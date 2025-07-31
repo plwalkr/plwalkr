@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>One Calculator to Rule Them All</title>
+  <title>MacroLegend – One Calculator to Rule Them All</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=UnifrakturCook:wght@700&family=Fira+Mono&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/@zxing/library@0.20.0"></script>
   <style>
     :root {
       --theme-1-bg: #191c24;
@@ -32,6 +34,9 @@
       --theme-card: var(--theme-1-card);
       --theme-text: var(--theme-1-text);
       --theme-font: 'Inter', sans-serif;
+      --danger: #ef3e36;
+      --warn: #ffbf47;
+      --goal-bg: #172b1d;
     }
     html, body {
       margin: 0; padding: 0;
@@ -191,6 +196,16 @@
       text-align: center;
       font-family: 'Fira Mono', monospace;
     }
+    .chart-canvas {
+      background: var(--goal-bg);
+      border-radius: 12px;
+      margin: 0.6em 0 0.7em 0;
+      box-shadow: 0 1px 9px #141c1f38;
+      width: 100%;
+      max-width: 99vw;
+      max-height: 330px;
+      display: block;
+    }
     #barcodeVideo {
       width: 100%;
       height: auto;
@@ -220,21 +235,65 @@
       font-size: 1.04em;
       text-align: center;
     }
+    .goal-bar-bg {
+      background: #253d2e;
+      border-radius: 7px;
+      height: 23px;
+      width: 100%;
+      margin-bottom: 7px;
+      position: relative;
+      overflow: hidden;
+    }
+    .goal-bar-fill {
+      background: linear-gradient(90deg, var(--theme-accent) 0%, #2eecb6 100%);
+      height: 100%;
+      border-radius: 7px;
+      transition: width 0.6s cubic-bezier(.4,1.2,.6,1), background 0.4s;
+    }
+    .goal-bar-label {
+      position: absolute;
+      left: 11px; top: 2px;
+      color: #202a22;
+      font-size: 0.98em;
+      font-family: 'Fira Mono', monospace;
+      z-index: 2;
+      pointer-events: none;
+      font-weight: bold;
+      letter-spacing: 0.03em;
+      text-shadow: 0 1px 6px #fff9;
+    }
+    .goal-warning { color: var(--warn); font-weight:700;}
+    .goal-danger { color: var(--danger); font-weight:700;}
+    .export-btn {
+      background: #5ecfff;
+      color: #213441;
+      border-radius: 7px;
+      font-weight: 700;
+      padding: 0.54em 1.11em;
+      font-size: 1.04em;
+      margin-top: 0.19em;
+      margin-bottom: 0.6em;
+      box-shadow: 0 1px 6px #11548142;
+    }
+    .export-btn:hover { filter: brightness(1.1); }
+    .goal-setting-group { display: flex; flex-wrap:wrap; gap:0.5em;}
+    .goal-setting-group input { max-width:90px; text-align:right;}
+    .goal-setting-label { font-size:0.97em; color:var(--theme-accent); font-weight:600; margin-right:4px;}
     @media (max-width: 600px) {
       .container { max-width: 99vw; padding: 0.4rem 1.2vw 1.6rem 1.2vw; }
       .card { padding: 0.8em 0.7em; }
       .app-title { font-size: 1.11em; }
       .theme-scrollbar { padding: 0.5rem 0.5rem 0.2rem 0.5rem; }
+      .goal-bar-label { left:6px; top:3px;}
     }
     @media (max-width: 440px) {
       .container { padding: 0.11rem 1vw 1.2rem 1vw; }
       .card { padding: 0.66em 0.5em; }
       input, select, textarea, button { font-size: 1em; }
       .theme-scrollbar { gap: 0.5rem; }
+      .goal-bar-label { left:2px; top:4px;}
     }
   </style>
-  <!-- ZXing library for barcode scanning (fast, compact, MIT license) -->
-  <script src="https://unpkg.com/@zxing/library@0.20.0"></script>
 </head>
 <body>
   <div class="theme-scrollbar" id="themeBar">
@@ -250,7 +309,27 @@
     </div>
   </div>
   <div class="container">
-    <div class="app-title">One Calculator to Rule Them All</div>
+    <div class="app-title">MacroLegend – One Calculator to Rule Them All</div>
+    <!-- Macro goals card -->
+    <div class="card" id="goalCard">
+      <div class="section-title">Set Your Daily Macro Goals</div>
+      <div class="goal-setting-group">
+        <span class="goal-setting-label">Calories</span>
+        <input type="number" id="goalCals" placeholder="2000"/>
+        <span class="goal-setting-label">Protein</span>
+        <input type="number" id="goalProtein" placeholder="150"/>
+        <span class="goal-setting-label">Carbs</span>
+        <input type="number" id="goalCarbs" placeholder="200"/>
+        <span class="goal-setting-label">Fat</span>
+        <input type="number" id="goalFat" placeholder="70"/>
+      </div>
+      <button onclick="saveGoals()" class="export-btn">Save Goals</button>
+    </div>
+    <!-- Macro bars card -->
+    <div class="card" id="progressCard">
+      <div class="section-title">Progress</div>
+      <div id="bars"></div>
+    </div>
     <!-- Meal entry card -->
     <div class="card" id="mealEntry">
       <div class="section-title">Add Meal</div>
@@ -269,19 +348,20 @@
     <!-- Meal log card -->
     <div class="card">
       <div class="section-title">Meal Log</div>
+      <button class="export-btn" onclick="exportCSV()">Export CSV</button>
+      <button class="export-btn" onclick="exportTXT()">Export TXT</button>
       <ul class="log-list" id="logList"></ul>
       <div id="totals" style="margin-top:0.45em; color:var(--theme-accent); font-weight:600;"></div>
     </div>
-    <!-- Chart placeholder card -->
+    <!-- Chart card -->
     <div class="card">
       <div class="section-title">Charts</div>
-      <div class="chart-placeholder" id="chartPlaceholder">
-        (Charts & graphs will show up here after logging a few meals!)
-      </div>
+      <canvas id="pieChart" class="chart-canvas"></canvas>
+      <canvas id="barChart" class="chart-canvas"></canvas>
     </div>
   </div>
   <script>
-    // ---- THEME/FONT SCROLLBAR LOGIC ----
+    // THEME/FONT LOGIC
     function setTheme(idx) {
       const themes = [
         ['--theme-1-bg','--theme-1-accent','--theme-1-card','--theme-1-text'],
@@ -304,8 +384,34 @@
       document.documentElement.style.setProperty('--theme-font', fonts[idx]);
       document.querySelectorAll('.font-btn').forEach((el,i)=>el.classList.toggle('selected',i===idx));
     }
-    // ---- MEAL LOGIC ----
+    // MACRO GOALS PERSISTENCE
+    function getGoals() {
+      return JSON.parse(localStorage.getItem("macroGoals") || '{"cals":2000,"protein":150,"carbs":200,"fat":70}');
+    }
+    function saveGoals() {
+      const goals = {
+        cals: parseInt(document.getElementById('goalCals').value) || 2000,
+        protein: parseInt(document.getElementById('goalProtein').value) || 150,
+        carbs: parseInt(document.getElementById('goalCarbs').value) || 200,
+        fat: parseInt(document.getElementById('goalFat').value) || 70,
+      };
+      localStorage.setItem("macroGoals", JSON.stringify(goals));
+      showToast("Goals saved!");
+      renderBars();
+    }
+    // MEAL LOG PERSISTENCE
     let mealLog = [];
+    function loadLog() {
+      mealLog = JSON.parse(localStorage.getItem("macroLog") || "[]");
+      renderLog();
+      renderBars();
+      updateCharts();
+    }
+    function saveLog() {
+      localStorage.setItem("macroLog", JSON.stringify(mealLog));
+      renderBars();
+      updateCharts();
+    }
     function addMeal() {
       const name = document.getElementById('mealName').value.trim() || "Meal";
       const cals = parseFloat(document.getElementById('mealCals').value)||0;
@@ -315,7 +421,13 @@
       if (!name || (!cals && !p && !c && !f)) return alert("Please enter at least a name and one value!");
       const meal = {name, cals, p, c, f, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})};
       mealLog.unshift(meal);
+      saveLog();
       renderLog();
+      clearMealInputs();
+      renderBars();
+      updateCharts();
+    }
+    function clearMealInputs() {
       document.getElementById('mealName').value = '';
       document.getElementById('mealCals').value = '';
       document.getElementById('mealProtein').value = '';
@@ -339,8 +451,152 @@
       document.getElementById('totals').textContent =
         mealLog.length ? `Total: ${totals.cals} cal, ${totals.p}g P, ${totals.c}g C, ${totals.f}g F` : '';
     }
-
-    // ---- BARCODE SCAN LOGIC ----
+    // GOAL PROGRESS BARS
+    function renderBars() {
+      const goals = getGoals();
+      const totals = mealLog.reduce((tot,m)=>({
+        cals: tot.cals+m.cals, p: tot.p+m.p, c: tot.c+m.c, f: tot.f+m.f
+      }),{cals:0,p:0,c:0,f:0});
+      let barsHtml = '';
+      // Helper: percent, class, value
+      function bar(val, goal, label, unit) {
+        let pct = goal ? Math.min(val/goal, 1) : 0;
+        let extra = '';
+        if (goal && val > goal*1.1) extra = '<span class="goal-danger"> (Over goal!)</span>';
+        else if (goal && val > goal) extra = '<span class="goal-warning"> (At goal)</span>';
+        return `
+          <div class="goal-bar-bg" title="${val} / ${goal} ${unit}">
+            <div class="goal-bar-fill" style="width:${Math.min((val/goal)*100,100)}%"></div>
+            <div class="goal-bar-label">${label}: ${val}${unit} / ${goal}${unit} ${extra}</div>
+          </div>
+        `;
+      }
+      barsHtml += bar(totals.cals, goals.cals, "Calories", "");
+      barsHtml += bar(totals.p, goals.protein, "Protein", "g");
+      barsHtml += bar(totals.c, goals.carbs, "Carbs", "g");
+      barsHtml += bar(totals.f, goals.fat, "Fat", "g");
+      document.getElementById('bars').innerHTML = barsHtml;
+    }
+    // EXPORT BUTTONS
+    function exportCSV() {
+      let csv = "Time,Meal,Calories,Protein,Carbs,Fat\n";
+      mealLog.slice().reverse().forEach(m => {
+        csv += `${m.time},"${m.name}",${m.cals},${m.p},${m.c},${m.f}\n`;
+      });
+      downloadFile(csv, "macrolegend_log.csv", "text/csv");
+    }
+    function exportTXT() {
+      let txt = "MacroLegend Meal Log\n\n";
+      mealLog.slice().reverse().forEach(m => {
+        txt += `${m.time} – ${m.name}  [${m.cals} cal | ${m.p}g P | ${m.c}g C | ${m.f}g F]\n`;
+      });
+      downloadFile(txt, "macrolegend_log.txt", "text/plain");
+    }
+    function downloadFile(data, filename, type) {
+      let blob = new Blob([data], {type});
+      let url = URL.createObjectURL(blob);
+      let a = document.createElement('a');
+      a.href = url; a.download = filename;
+      document.body.appendChild(a); a.click();
+      setTimeout(()=>{ document.body.removeChild(a); URL.revokeObjectURL(url); },500);
+      showToast("Exported!");
+    }
+    // CHARTS
+    let pieChart, barChart;
+    function updateCharts() {
+      const totals = mealLog.reduce((tot,m)=>({
+        cals: tot.cals+m.cals, p: tot.p+m.p, c: tot.c+m.c, f: tot.f+m.f
+      }),{cals:0,p:0,c:0,f:0});
+      // Pie chart (macro %)
+      let ctxPie = document.getElementById('pieChart').getContext('2d');
+      let macroVals = [totals.p, totals.c, totals.f];
+      let sum = macroVals.reduce((a,b)=>a+b,0) || 1;
+      let macroPct = macroVals.map(v=>Math.round((v/sum)*100));
+      if (pieChart) pieChart.destroy();
+      pieChart = new Chart(ctxPie, {
+        type: 'pie',
+        data: {
+          labels: ['Protein','Carbs','Fat'],
+          datasets: [{
+            data: macroVals,
+            backgroundColor: [
+              'rgba(68,180,88,0.92)',
+              'rgba(42,138,255,0.83)',
+              'rgba(255,193,45,0.87)'
+            ],
+            borderWidth: 1.7,
+            borderColor: "#20292a"
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display:true, position:'bottom', labels: {color:getComputedStyle(document.documentElement).getPropertyValue('--theme-text')} }
+          }
+        }
+      });
+      // Bar chart (progress vs goal)
+      let ctxBar = document.getElementById('barChart').getContext('2d');
+      let goals = getGoals();
+      if (barChart) barChart.destroy();
+      barChart = new Chart(ctxBar, {
+        type: 'bar',
+        data: {
+          labels: ['Calories','Protein','Carbs','Fat'],
+          datasets: [
+            {
+              label: 'Consumed',
+              data: [totals.cals, totals.p, totals.c, totals.f],
+              backgroundColor: 'rgba(96, 241, 168, 0.83)',
+              borderWidth: 1.3,
+              borderColor: "#222a2a"
+            },
+            {
+              label: 'Goal',
+              data: [goals.cals, goals.protein, goals.carbs, goals.fat],
+              backgroundColor: 'rgba(80,130,220,0.13)',
+              borderWidth: 1.2,
+              borderColor: "#2b4258"
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display:true, position:'bottom', labels: {color:getComputedStyle(document.documentElement).getPropertyValue('--theme-text')} }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: { color:getComputedStyle(document.documentElement).getPropertyValue('--theme-text') }
+            },
+            x: {
+              ticks: { color:getComputedStyle(document.documentElement).getPropertyValue('--theme-text') }
+            }
+          }
+        }
+      });
+    }
+    // TOAST NOTIFICATION
+    function showToast(msg) {
+      let toast = document.createElement('div');
+      toast.style.position = 'fixed';
+      toast.style.bottom = '42px';
+      toast.style.left = '50%';
+      toast.style.transform = 'translateX(-50%)';
+      toast.style.background = '#2f3e2a';
+      toast.style.color = '#fff';
+      toast.style.padding = '13px 26px';
+      toast.style.borderRadius = '17px';
+      toast.style.fontSize = '1.1em';
+      toast.style.boxShadow = '0 4px 13px #000b';
+      toast.style.opacity = 0.95;
+      toast.style.zIndex = 2000;
+      toast.innerText = msg;
+      document.body.appendChild(toast);
+      setTimeout(()=>{toast.remove()},1700);
+    }
+    // BARCODE SCAN LOGIC
     let scanning = false, codeReader = null;
     async function scanBarcode() {
       if (scanning) return; // Prevent double scan
@@ -361,7 +617,6 @@
           if (result) {
             stopScan();
             const code = result.getText();
-            // Show barcode found
             scanArea.innerHTML = `<div class="scan-info">Found barcode: <b>${code}</b>. Looking up…</div>`;
             await fillMealFromBarcode(code);
           }
@@ -384,16 +639,13 @@
       }
       document.getElementById('scanArea').innerHTML = "";
     }
-
     async function fillMealFromBarcode(code) {
-      // Look up on Open Food Facts API
       try {
         const resp = await fetch(`https://world.openfoodfacts.org/api/v0/product/${code}.json`);
         const data = await resp.json();
         if (data.status === 1 && data.product) {
           const p = data.product;
           document.getElementById('mealName').value = p.product_name || p.brands || "Food";
-          // Try to fill macros if available
           if (p.nutriments) {
             document.getElementById('mealCals').value = p.nutriments['energy-kcal_100g'] || p.nutriments['energy-kcal'] || '';
             document.getElementById('mealProtein').value = p.nutriments['proteins_100g'] || '';
@@ -414,9 +666,17 @@
           Lookup failed. Enter manually if needed.</div>`;
       }
     }
-
-    // Default theme/font on load
-    setTheme(1); setFont(0);
+    // INIT: LOAD LOG, BARS, CHARTS, GOALS
+    window.onload = function() {
+      setTheme(1); setFont(0);
+      // Load goals if present
+      const goals = getGoals();
+      document.getElementById('goalCals').value = goals.cals;
+      document.getElementById('goalProtein').value = goals.protein;
+      document.getElementById('goalCarbs').value = goals.carbs;
+      document.getElementById('goalFat').value = goals.fat;
+      loadLog();
+    };
   </script>
 </body>
 </html>
