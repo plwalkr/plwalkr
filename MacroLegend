@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>One Calculator to Rule Them All</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=UnifrakturCook:wght@700&family=Fira+Mono&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --theme-1-bg: #191c24;
+      --theme-1-accent: #76e0a7;
+      --theme-1-card: #232733;
+      --theme-1-text: #eaf7f0;
+      --theme-2-bg: #212126;
+      --theme-2-accent: #c7ad6b;
+      --theme-2-card: #2e2e36;
+      --theme-2-text: #ffeeca;
+      --theme-3-bg: #0b1922;
+      --theme-3-accent: #5ecfff;
+      --theme-3-card: #133040;
+      --theme-3-text: #e8f6fe;
+      --theme-4-bg: #252016;
+      --theme-4-accent: #d0b55b;
+      --theme-4-card: #39331a;
+      --theme-4-text: #fff7de;
+      --theme-5-bg: #1a202c;
+      --theme-5-accent: #b7a3f5;
+      --theme-5-card: #262c40;
+      --theme-5-text: #f5f3ff;
+      --theme-bg: var(--theme-1-bg);
+      --theme-accent: var(--theme-1-accent);
+      --theme-card: var(--theme-1-card);
+      --theme-text: var(--theme-1-text);
+      --theme-font: 'Inter', sans-serif;
+    }
+    html, body {
+      margin: 0; padding: 0;
+      width: 100vw; height: 100vh;
+      min-height: 100vh;
+      background: var(--theme-bg);
+      font-family: var(--theme-font);
+      color: var(--theme-text);
+      overscroll-behavior: none;
+    }
+    .theme-scrollbar {
+      display: flex;
+      overflow-x: auto;
+      gap: 0.7rem;
+      padding: 1rem 0.7rem 0.3rem 0.7rem;
+      background: rgba(0,0,0,0.08);
+      align-items: center;
+      scrollbar-width: thin;
+    }
+    .theme-btn {
+      width: 36px; height: 36px;
+      border-radius: 50%; border: 2.5px solid #fff5;
+      cursor: pointer; outline: none;
+      transition: border 0.13s, box-shadow 0.13s;
+      box-shadow: 0 0 0px 0px #0000;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .theme-btn.selected {
+      border: 3px solid var(--theme-accent);
+      box-shadow: 0 0 6px 1.5px var(--theme-accent);
+    }
+    .font-scroll {
+      display: flex; gap: 0.5rem; margin-left: 1.1rem;
+    }
+    .font-btn {
+      border-radius: 10px;
+      border: 2px solid #fff2;
+      padding: 2px 13px;
+      background: rgba(0,0,0,0.07);
+      color: var(--theme-text);
+      font-size: 1.02em;
+      cursor: pointer;
+      font-family: inherit;
+      transition: border 0.12s, box-shadow 0.14s;
+      margin-bottom: 2px;
+    }
+    .font-btn.selected {
+      border: 2.5px solid var(--theme-accent);
+      box-shadow: 0 1px 7px 0px var(--theme-accent);
+      background: var(--theme-card);
+      color: var(--theme-accent);
+    }
+    .container {
+      max-width: 430px;
+      margin: 0 auto;
+      padding: 0.5rem 0.5rem 2.3rem 0.5rem;
+      display: flex; flex-direction: column;
+      gap: 1.1rem;
+    }
+    .app-title {
+      font-size: 1.6em;
+      font-weight: 700;
+      margin: 0.3em 0 0.6em 0;
+      letter-spacing: 1.3px;
+      color: var(--theme-accent);
+      font-family: 'UnifrakturCook', 'Inter', serif;
+      text-align: center;
+      text-shadow: 0 1px 8px #0003;
+      user-select: none;
+    }
+    .card {
+      background: var(--theme-card);
+      box-shadow: 0 2px 14px #0005;
+      border-radius: 19px;
+      padding: 1.1em 1em 1.1em 1em;
+      margin-bottom: 1.2em;
+      display: flex; flex-direction: column; gap: 0.7em;
+      transition: background 0.25s, box-shadow 0.2s;
+      border: 1.7px solid #fff2;
+    }
+    .section-title {
+      font-size: 1.17em;
+      font-weight: 600;
+      color: var(--theme-accent);
+      margin-bottom: 0.4em;
+      letter-spacing: 0.2px;
+    }
+    input, select, button, textarea {
+      font-family: var(--theme-font);
+      font-size: 1.08em;
+      background: #232733;
+      color: var(--theme-text);
+      padding: 0.68em 0.6em;
+      border-radius: 8px;
+      border: 1.2px solid #374049;
+      margin-bottom: 0.5em;
+      outline: none;
+      box-sizing: border-box;
+      width: 100%;
+      transition: border 0.14s, background 0.14s;
+    }
+    input:focus, select:focus, textarea:focus {
+      border: 1.7px solid var(--theme-accent);
+      background: #242d38;
+    }
+    button {
+      background: var(--theme-accent);
+      color: #1d2318;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      padding: 0.77em 1em;
+      transition: filter 0.12s, background 0.18s;
+      box-shadow: 0 1px 4px #0006;
+      margin-top: 0.7em;
+      font-size: 1.07em;
+    }
+    button:hover {
+      filter: brightness(1.11) saturate(1.2);
+    }
+    .scan-btn {
+      background: linear-gradient(90deg,#181e18,#52c998 60%,#67e8f9 100%);
+      color: #232733;
+      border: none;
+      font-weight: 700;
+      font-size: 1em;
+      margin-bottom: 0.4em;
+      box-shadow: 0 1px 7px #233a4480;
+    }
+    .scan-btn:active {
+      filter: brightness(1.1) saturate(1.2);
+    }
+    .log-list {
+      list-style: none;
+      padding: 0; margin: 0.2em 0 0 0;
+      display: flex; flex-direction: column; gap: 0.38em;
+    }
+    .log-entry {
+      background: #16191f77;
+      border-radius: 9px;
+      padding: 0.7em 0.6em;
+      display: flex; flex-direction: column;
+      border: 1px solid #2c313c;
+      font-size: 0.99em;
+    }
+    .log-entry .time {
+      color: var(--theme-accent); font-size: 0.96em; font-family: 'Fira Mono', monospace;
+    }
+    .chart-placeholder {
+      background: linear-gradient(90deg, #1e2b27 60%, #30473e 100%);
+      border-radius: 17px;
+      min-height: 130px;
+      color: #9ce8b8;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.13em; margin-top: 0.5em;
+      box-shadow: 0 1px 8px #0003;
+      text-align: center;
+      font-family: 'Fira Mono', monospace;
+    }
+    #barcodeVideo {
+      width: 100%;
+      height: auto;
+      border-radius: 16px;
+      margin-bottom: 8px;
+      margin-top: 4px;
+      background: #1a2123;
+      display: block;
+      box-shadow: 0 2px 14px #0005;
+    }
+    .close-scan-btn {
+      margin: 0.5em auto 0.3em auto;
+      background: #d1345b;
+      color: #fff;
+      border-radius: 8px;
+      font-size: 1em;
+      font-weight: 700;
+      border: none;
+      padding: 0.5em 1em;
+      box-shadow: 0 1px 6px #3008;
+      display: block;
+      max-width: 220px;
+    }
+    .scan-info {
+      color: #9cfbbf;
+      margin: 0.3em 0 0.7em 0;
+      font-size: 1.04em;
+      text-align: center;
+    }
+    @media (max-width: 600px) {
+      .container { max-width: 99vw; padding: 0.4rem 1.2vw 1.6rem 1.2vw; }
+      .card { padding: 0.8em 0.7em; }
+      .app-title { font-size: 1.11em; }
+      .theme-scrollbar { padding: 0.5rem 0.5rem 0.2rem 0.5rem; }
+    }
+    @media (max-width: 440px) {
+      .container { padding: 0.11rem 1vw 1.2rem 1vw; }
+      .card { padding: 0.66em 0.5em; }
+      input, select, textarea, button { font-size: 1em; }
+      .theme-scrollbar { gap: 0.5rem; }
+    }
+  </style>
+  <!-- ZXing library for barcode scanning (fast, compact, MIT license) -->
+  <script src="https://unpkg.com/@zxing/library@0.20.0"></script>
+</head>
+<body>
+  <div class="theme-scrollbar" id="themeBar">
+    <div class="theme-btn selected" style="background: linear-gradient(135deg,#1b2521,#76e0a7);" onclick="setTheme(1)" title="Elven"></div>
+    <div class="theme-btn" style="background: linear-gradient(120deg,#222126,#c7ad6b);" onclick="setTheme(2)" title="Rivendell"></div>
+    <div class="theme-btn" style="background: linear-gradient(110deg,#0b1922,#5ecfff);" onclick="setTheme(3)" title="Blue Wizard"></div>
+    <div class="theme-btn" style="background: linear-gradient(120deg,#252016,#d0b55b);" onclick="setTheme(4)" title="Hobbiton"></div>
+    <div class="theme-btn" style="background: linear-gradient(130deg,#1a202c,#b7a3f5);" onclick="setTheme(5)" title="Valinor"></div>
+    <div class="font-scroll" id="fontScroll">
+      <button class="font-btn selected" onclick="setFont(0)">Inter</button>
+      <button class="font-btn" onclick="setFont(1)">Unifraktur</button>
+      <button class="font-btn" onclick="setFont(2)">Mono</button>
+    </div>
+  </div>
+  <div class="container">
+    <div class="app-title">One Calculator to Rule Them All</div>
+    <!-- Meal entry card -->
+    <div class="card" id="mealEntry">
+      <div class="section-title">Add Meal</div>
+      <input type="text" id="mealName" placeholder="Meal name (or scan barcode)"/>
+      <input type="number" id="mealCals" placeholder="Calories"/>
+      <input type="number" id="mealProtein" placeholder="Protein (g)"/>
+      <input type="number" id="mealCarbs" placeholder="Carbs (g)"/>
+      <input type="number" id="mealFat" placeholder="Fat (g)"/>
+      <button class="scan-btn" onclick="scanBarcode()">🔎 Scan Barcode</button>
+      <button onclick="addMeal()">Add to Log</button>
+      <div style="font-size:0.91em; color:#c3b05a; margin-top:2px;">
+        (Scan a food barcode or enter manually!)
+      </div>
+      <div id="scanArea"></div>
+    </div>
+    <!-- Meal log card -->
+    <div class="card">
+      <div class="section-title">Meal Log</div>
+      <ul class="log-list" id="logList"></ul>
+      <div id="totals" style="margin-top:0.45em; color:var(--theme-accent); font-weight:600;"></div>
+    </div>
+    <!-- Chart placeholder card -->
+    <div class="card">
+      <div class="section-title">Charts</div>
+      <div class="chart-placeholder" id="chartPlaceholder">
+        (Charts & graphs will show up here after logging a few meals!)
+      </div>
+    </div>
+  </div>
+  <script>
+    // ---- THEME/FONT SCROLLBAR LOGIC ----
+    function setTheme(idx) {
+      const themes = [
+        ['--theme-1-bg','--theme-1-accent','--theme-1-card','--theme-1-text'],
+        ['--theme-2-bg','--theme-2-accent','--theme-2-card','--theme-2-text'],
+        ['--theme-3-bg','--theme-3-accent','--theme-3-card','--theme-3-text'],
+        ['--theme-4-bg','--theme-4-accent','--theme-4-card','--theme-4-text'],
+        ['--theme-5-bg','--theme-5-accent','--theme-5-card','--theme-5-text'],
+      ];
+      ['--theme-bg','--theme-accent','--theme-card','--theme-text'].forEach((v,i)=>{
+        document.documentElement.style.setProperty(v,getComputedStyle(document.documentElement).getPropertyValue(themes[idx-1][i]));
+      });
+      document.querySelectorAll('.theme-btn').forEach((el,i)=>el.classList.toggle('selected',i===idx-1));
+    }
+    function setFont(idx) {
+      const fonts = [
+        "'Inter',sans-serif",
+        "'UnifrakturCook',cursive",
+        "'Fira Mono',monospace"
+      ];
+      document.documentElement.style.setProperty('--theme-font', fonts[idx]);
+      document.querySelectorAll('.font-btn').forEach((el,i)=>el.classList.toggle('selected',i===idx));
+    }
+    // ---- MEAL LOGIC ----
+    let mealLog = [];
+    function addMeal() {
+      const name = document.getElementById('mealName').value.trim() || "Meal";
+      const cals = parseFloat(document.getElementById('mealCals').value)||0;
+      const p = parseFloat(document.getElementById('mealProtein').value)||0;
+      const c = parseFloat(document.getElementById('mealCarbs').value)||0;
+      const f = parseFloat(document.getElementById('mealFat').value)||0;
+      if (!name || (!cals && !p && !c && !f)) return alert("Please enter at least a name and one value!");
+      const meal = {name, cals, p, c, f, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})};
+      mealLog.unshift(meal);
+      renderLog();
+      document.getElementById('mealName').value = '';
+      document.getElementById('mealCals').value = '';
+      document.getElementById('mealProtein').value = '';
+      document.getElementById('mealCarbs').value = '';
+      document.getElementById('mealFat').value = '';
+    }
+    function renderLog() {
+      let html = mealLog.map(m=>`
+        <li class="log-entry">
+          <span><b>${m.name}</b> <span class="time">(${m.time})</span></span>
+          ${m.cals ? `<span>Calories: ${m.cals}</span>` : ""}
+          ${m.p ? `<span>Protein: ${m.p}g</span>` : ""}
+          ${m.c ? `<span>Carbs: ${m.c}g</span>` : ""}
+          ${m.f ? `<span>Fat: ${m.f}g</span>` : ""}
+        </li>
+      `).join('');
+      document.getElementById('logList').innerHTML = html || "<div style='opacity:0.6'>No meals yet.</div>";
+      let totals = mealLog.reduce((tot,m)=>({
+        cals: tot.cals+m.cals, p: tot.p+m.p, c: tot.c+m.c, f: tot.f+m.f
+      }),{cals:0,p:0,c:0,f:0});
+      document.getElementById('totals').textContent =
+        mealLog.length ? `Total: ${totals.cals} cal, ${totals.p}g P, ${totals.c}g C, ${totals.f}g F` : '';
+    }
+
+    // ---- BARCODE SCAN LOGIC ----
+    let scanning = false, codeReader = null;
+    async function scanBarcode() {
+      if (scanning) return; // Prevent double scan
+      scanning = true;
+      const scanArea = document.getElementById('scanArea');
+      scanArea.innerHTML = `
+        <div class="scan-info">Point your camera at a barcode…</div>
+        <video id="barcodeVideo" playsinline></video>
+        <button class="close-scan-btn" onclick="stopScan()">✖ Cancel Scan</button>
+      `;
+      const videoElem = document.getElementById('barcodeVideo');
+      try {
+        codeReader = new ZXing.BrowserMultiFormatReader();
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+        videoElem.srcObject = stream;
+        videoElem.play();
+        codeReader.decodeFromVideoDevice(null, videoElem, async (result, err) => {
+          if (result) {
+            stopScan();
+            const code = result.getText();
+            // Show barcode found
+            scanArea.innerHTML = `<div class="scan-info">Found barcode: <b>${code}</b>. Looking up…</div>`;
+            await fillMealFromBarcode(code);
+          }
+        });
+      } catch (e) {
+        scanArea.innerHTML = `<div class="scan-info" style="color:#fa7c6c;">Camera access denied or unavailable.</div>`;
+        scanning = false;
+      }
+    }
+    function stopScan() {
+      scanning = false;
+      if (codeReader) {
+        codeReader.reset();
+        codeReader = null;
+      }
+      const videoElem = document.getElementById('barcodeVideo');
+      if (videoElem && videoElem.srcObject) {
+        videoElem.srcObject.getTracks().forEach(track => track.stop());
+        videoElem.srcObject = null;
+      }
+      document.getElementById('scanArea').innerHTML = "";
+    }
+
+    async function fillMealFromBarcode(code) {
+      // Look up on Open Food Facts API
+      try {
+        const resp = await fetch(`https://world.openfoodfacts.org/api/v0/product/${code}.json`);
+        const data = await resp.json();
+        if (data.status === 1 && data.product) {
+          const p = data.product;
+          document.getElementById('mealName').value = p.product_name || p.brands || "Food";
+          // Try to fill macros if available
+          if (p.nutriments) {
+            document.getElementById('mealCals').value = p.nutriments['energy-kcal_100g'] || p.nutriments['energy-kcal'] || '';
+            document.getElementById('mealProtein').value = p.nutriments['proteins_100g'] || '';
+            document.getElementById('mealCarbs').value = p.nutriments['carbohydrates_100g'] || '';
+            document.getElementById('mealFat').value = p.nutriments['fat_100g'] || '';
+          }
+          document.getElementById('scanArea').innerHTML =
+            `<div class="scan-info" style="color:#86f39c;">
+            Filled from Open Food Facts! Edit values if needed, then Add to Log.</div>`;
+        } else {
+          document.getElementById('scanArea').innerHTML =
+            `<div class="scan-info" style="color:#efba62;">
+            Barcode found but not in food database. Enter manually!</div>`;
+        }
+      } catch (e) {
+        document.getElementById('scanArea').innerHTML =
+          `<div class="scan-info" style="color:#ef6c7c;">
+          Lookup failed. Enter manually if needed.</div>`;
+      }
+    }
+
+    // Default theme/font on load
+    setTheme(1); setFont(0);
+  </script>
+</body>
+</html>
