@@ -2,516 +2,807 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MacroLegend</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.cdnfonts.com/css/ringbearer" rel="stylesheet">
   <style>
     :root {
-      --main-bg: #f5f5fa;
-      --container-bg: #fff;
-      --text-color: #1a1a1a;
-      --accent: #3d7d37;
-      --bar-bg: #f0f2f4;
-      --bar-protein: #a7ce7a;
-      --bar-fat: #ffe699;
-      --bar-carbs: #7db1ff;
-      --bar-shadow: 0 2px 12px #d8e3db88;
-      --ring-gold: #edb941;
-      --ring-map: url('data:image/svg+xml;utf8,<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg"><rect fill=\'none\'/><text x=\'30\' y=\'60\' font-size=\'54\' fill=\'%23edb941\' fill-opacity=\'.13\' font-family=\'serif\'>Middle-earth</text><path d=\'M65 300 Q200 50 400 200 T550 100\' fill=\'none\' stroke=\'%23b59b21\' stroke-width=\'7\' stroke-opacity=\'.1\'/><text x=\'300\' y=\'390\' font-size=\'36\' fill=\'%23edb941\' fill-opacity=\'.09\'>Mordor</text></svg>');
+      --light-bg: #f6f6fa;
+      --light-card: #fff;
+      --light-text: #1a1a1a;
+      --light-accent: #2b78e4;
+      --light-bar: #d6eaff;
+      --light-shadow: 0 4px 32px #0002;
+      --gold: #fbe62c;
+      --ring-shadow: 0 0 18px 6px #edb94144;
+      --ring-bar: #f8c944;
+      --ring-green: #7dc271;
+      --ring-blue: #5ba4fa;
+      --ring-orange: #f5a94d;
+      --ring-bg: #2a2009;
+      --ring-card: #382a00;
+      --ring-txt: #fbe62c;
+      --ring-inscription: #bd8c19;
+      --chart-bar: #2b78e4;
+      --chart-bg: #e5ecfa;
+      --progress-radius: 13px;
     }
-
     body {
-      background: var(--main-bg);
-      color: var(--text-color);
       font-family: 'Inter', sans-serif;
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      transition: background 0.5s;
+      margin: 0; padding: 0; min-height: 100vh;
+      background: var(--light-bg);
+      color: var(--light-text);
+      display: flex; flex-direction: column; align-items: center;
+      transition: background 0.3s, color 0.3s;
     }
-
     .container {
-      margin: 2vw auto 6vw auto;
-      background: var(--container-bg);
-      border-radius: 20px;
-      box-shadow: var(--bar-shadow);
-      max-width: 400px;
-      width: 96vw;
-      padding: 2rem 1.4rem 2.6rem 1.4rem;
-      position: relative;
+      background: var(--light-card);
+      box-shadow: var(--light-shadow);
+      border-radius: 22px;
+      max-width: 470px; width: 100vw;
+      margin: 2vw 0 16vw 0;
+      padding: 1.3em 1em 2.3em 1em;
+      transition: background 0.3s;
+      position: relative; min-width: 0;
     }
     h1 {
-      text-align: center;
-      font-family: 'Ringbearer','Inter',sans-serif;
-      color: var(--accent);
-      margin: 0 0 1rem 0;
+      font-family: 'Inter', 'Ringbearer', serif;
       font-size: 2.1rem;
-      letter-spacing: 1.5px;
-      text-shadow: 0 3px 20px #0001;
+      letter-spacing: 2px;
+      margin-bottom: 0.7em;
+      text-align: center;
+      color: var(--light-accent);
+      transition: color 0.3s, text-shadow 0.3s;
       user-select: none;
     }
-
-    .ring-btn {
+    .ringmode h1 {
+      font-family: 'Ringbearer', 'Inter', serif;
+      color: var(--gold);
+      text-shadow: 0 2px 14px #edb94199;
+      letter-spacing: 2px;
+    }
+    .theme-toggle {
       position: absolute;
-      top: 16px; right: 16px;
-      z-index: 3;
-      background: var(--ring-gold);
-      color: #2c2104;
+      right: 20px; top: 18px;
+      display: flex; gap: 8px;
+    }
+    .theme-btn {
+      background: var(--light-bar);
       border: none;
-      font-family: 'Ringbearer','Inter',sans-serif;
-      font-size: 1.02em;
-      border-radius: 11px;
-      padding: 6px 20px;
+      border-radius: 16px;
+      padding: 4px 12px;
+      font-size: 1.03rem;
+      color: var(--light-accent);
+      font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 2px 12px #ccb2435c;
-      transition: filter 0.18s;
+      margin-left: 4px;
+      box-shadow: 0 2px 7px #0001;
+      transition: background 0.2s, color 0.2s;
     }
-    .ring-btn.active {
-      outline: 2px solid var(--ring-gold);
-      filter: drop-shadow(0 0 12px #fbe62c88);
-      background: linear-gradient(90deg,#fbe62c 60%,#c39c25 100%);
+    .theme-btn.active, .theme-btn:focus {
+      background: var(--gold);
+      color: #3b2e08;
+      outline: none;
     }
-
-    label {font-weight: 600; margin: 0.5rem 0 0.2rem 0; display:block;}
-    input[type="number"] {
-      width: 100%; padding: 0.7em; margin-bottom: 0.4rem;
-      border: 1.5px solid #cfd9de; border-radius: 8px; font-size: 1.07em;
-      background: #f9f9fc; color: var(--text-color);
-      box-sizing: border-box;
-      transition: border 0.13s;
+    /* Tab row */
+    .tab-row {
+      display: flex; justify-content: center;
+      gap: 9px; margin: 0 0 1.4em 0;
     }
-    input[type="number"]:focus {border: 1.5px solid var(--accent);}
-    select {
-      width: 100%; padding: 0.7em; margin-bottom: 0.7rem;
-      border-radius: 8px; font-size: 1.08rem;
-      border: 1.5px solid #cfd9de; background: #f9f9fc;
-      color: var(--text-color);
+    .tab-btn {
+      background: #eceefe; color: #4275ba;
+      border: none; border-radius: 9px 9px 0 0;
+      padding: 7px 24px; font-weight: 700; font-size: 1.01em;
+      cursor: pointer; box-shadow: 0 2px 7px #0001;
+      transition: background 0.17s, color 0.17s;
     }
-
-    .macro-bars {
-      margin: 1.6rem 0 0.9rem 0;
-    }
-    .macro-bar {
-      background: var(--bar-bg);
-      border-radius: 18px;
-      box-shadow: 0 1.5px 7px #0001;
-      margin-bottom: 14px;
-      height: 42px;
-      display: flex;
-      align-items: center;
-      position: relative;
-      overflow: hidden;
-      font-weight: 700;
-    }
-    .bar-fill {
-      height: 100%;
-      border-radius: 18px;
-      display: flex;
-      align-items: center;
-      font-size: 1.09em;
-      padding-left: 1em;
+    .tab-btn.active, .tab-btn:focus {
+      background: var(--light-accent);
       color: #fff;
-      box-sizing: border-box;
-      position: relative;
-      white-space: nowrap;
-      transition: width 0.4s cubic-bezier(.53,1.3,.55,1.0);
-      z-index: 2;
     }
-    .bar-protein   { background: linear-gradient(90deg, var(--bar-protein) 90%, #96a97a 100%);}
-    .bar-fat       { background: linear-gradient(90deg, var(--bar-fat) 85%, #ffe69955 100%);}
-    .bar-carbs     { background: linear-gradient(90deg, var(--bar-carbs) 90%, #4067a5 100%);}
-    .bar-label {
-      position: absolute;
-      left: 15px;
-      top: 50%; transform: translateY(-50%);
-      z-index: 3;
-      color: #333;
-      font-size: 1.04em;
-      text-shadow: 0 1px 6px #fff8;
-      font-weight: 700;
-      letter-spacing: 0.5px;
+    .ringmode .tab-btn {
+      background: #2e2208;
+      color: #fbe62c;
     }
-    .bar-value {
-      position: absolute;
-      right: 16px; top: 50%; transform: translateY(-50%);
-      font-size: 1.07em;
-      color: #222;
-      background: #fff6;
-      padding: 2px 11px 2px 10px;
-      border-radius: 10px;
-      z-index: 4;
-      font-weight: 700;
+    .ringmode .tab-btn.active { background: #fbe62c; color: #382a00; }
+    /* Macro goal line */
+    .goal-line {
+      font-size: 1.07em; color: #4c4c4c; background: #f6f6fa;
+      border-radius: 9px; margin: 0 auto 0.8em auto; text-align: center;
+      padding: 0.25em 0.9em; font-weight: 500; letter-spacing: 0.5px;
+      display: flex; justify-content: center; gap: 1.2em; flex-wrap: wrap;
+      max-width: 99vw; white-space: nowrap;
     }
-    .bar-goal {
-      position: absolute;
-      right: 16px; top: 65%;
-      font-size: 0.97em;
-      color: #444; opacity: .79;
-      z-index: 3;
+    .goal-line span { font-weight: 700; letter-spacing: 0.2px; padding: 0 2px; }
+    .goal-macro-p { color: #49a858; }
+    .goal-macro-c { color: #3677c6; }
+    .goal-macro-f { color: #e8a200; }
+    .goal-macro-cal { color: #d4b117; }
+    /* Progress bars */
+    .macro-bars { margin-bottom: 0.7em; margin-top: 0.5em; display: flex; flex-direction: column; gap: 0.45em;}
+    .macro-bar-outer { background: var(--light-bar); border-radius: var(--progress-radius); overflow: hidden; position: relative; height: 28px; margin: 0 0.1em;}
+    .macro-bar-inner { height: 100%; display: flex; align-items: center; font-weight: 600; font-size: 1em; justify-content: flex-start; padding-left: 11px; border-radius: var(--progress-radius); transition: width 0.45s cubic-bezier(.35,1.65,.6,1.1); color: #fff; letter-spacing: 0.5px; text-shadow: 0 1px 8px #0004; white-space: nowrap; position: relative;}
+    .bar-cal { background: linear-gradient(90deg,#fbe62c,#f5c80f); color: #735900; }
+    .bar-p { background: linear-gradient(90deg,#51c16e,#379956); }
+    .bar-c { background: linear-gradient(90deg,#61aaff,#396ebb); }
+    .bar-f { background: linear-gradient(90deg,#f5a94d,#d1850b); }
+    .macro-bar-label { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); color: #fff; font-size: 1em; font-weight: 700; text-shadow: 0 1px 4px #0006; width: 100%; text-align: center; pointer-events: none; letter-spacing: 0.5px; z-index: 2;}
+    /* Chart area */
+    #macroChart { width: 100% !important; max-width: 98vw; height: 170px; background: #e8f2ff; border-radius: 11px; margin: 0.8em 0 1.6em 0; box-shadow: 0 2px 8px #0002;}
+    /* Meal log table */
+    .meal-log-table { width: 100%; margin-bottom: 0.6em; border-collapse: collapse; font-size: 1.04em; background: #fff; border-radius: 10px; box-shadow: 0 1px 8px #0001; overflow-x: auto;}
+    .meal-log-table th, .meal-log-table td { padding: 5px 6px; border: none; text-align: center; white-space: nowrap; font-size: 0.99em;}
+    .meal-log-table th { background: #f2f6fc; color: #5179c2; font-weight: 700;}
+    .meal-log-table tbody tr:nth-child(even) { background: #f7faff;}
+    /* Export buttons */
+    .export-row { display: flex; gap: 0.8em; justify-content: flex-end; margin-bottom: 0.5em;}
+    .export-btn { background: #e9eef6; color: #2b78e4; font-size: 0.99em; padding: 4px 17px; border-radius: 7px; border: none; font-weight: 700; cursor: pointer; margin: 0; box-shadow: 0 1px 3px #0001; transition: background 0.13s, color 0.13s;}
+    .export-btn:hover, .export-btn:focus { background: #d6eaff; color: #0c51a4;}
+    /* Streak ring area */
+    .streak-ring-wrap { margin: 0 auto; margin-top: 2.5em; width: 140px; height: 140px; display: flex; align-items: center; justify-content: center; position: relative; transition: filter 0.3s;}
+    .streak-ring-svg { width: 100%; height: 100%; display: block; filter: drop-shadow(var(--ring-shadow)); }
+    .streak-center-label { position: absolute; left: 50%; top: 51%; transform: translate(-50%,-50%); width: 90px; text-align: center; color: var(--ring-txt); font-family: 'Ringbearer', 'Inter', serif; font-size: 1.12em; line-height: 1.14; font-weight: 700; text-shadow: 0 0 11px #edb941c5, 0 1px 2px #000c; pointer-events: none;}
+    .streak-week-phrase { position: absolute; left: 50%; top: 77%; transform: translate(-50%,0); font-family: 'Ringbearer','Inter',serif; color: var(--gold); font-size: 0.99em; text-align: center; width: 135px; filter: brightness(1.05) blur(0.1px); text-shadow: 0 0 10px #edb94188, 0 2px 8px #000a; pointer-events: none;}
+    /* Minimal streak bar for light mode */
+    .streak-bar-wrap { width: 100%; max-width: 390px; margin: 1.8em auto 0.3em auto; background: #d6eaff; border-radius: 16px; box-shadow: 0 1px 4px #0001; padding: 0.5em 0.7em; font-size: 1.08em; color: #2b78e4; font-weight: 700; letter-spacing: 1px; display: flex; align-items: center; gap: 9px; justify-content: center;}
+    .streak-bar-value { background: #2b78e4; color: #fff; border-radius: 12px; padding: 1.5px 10px; margin: 0 7px; font-size: 1em; font-weight: 700; box-shadow: 0 2px 6px #2b78e411;}
+    /* Input areas */
+    .macro-input-row { display: flex; gap: 0.6em; flex-wrap: wrap; justify-content: center; margin-bottom: 0.4em;}
+    .macro-input { flex: 1 1 41%; min-width: 95px; max-width: 130px; font-size: 1.07em; padding: 7px 6px; margin: 0 0 6px 0; border-radius: 8px; border: 1.2px solid #b6c6e1; background: #f6faff; color: #1a2a2a; box-shadow: 0 2px 5px #b6d4fa11; outline: none; transition: border 0.15s;}
+    .macro-input:focus { border: 1.2px solid #2b78e4; }
+    /* Add meal row */
+    .add-meal-row { display: flex; gap: 0.5em; flex-wrap: wrap; margin-bottom: 0.6em; justify-content: center; align-items: flex-end;}
+    .meal-name-input, .meal-amt-input { font-size: 1.04em; border-radius: 7px; padding: 7px 7px; border: 1.2px solid #c0c9db; outline: none; background: #f7fafc; color: #252525; box-shadow: 0 1px 2px #c7e3fa11; transition: border 0.16s;}
+    .meal-name-input:focus, .meal-amt-input:focus { border: 1.2px solid #49a858; }
+    .add-meal-btn, .scan-btn {
+      background: #2b78e4; color: #fff; border: none; border-radius: 8px; font-weight: 700;
+      padding: 7px 18px; font-size: 1em; cursor: pointer; margin-left: 4px; box-shadow: 0 2px 6px #0002;
+      transition: background 0.16s, color 0.16s;
+      display: flex; align-items: center; gap: 0.5em;
     }
-    .entry-list {
-      margin: 0 0 1.3rem 0;
-      max-height: 185px; overflow-y: auto;
-      border-radius: 10px;
-      background: #f4f6fa;
-      font-size: 1.03em;
-      box-shadow: 0 1px 5px #0002;
-      padding: 8px 12px;
-    }
-    .entry-list-item {
-      border-bottom: 1px dashed #d0d0e9;
-      padding: 5px 0 5px 4px;
-      font-size: 0.98em;
-    }
-    .entry-list-item:last-child {border-bottom: none;}
-    .button-row {
-      margin: 1.4rem 0 0.3rem 0;
-      display: flex; gap: 0.7rem; flex-wrap: wrap;
-      justify-content: space-between;
-    }
-    .mini-btn {
-      padding: 0.6em 1.8em;
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-weight: 700;
-      font-size: 1.04em;
-      box-shadow: 0 1px 7px #8bc58a44;
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-    .mini-btn:hover, .mini-btn:focus {
-      background: #27531f;
-    }
-
-    /* Streak Ring */
-    .streak-section {
-      margin: 1.8rem 0 0 0;
-      display: flex; flex-direction: column; align-items: center;
-      width: 100%;
-      min-height: 90px;
-    }
-    .ring-svg {
-      width: 100px; height: 100px;
-      display: block; margin: 0 auto;
-    }
-    .ring-label {
-      font-family: 'Ringbearer','Inter',sans-serif;
-      text-align: center;
-      font-size: 1.04rem;
-      color: var(--accent);
-      letter-spacing: 0.5px;
-      margin-top: 0.2em;
-    }
-
-    .csv-toast {
-      position: fixed;
-      bottom: 40px;
-      left: 50%; transform: translateX(-50%);
-      background: #22370f;
-      color: #fff;
-      padding: 10px 23px;
-      border-radius: 20px;
-      font-size: 1.09rem;
-      box-shadow: 0 2px 10px #000b;
-      opacity: 0.95;
-      z-index: 99;
-      pointer-events: none;
-      animation: fadeToast 1.9s linear;
+    .add-meal-btn:hover, .add-meal-btn:focus,
+    .scan-btn:hover, .scan-btn:focus { background: #49a858; color: #fff;}
+    .scan-btn { background: #fbe62c; color: #382a00; font-weight: 800; padding: 7px 9px;}
+    .scan-btn svg {width:1.4em;height:1.4em;vertical-align:middle;}
+    /* Toast popup */
+    .toast {
+      position: fixed; left: 50%; bottom: 36px; transform: translateX(-50%);
+      background: #fffbe0; color: #2b78e4;
+      padding: 11px 28px; border-radius: 22px;
+      box-shadow: 0 5px 22px #0006; font-size: 1.08em; font-weight: 700;
+      opacity: 0.97; z-index: 999; pointer-events: none; animation: fadeToast 2.2s linear;
     }
     @keyframes fadeToast {
-      0%{opacity:0;} 10%{opacity:1;} 90%{opacity:0.98;} 100%{opacity:0;}
+      0%{opacity:0;}
+      10%{opacity:1;}
+      85%{opacity:0.98;}
+      100%{opacity:0;}
     }
-
-    /* RING MODE OVERRIDES */
-    body.ringmode {
-      background:
-        var(--ring-map) repeat,
-        radial-gradient(ellipse at 60% 55%, #fbe62c18 0%, #fbe62c10 20%, #271e05 100%);
-      color: #382800;
-      --container-bg: #fdfae3;
-      --text-color: #473200;
-      --accent: #b99d25;
-      --bar-protein: #ecd778;
-      --bar-fat: #eed49a;
-      --bar-carbs: #d3c86d;
-      --bar-bg: #faf4d0;
+    /* Barcode video overlay */
+    #barcodeVideo {
+      position: fixed; left:0; top:0; width: 100vw; height: 100vh; object-fit:cover; z-index: 9998; background:#000f;
+      display: none;
     }
-    body.ringmode .container { box-shadow: 0 4px 28px #b2a26744; }
-    body.ringmode h1 { color: #b99d25; text-shadow: 0 0 13px #fff7, 0 1px 12px #b99d25cc; }
-    body.ringmode .ring-btn { background: #e5c445; color: #322702; }
-    body.ringmode .ring-btn.active { background: #fffba8; color: #b99d25; }
-
-    /* Responsive */
-    @media (max-width:600px) {
-      .container { max-width:100vw; padding:0.8rem 2vw 2.6rem 2vw;}
-      h1 { font-size: 1.3rem; }
-      .bar-label, .bar-value { font-size: 1em; }
-      .bar-goal { font-size: 0.87em;}
-      .ring-svg { width: 75px; height: 75px;}
-      .streak-section { min-height: 75px;}
+    #barcodeOverlay {
+      position:fixed;left:0;top:0;width:100vw;height:100vh;z-index:9999;pointer-events:none;display:none;
     }
+    #barcodeOverlay::after {
+      content:''; display:block; position:absolute;left:0;top:0;width:100vw;height:100vh;
+      background:radial-gradient(ellipse at center,#fff0 60%,#000c 100%);
+      pointer-events:none;
+    }
+    #barcodeCancelBtn {
+      position:fixed;top:15px;right:24px;z-index:10000;background:#fbe62c;color:#382a00;border:none;border-radius:12px;padding:8px 18px;font-size:1.15em;font-weight:800;box-shadow:0 2px 12px #0009;cursor:pointer;
+      display:none;
+    }
+    @media (max-width: 500px) {
+      .container { padding: 0.8em 2vw 2em 2vw; border-radius: 0; }
+      h1 { font-size: 1.17rem; }
+      .goal-line { font-size: 0.98em; gap: 0.5em;}
+      .macro-bar-inner, .macro-bar-label { font-size: 0.97em;}
+      #macroChart { height: 110px;}
+      .streak-ring-wrap { width: 92vw; height: 92vw; max-width: 172px; max-height: 172px;}
+      .streak-center-label { width: 61vw; max-width: 112px; font-size: 0.98em;}
+      .streak-week-phrase { font-size: 0.92em; width: 90vw; max-width: 145px;}
+    }
+    /* Ring Mode! */
+    .ringmode body, .ringmode {
+      background: var(--ring-bg) !important;
+      color: var(--ring-txt) !important;
+      transition: background 0.4s, color 0.3s;
+    }
+    .ringmode .container {
+      background: var(--ring-card) !important;
+      color: var(--ring-txt) !important;
+      box-shadow: 0 4px 32px #5c4b0a99;
+      background-image: url('https://cdn.pixabay.com/photo/2018/01/15/07/51/middle-earth-3081751_1280.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center top;
+    }
+    .ringmode .goal-line, .ringmode .meal-log-table th, .ringmode .macro-bar-label {
+      background: #2e2208 !important;
+      color: #fbe62c !important;
+    }
+    .ringmode .macro-bar-outer { background: #b49c24 !important; }
+    .ringmode .bar-cal { background: linear-gradient(90deg,#fbe62c,#cfa211) !important; color: #5d4b04;}
+    .ringmode .bar-p { background: linear-gradient(90deg,#7dc271,#3b7f2d);}
+    .ringmode .bar-c { background: linear-gradient(90deg,#5ba4fa,#30426e);}
+    .ringmode .bar-f { background: linear-gradient(90deg,#f5a94d,#ad7a1d);}
+    .ringmode .macro-bar-label { color: #fff9db !important;}
+    .ringmode .streak-bar-wrap { background: #3a3008 !important; color: #fbe62c !important;}
+    .ringmode .export-btn { background: #3e3108; color: #fbe62c;}
+    .ringmode .theme-btn { background: #fbe62c; color: #3b2e08;}
+    .ringmode .theme-btn.active { background: #fff; color: #a28907;}
+    .ringmode .meal-log-table th { color: #edb941;}
+    .ringmode .meal-log-table { background: #382a00; }
+    .ringmode .meal-log-table td { color: #fbe62c;}
   </style>
-  <!-- Ringbearer font -->
-  <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/ringbearer" />
 </head>
 <body>
-  <div class="container">
-    <button class="ring-btn" id="ringBtn" onclick="toggleRingMode()">Ring Mode</button>
+  <div class="container" id="macroLegendContainer">
+    <div class="theme-toggle">
+      <button class="theme-btn active" id="appleLightBtn" onclick="setTheme('light')">Apple Light</button>
+      <button class="theme-btn" id="ringModeBtn" onclick="setTheme('ring')">Ring Mode</button>
+    </div>
     <h1>MacroLegend</h1>
-    <form id="macroForm" onsubmit="addMacroEntry(event)">
-      <label>Calories</label>
-      <input type="number" id="calories" min="0" step="1" required placeholder="e.g. 2200" />
-      <label>Protein (g)</label>
-      <input type="number" id="protein" min="0" step="1" required placeholder="e.g. 160" />
-      <label>Fat (g)</label>
-      <input type="number" id="fat" min="0" step="1" required placeholder="e.g. 65" />
-      <label>Carbs (g)</label>
-      <input type="number" id="carbs" min="0" step="1" required placeholder="e.g. 275" />
-      <label>Goal Name</label>
-      <input type="text" id="goalName" maxlength="32" placeholder="(optional, e.g. Cut, Bulk)" />
-      <button type="submit" class="mini-btn" style="margin-top: 1.2em; width:100%;">Add Entry</button>
-    </form>
-    <div class="macro-bars" id="macroBars">
-      <!-- Progress bars inserted here -->
+    <div class="tab-row">
+      <button class="tab-btn active" id="tabCalc" onclick="showTab('calc')">Macro Calculator</button>
+      <button class="tab-btn" id="tabProg" onclick="showTab('prog')">Macro Progression</button>
     </div>
-    <div class="button-row">
-      <button class="mini-btn" onclick="exportCSV()">Export as CSV</button>
-      <button class="mini-btn" onclick="exportTXT()">Export as TXT</button>
-      <button class="mini-btn" onclick="clearAll()">Clear All</button>
+    <div id="tabArea">
+      <!-- Tabs will be filled by JS -->
     </div>
-    <div class="entry-list" id="entryList"></div>
-    <div class="streak-section">
-      <svg class="ring-svg" viewBox="0 0 100 100">
-        <circle cx="50" cy="50" r="45" fill="none" stroke="#e1cb7a" stroke-width="8" opacity="0.33"/>
-        <circle id="streakRing" cx="50" cy="50" r="45" fill="none" stroke="#b99d25" stroke-width="8" stroke-linecap="round"
-          stroke-dasharray="282.74" stroke-dashoffset="0"/>
-        <text x="50" y="56" text-anchor="middle" font-size="1.95em" fill="#b99d25" font-family="Ringbearer,Inter,sans-serif" font-weight="700" id="streakNum">0</text>
-      </svg>
-      <div class="ring-label" id="streakPhrase">"A wizard is never late, nor is he early..."</div>
-    </div>
+    <audio id="streakSound" preload="auto">
+      <source src="https://cdn.pixabay.com/audio/2022/07/26/audio_124b01f3be.mp3" type="audio/mp3">
+    </audio>
+    <video id="barcodeVideo" autoplay playsinline></video>
+    <div id="barcodeOverlay"></div>
+    <button id="barcodeCancelBtn" onclick="stopBarcodeScan()">Cancel Scan</button>
   </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2@1.2.6/dist/quagga.min.js"></script>
   <script>
-    // ========== LOTR STREAK PHRASES ==========
-    const phrases = [
-      "A wizard is never late, nor is he early.",
-      "There is some good in this world, and it’s worth fighting for.",
-      "Not all those who wander are lost.",
+    // ========== PHRASES ==========
+    const streakPhrases = [
       "Even the smallest person can change the course of the future.",
+      "Not all those who wander are lost.",
       "The road goes ever on and on.",
-      "Courage is found in unlikely places.",
-      "You shall not pass!",
-      "One ring to rule them all.",
-      "There’s only one Lord of the Ring.",
       "Deeds will not be less valiant because they are unpraised.",
-      "The world is indeed full of peril.",
-      "All we have to decide is what to do with the time given to us.",
-      "I am with you, Samwise Gamgee.",
-      "Speak, friend, and enter.",
       "Faithless is he that says farewell when the road darkens.",
-      "There’s some good in this world, Mr. Frodo.",
-      "A day may come when the courage of men fails.",
-      "The hands of a king are the hands of a healer.",
-      "Oft hope is born when all is forlorn.",
-      "May it be a light for you in dark places.",
-      "Go where you must go, and hope!",
-      "There is always hope.",
-      "The wide world is all about you.",
-      "It’s the job that’s never started as takes longest to finish.",
-      "Sam will go with you.",
-      "The ring has awoken.",
-      "Even darkness must pass.",
-      "What about second breakfast?",
-      "The beacons are lit!",
-      "Forth Eorlingas!",
-      "Let him be spared. Do not kill him.",
-      "Shadowfax! Show us the meaning of haste.",
-      "But in the end it’s only a passing thing, this shadow.",
-      "The horn of Gondor has not sounded in vain.",
-      "You have my sword.",
-      "And my bow.",
-      "And my axe.",
-      "Mithrandir, why the halfling?",
-      "I will take the Ring to Mordor.",
-      "There’s still time to change the course.",
-      "All that is gold does not glitter.",
-      "I would rather share one lifetime with you.",
+      "All we have to decide is what to do with the time that is given us.",
+      "There’s some good in this world, and it’s worth fighting for.",
+      "I am glad you are here with me. Here at the end of all things.",
+      "The world is indeed full of peril, and in it there are many dark places.",
+      "A wizard is never late, nor is he early, he arrives precisely when he means to.",
+      "You shall not pass!",
+      "Courage is found in unlikely places.",
+      "The shadow is only a passing thing.",
+      "Hope remains while the Company is true.",
+      "The board is set, the pieces are moving.",
+      "One does not simply walk into Mordor.",
+      "I would rather share one lifetime with you than face all the ages of this world alone.",
+      "May it be a light to you in dark places, when all other lights go out.",
+      "It's a dangerous business, going out your door.",
+      "The wise speak only of what they know.",
+      "Many that live deserve death. And some that die deserve life.",
+      "Even darkness must pass. A new day will come.",
+      "The strength of the ring-bearer is in his heart.",
+      "There’s always hope.",
       "For Frodo.",
-      "Fly, you fools!",
-      "The grey rain-curtain of this world rolls back.",
-      "Gollum! Gollum!",
-      "You are the luckiest, the canniest, and the most reckless man I ever knew.",
-      "The world is changed.",
-      "The age of Men is over.",
-      "The time of the Orc has come."
+      "The journey doesn’t end here.",
+      "I am no man!",
+      "The Ring has awoken.",
+      "Speak, friend, and enter.",
+      "There and back again.",
+      "Let him not vow to walk in the dark, who has not seen the nightfall.",
+      "Renewed shall be blade that was broken.",
+      "I will take the Ring, though I do not know the way.",
+      "A day may come when the courage of men fails… but it is not this day.",
+      "My friends, you bow to no one.",
+      "White shores, and beyond, a far green country under a swift sunrise.",
+      "You have my sword.",
+      "The Shire must truly be a great place.",
+      "If by my life or death I can protect you, I will.",
+      "End? No, the journey doesn't end here.",
+      "Where there's life, there's hope.",
+      "It’s the job that’s never started as takes longest to finish.",
+      "But in the end, it’s only a passing thing, this shadow.",
+      "I can't carry it for you, but I can carry you!",
+      "The hands of a king are the hands of a healer.",
+      "Shadowfax, show us the meaning of haste.",
+      "There is no curse in Elvish, Entish, or the tongues of Men for this treachery.",
+      "Mithrandir, why did you leave us?",
+      "You shall be the Fellowship of the Ring.",
+      "I will not say: do not weep; for not all tears are an evil.",
+      "The fire of your heart outshines the darkness.",
+      "May your path be green and the breeze on your back.",
+      "Streaks are for heroes. Today you are legend.",
+      "Let the courage of the Eldar guide you.",
     ];
-
-    // ========== APP STATE ==========
-    let macroData = [];
-    let streakCount = 0;
-    let streakLastDate = '';
-    let streak = 0;
-
-    // ========== RING MODE ==========
-    function toggleRingMode() {
-      document.body.classList.toggle('ringmode');
-      document.getElementById('ringBtn').classList.toggle('active');
-      if (document.body.classList.contains('ringmode')) playRingSound();
-    }
-
-    function playRingSound() {
-      let audio = document.getElementById('ring-audio');
-      if (!audio) {
-        audio = document.createElement('audio');
-        audio.id = 'ring-audio';
-        audio.src = 'https://cdn.pixabay.com/audio/2022/10/16/audio_125b1c4ab8.mp3'; // Epic choir
-        audio.volume = 0.25;
-        document.body.appendChild(audio);
+    // ========== STATE ==========
+    let macroGoals = {calories: 2000, protein: 150, carbs: 200, fat: 70};
+    let macroTotals = {calories: 0, protein: 0, carbs: 0, fat: 0};
+    let mealLog = [];
+    let streak = { days: 1, best: 1, lastDate: null, weekPhrase: 0 };
+    try {
+      if (localStorage.getItem('macroGoals')) macroGoals = JSON.parse(localStorage.getItem('macroGoals'));
+      if (localStorage.getItem('mealLog')) mealLog = JSON.parse(localStorage.getItem('mealLog'));
+      if (localStorage.getItem('streak')) streak = JSON.parse(localStorage.getItem('streak'));
+    } catch (e) {}
+    let chart;
+    // ========== THEME ==========
+    function setTheme(theme) {
+      const body = document.body;
+      const cont = document.getElementById('macroLegendContainer');
+      if (theme === 'ring') {
+        body.classList.add('ringmode');
+        cont.classList.add('ringmode');
+        document.getElementById('appleLightBtn').classList.remove('active');
+        document.getElementById('ringModeBtn').classList.add('active');
+        document.body.style.background = "radial-gradient(ellipse at center, #fbe62c33 0%, #271e0570 100%)";
+        renderStreak();
+      } else {
+        body.classList.remove('ringmode');
+        cont.classList.remove('ringmode');
+        document.getElementById('appleLightBtn').classList.add('active');
+        document.getElementById('ringModeBtn').classList.remove('active');
+        document.body.style.background = "var(--light-bg)";
+        renderStreak();
       }
-      audio.currentTime = 0;
-      audio.play();
     }
-
-    // ========== MACRO INPUT ==========
-    function addMacroEntry(e) {
+    setTheme('light');
+    // ========== TAB SYSTEM ==========
+    function showTab(tab) {
+      document.getElementById('tabCalc').classList.remove('active');
+      document.getElementById('tabProg').classList.remove('active');
+      if (tab === 'calc') document.getElementById('tabCalc').classList.add('active');
+      else document.getElementById('tabProg').classList.add('active');
+      renderTab(tab);
+    }
+    function renderTab(tab) {
+      if (tab === 'calc') renderCalculatorTab();
+      else renderProgressionTab();
+    }
+    // ========== MACRO CALCULATOR TAB ==========
+    function renderCalculatorTab() {
+      document.getElementById('tabArea').innerHTML = `
+      <form onsubmit="setGoalsFromInputs(event)" class="macro-input-row">
+        <input class="macro-input" id="inputWeight" type="number" min="70" placeholder="Weight (lbs)">
+        <input class="macro-input" id="inputHeight" type="number" min="48" placeholder="Height (in)">
+        <input class="macro-input" id="inputAge" type="number" min="8" max="99" placeholder="Age">
+        <select class="macro-input" id="inputGender">
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+        <select class="macro-input" id="inputActivity">
+          <option value="1.2">Sedentary</option>
+          <option value="1.375">Light (1-3 days/wk)</option>
+          <option value="1.55">Moderate (3-5 days/wk)</option>
+          <option value="1.725">Active (6-7 days/wk)</option>
+          <option value="1.9">Very Active</option>
+        </select>
+        <select class="macro-input" id="inputGoal">
+          <option value="maintain">Maintain</option>
+          <option value="lose">Lose Weight</option>
+          <option value="gain">Gain Weight</option>
+        </select>
+        <button class="add-meal-btn" style="min-width:99px" type="submit">Set Macros</button>
+      </form>
+      <div style="color:#687; font-size:0.96em;text-align:center; margin-bottom:1.2em">
+        Use the calculator to estimate daily calorie/macros.  
+        <br><span style="color:#4275ba;font-weight:600;">Your settings transfer to Progression tab instantly.</span>
+      </div>
+      <div class="macro-input-row" style="gap:0.3em;">
+        <input class="macro-input" id="goalCalories" type="number" min="0" placeholder="Goal Calories">
+        <input class="macro-input" id="goalProtein" type="number" min="0" placeholder="Goal Protein (g)">
+        <input class="macro-input" id="goalCarbs" type="number" min="0" placeholder="Goal Carbs (g)">
+        <input class="macro-input" id="goalFat" type="number" min="0" placeholder="Goal Fat (g)">
+        <button class="add-meal-btn" style="min-width:97px" onclick="saveGoalInputs()" type="button">Update Goal</button>
+      </div>
+      `;
+      document.getElementById('goalCalories').value = macroGoals.calories;
+      document.getElementById('goalProtein').value = macroGoals.protein;
+      document.getElementById('goalCarbs').value = macroGoals.carbs;
+      document.getElementById('goalFat').value = macroGoals.fat;
+    }
+    // CALCULATOR ACTIONS
+    function setGoalsFromInputs(e) {
       e.preventDefault();
-      const cal = parseInt(document.getElementById('calories').value) || 0;
-      const p = parseInt(document.getElementById('protein').value) || 0;
-      const f = parseInt(document.getElementById('fat').value) || 0;
-      const c = parseInt(document.getElementById('carbs').value) || 0;
-      const goal = (document.getElementById('goalName').value || '').trim();
-      const date = new Date().toISOString().split('T')[0];
-
-      if (cal <= 0 || p < 0 || f < 0 || c < 0) return;
-      macroData.push({date,cal,p,f,c,goal});
-      if (macroData.length > 50) macroData = macroData.slice(-50); // Limit entries
-      localStorage.setItem('macroData',JSON.stringify(macroData));
-      updateMacros();
-
-      // Streak logic: if last entry was yesterday, continue; if today, keep streak; else reset
-      let lastDate = streakLastDate || localStorage.getItem('streakLastDate') || '';
-      if (lastDate && lastDate !== date) {
-        let last = new Date(lastDate);
-        let today = new Date(date);
-        let diff = Math.round((today - last)/(1000*60*60*24));
-        if (diff === 1) streak++;
-        else if (diff === 0) {/* same day, keep streak */}
-        else streak = 1;
-      } else if (!lastDate) {
-        streak = 1;
-      }
-      streakLastDate = date;
-      localStorage.setItem('streak', streak);
-      localStorage.setItem('streakLastDate', date);
-      updateStreak();
-      document.getElementById('macroForm').reset();
+      let w = Number(document.getElementById('inputWeight').value);
+      let h = Number(document.getElementById('inputHeight').value);
+      let a = Number(document.getElementById('inputAge').value);
+      let g = document.getElementById('inputGender').value;
+      let act = Number(document.getElementById('inputActivity').value);
+      let goal = document.getElementById('inputGoal').value;
+      if (!w || !h || !a) return showToast("Fill in all fields!");
+      let bmr = (g==="male")
+        ? 66 + (6.23 * w) + (12.7 * h) - (6.8 * a)
+        : 655 + (4.35 * w) + (4.7 * h) - (4.7 * a);
+      let tdee = bmr * act;
+      let cal = tdee;
+      if (goal === "lose") cal -= 500;
+      if (goal === "gain") cal += 300;
+      macroGoals.calories = Math.round(cal);
+      macroGoals.protein = Math.round(w*0.8);
+      macroGoals.carbs = Math.round((cal*0.45)/4);
+      macroGoals.fat = Math.round((cal*0.25)/9);
+      saveData(); renderAll();
+      showToast("Goals updated!");
     }
-
-    function updateMacros() {
-      // Show the last entry as current target
-      let last = macroData.length ? macroData[macroData.length-1] : {cal:0,p:0,f:0,c:0,goal:""};
-      let sumCal = 0, sumP=0, sumF=0, sumC=0;
-      macroData.forEach(e => {sumCal+=e.cal; sumP+=e.p; sumF+=e.f; sumC+=e.c;});
-
-      // Bars
-      let bars = [
-        {label:"Protein", val: last.p, goal: last.cal ? Math.round(last.cal*0.3/4) : 0, color:"bar-protein"},
-        {label:"Fat",    val: last.f, goal: last.cal ? Math.round(last.cal*0.25/9) : 0, color:"bar-fat"},
-        {label:"Carbs",  val: last.c, goal: last.cal ? Math.round(last.cal*0.45/4) : 0, color:"bar-carbs"},
-      ];
-      let html = bars.map(b=>`
-        <div class="macro-bar">
-          <span class="bar-label">${b.label}</span>
-          <div class="bar-fill ${b.color}" style="width:${Math.min(100,b.goal?b.val/b.goal*100:0)}%">
-            ${b.val}g
+    function saveGoalInputs() {
+      macroGoals.calories = Number(document.getElementById('goalCalories').value)||0;
+      macroGoals.protein = Number(document.getElementById('goalProtein').value)||0;
+      macroGoals.carbs = Number(document.getElementById('goalCarbs').value)||0;
+      macroGoals.fat = Number(document.getElementById('goalFat').value)||0;
+      saveData(); renderAll();
+      showToast("Macros saved!");
+    }
+    // ========== PROGRESSION TAB ==========
+    function renderProgressionTab() {
+      document.getElementById('tabArea').innerHTML = `
+      <div class="goal-line" id="goalLine"></div>
+      <div class="macro-bars" id="macroBars"></div>
+      <canvas id="macroChart"></canvas>
+      <form onsubmit="addMeal(event)" class="add-meal-row">
+        <input class="meal-name-input" id="mealName" placeholder="Meal name/food" autocomplete="off" required>
+        <input class="meal-amt-input" id="mealCalories" type="number" min="0" placeholder="Calories" required>
+        <input class="meal-amt-input" id="mealProtein" type="number" min="0" placeholder="Protein (g)">
+        <input class="meal-amt-input" id="mealCarbs" type="number" min="0" placeholder="Carbs (g)">
+        <input class="meal-amt-input" id="mealFat" type="number" min="0" placeholder="Fat (g)">
+        <button class="add-meal-btn" type="submit">+ Add</button>
+        <button type="button" class="scan-btn" onclick="scanBarcode()">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="5" height="5"/><rect x="16" y="3" width="5" height="5"/><rect x="3" y="16" width="5" height="5"/><rect x="16" y="16" width="5" height="5"/><path d="M9 5h6M19 9v6M5 9v6M9 19h6"/></svg>
+        </button>
+      </form>
+      <table class="meal-log-table" id="mealLogTable"></table>
+      <div class="export-row">
+        <button class="export-btn" onclick="exportCSV()">Export CSV</button>
+        <button class="export-btn" onclick="exportTXT()">Export TXT</button>
+        <button class="export-btn" onclick="window.print()">Print / PDF</button>
+      </div>
+      <div id="streakArea"></div>
+      `;
+      renderGoalLine();
+      renderMacroBars();
+      renderMealLog();
+      renderChart();
+      renderStreak();
+    }
+    // ========== MACRO PROGRESS ========== 
+    function renderGoalLine() {
+      const {calories, protein, carbs, fat} = macroGoals;
+      document.getElementById('goalLine').innerHTML =
+        `<span class="goal-macro-cal">Calories: <b>${calories}</b></span>
+         <span class="goal-macro-p">P: <b>${protein}g</b></span>
+         <span class="goal-macro-c">C: <b>${carbs}g</b></span>
+         <span class="goal-macro-f">F: <b>${fat}g</b></span>`;
+    }
+    function renderMacroBars() {
+      const {calories, protein, carbs, fat} = macroGoals;
+      const t = macroTotals;
+      function pct(val, goal) { return Math.min(100, Math.round(100 * val/goal)); }
+      document.getElementById('macroBars').innerHTML = `
+        <div class="macro-bar-outer">
+          <div class="macro-bar-inner bar-cal" style="width:${pct(t.calories,calories)}%">
+            <span class="macro-bar-label">${t.calories}/${calories} kcal</span>
           </div>
-          <span class="bar-value">${b.val}/${b.goal}g</span>
         </div>
-      `).join('');
-      document.getElementById('macroBars').innerHTML = html;
-
-      // History
-      let entries = macroData.slice(-10).map(e=>
-        `<div class="entry-list-item">
-          <b>${e.date}</b> — Cal: ${e.cal}, P: ${e.p}, F: ${e.f}, C: ${e.c}
-          ${e.goal?`<span style="color:#777;font-size:0.98em">(${e.goal})</span>`:""}
-        </div>`
-      ).reverse().join('');
-      document.getElementById('entryList').innerHTML = entries;
+        <div class="macro-bar-outer">
+          <div class="macro-bar-inner bar-p" style="width:${pct(t.protein,protein)}%">
+            <span class="macro-bar-label">${t.protein}/${protein}g Protein</span>
+          </div>
+        </div>
+        <div class="macro-bar-outer">
+          <div class="macro-bar-inner bar-c" style="width:${pct(t.carbs,carbs)}%">
+            <span class="macro-bar-label">${t.carbs}/${carbs}g Carbs</span>
+          </div>
+        </div>
+        <div class="macro-bar-outer">
+          <div class="macro-bar-inner bar-f" style="width:${pct(t.fat,fat)}%">
+            <span class="macro-bar-label">${t.fat}/${fat}g Fat</span>
+          </div>
+        </div>
+      `;
     }
-
+    // ========== MEAL LOG ========== 
+    function addMeal(e) {
+      e.preventDefault();
+      const name = document.getElementById('mealName').value.trim();
+      const calories = Number(document.getElementById('mealCalories').value);
+      const protein = Number(document.getElementById('mealProtein').value) || 0;
+      const carbs = Number(document.getElementById('mealCarbs').value) || 0;
+      const fat = Number(document.getElementById('mealFat').value) || 0;
+      if (!name || !calories) return showToast("Enter meal name and calories!");
+      mealLog.push({name,calories,protein,carbs,fat,date:Date.now()});
+      saveData();
+      document.getElementById('mealName').value = '';
+      document.getElementById('mealCalories').value = '';
+      document.getElementById('mealProtein').value = '';
+      document.getElementById('mealCarbs').value = '';
+      document.getElementById('mealFat').value = '';
+      renderAll();
+      checkStreak();
+      showToast("Meal added!");
+    }
+    function renderMealLog() {
+      let rows = mealLog.map((m,i) =>
+        `<tr>
+          <td>${m.name}</td>
+          <td>${m.calories}</td>
+          <td>${m.protein}</td>
+          <td>${m.carbs}</td>
+          <td>${m.fat}</td>
+          <td><button onclick="removeMeal(${i})" style="color:#e34747;font-weight:700;font-size:0.93em;border:none;background:none;cursor:pointer;">✕</button></td>
+        </tr>`
+      ).join('');
+      document.getElementById('mealLogTable').innerHTML = `
+        <thead>
+          <tr>
+            <th>Meal</th>
+            <th>Cal</th>
+            <th>P</th>
+            <th>C</th>
+            <th>F</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      `;
+    }
+    function removeMeal(idx) {
+      mealLog.splice(idx,1);
+      saveData();
+      renderAll();
+      showToast("Meal removed.");
+    }
+    // ========== MACRO TOTALS ==========
+    function updateTotals() {
+      macroTotals = {calories:0,protein:0,carbs:0,fat:0};
+      mealLog.forEach(m=>{
+        macroTotals.calories += Number(m.calories)||0;
+        macroTotals.protein += Number(m.protein)||0;
+        macroTotals.carbs += Number(m.carbs)||0;
+        macroTotals.fat += Number(m.fat)||0;
+      });
+    }
+    // ========== CHART ==========
+    function renderChart() {
+      const ctx = document.getElementById('macroChart').getContext('2d');
+      if (chart) chart.destroy();
+      chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Calories','Protein','Carbs','Fat'],
+          datasets: [
+            {
+              label: 'Current',
+              data: [macroTotals.calories, macroTotals.protein, macroTotals.carbs, macroTotals.fat],
+              backgroundColor: [
+                'rgba(251,230,44,0.82)',  // Calories: gold
+                'rgba(81,193,110,0.85)',  // Protein: green
+                'rgba(97,170,255,0.85)',  // Carbs: blue
+                'rgba(245,169,77,0.85)'   // Fat: orange
+              ],
+              borderRadius: 10,
+              maxBarThickness: 40,
+            },
+            {
+              label: 'Goal',
+              data: [macroGoals.calories, macroGoals.protein, macroGoals.carbs, macroGoals.fat],
+              backgroundColor: [
+                'rgba(251,230,44,0.19)',
+                'rgba(81,193,110,0.18)',
+                'rgba(97,170,255,0.18)',
+                'rgba(245,169,77,0.17)'
+              ],
+              borderRadius: 10,
+              borderWidth: 0,
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {display: false},
+            tooltip: {enabled: true},
+          },
+          scales: {
+            x: { grid: {display: false}, ticks: {color: '#888', font: {weight:700}}},
+            y: {
+              beginAtZero: true,
+              ticks: {color: '#888', font: {weight:700}},
+              grid: {color:'#e5ecfa'},
+            }
+          }
+        }
+      });
+    }
+    // ========== STREAK ==========
+    function checkStreak() {
+      const today = new Date();
+      const todayStr = today.toISOString().slice(0,10);
+      if (streak.lastDate !== todayStr) {
+        const yesterday = new Date(today);
+        yesterday.setDate(yesterday.getDate()-1);
+        const ystr = yesterday.toISOString().slice(0,10);
+        if (streak.lastDate === ystr) {
+          streak.days += 1;
+          if (streak.days > streak.best) {
+            streak.best = streak.days;
+            playStreakSound();
+          }
+        } else {
+          streak.days = 1;
+        }
+        streak.lastDate = todayStr;
+        streak.weekPhrase = ((streak.days-1) % streakPhrases.length);
+        saveData();
+        renderStreak();
+      }
+    }
+    function renderStreak() {
+      const streakArea = document.getElementById('streakArea');
+      const isRing = document.body.classList.contains('ringmode');
+      const phrase = streakPhrases[streak.weekPhrase % streakPhrases.length];
+      if (isRing) {
+        streakArea.innerHTML = `
+        <div class="streak-ring-wrap">
+          <svg class="streak-ring-svg" width="140" height="140" viewBox="0 0 140 140">
+            <defs>
+              <radialGradient id="gold" cx="70" cy="70" r="70" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#fff9c9"/>
+                <stop offset="65%" stop-color="#edb941"/>
+                <stop offset="100%" stop-color="#a28209"/>
+              </radialGradient>
+            </defs>
+            <circle cx="70" cy="70" r="58" fill="url(#gold)" stroke="#d4b117" stroke-width="7"/>
+            <text x="70" y="70" text-anchor="middle" fill="#bd8c19" font-family="Ringbearer, serif"
+              font-size="13" font-weight="bold" dy="10" letter-spacing="2">
+              ${toElvishInscription(streak.days)}
+            </text>
+          </svg>
+          <div class="streak-center-label">
+            Streak<br>
+            <span style="font-size:1.65em;letter-spacing:2px;">${streak.days}</span>
+            <br>Best: <b>${streak.best}</b>
+          </div>
+          <div class="streak-week-phrase">${phrase}</div>
+        </div>
+        `;
+      } else {
+        streakArea.innerHTML = `
+          <div class="streak-bar-wrap">
+            Streak
+            <span class="streak-bar-value">${streak.days}</span>
+            | Best: <span class="streak-bar-value">${streak.best}</span>
+          </div>
+          <div style="text-align:center;color:#567;font-size:1.01em;font-weight:400;margin:0.7em 0 1em 0;">"${phrase}"</div>
+        `;
+      }
+    }
+    function toElvishInscription(num) {
+      const roman = ["","I","II","III","IV","V","VI","VII","VIII","IX","X",
+        "XI","XII","XIII","XIV","XV","XVI","XVII","XVIII","XIX","XX",
+        "XXI","XXII","XXIII","XXIV","XXV","XXVI","XXVII","XXVIII","XXIX","XXX",
+        "XXXI","XXXII","XXXIII","XXXIV","XXXV","XXXVI","XXXVII","XXXVIII","XXXIX","XL",
+        "XLI","XLII","XLIII","XLIV","XLV","XLVI","XLVII","XLVIII","XLIX","L"];
+      let romanNum = num < roman.length ? roman[num] : num;
+      return "Ash nazg " + romanNum + " burzum-ishi";
+    }
+    function playStreakSound() {
+      if (document.body.classList.contains('ringmode')) {
+        try {
+          document.getElementById('streakSound').currentTime = 0;
+          document.getElementById('streakSound').play();
+        } catch (e) {}
+      }
+    }
+    // ========== DATA STORAGE ==========
+    function saveData() {
+      localStorage.setItem('macroGoals', JSON.stringify(macroGoals));
+      localStorage.setItem('mealLog', JSON.stringify(mealLog));
+      localStorage.setItem('streak', JSON.stringify(streak));
+    }
     // ========== EXPORT ==========
     function exportCSV() {
-      if (!macroData.length) return showToast("No data to export");
-      let csv = "Date,Calories,Protein,Fat,Carbs,Goal\n" + macroData.map(
-        e => [e.date,e.cal,e.p,e.f,e.c,e.goal].join(",")
-      ).join("\n");
-      let blob = new Blob([csv],{type:'text/csv'});
-      let url = URL.createObjectURL(blob);
-      let a = document.createElement('a');
-      a.href = url; a.download = "macrolegend.csv";
-      document.body.appendChild(a); a.click(); document.body.removeChild(a);
-      showToast('Exported CSV!');
+      let csv = "Meal,Calories,Protein,Carbs,Fat\n";
+      mealLog.forEach(m=>{
+        csv+=`${m.name},${m.calories},${m.protein},${m.carbs},${m.fat}\n`;
+      });
+      download(csv, "macrolegend.csv");
     }
     function exportTXT() {
-      if (!macroData.length) return showToast("No data to export");
-      let txt = macroData.map(e=>
-        `${e.date}: Cal ${e.cal}, Protein ${e.p}g, Fat ${e.f}g, Carbs ${e.c}g${e.goal?` (${e.goal})`:""}`
-      ).join("\n");
-      let blob = new Blob([txt],{type:'text/plain'});
-      let url = URL.createObjectURL(blob);
-      let a = document.createElement('a');
-      a.href = url; a.download = "macrolegend.txt";
-      document.body.appendChild(a); a.click(); document.body.removeChild(a);
-      showToast('Exported TXT!');
+      let txt = "MacroLegend Log\n==================\n";
+      mealLog.forEach(m=>{
+        txt+=`${m.name.padEnd(16)} | Cal: ${m.calories} P: ${m.protein} C: ${m.carbs} F: ${m.fat}\n`;
+      });
+      download(txt, "macrolegend.txt");
     }
-
-    // ========== CLEAR ==========
-    function clearAll() {
-      if (!confirm('Clear all macro data and streak?')) return;
-      macroData = [];
-      streak = 0;
-      streakLastDate = '';
-      localStorage.removeItem('macroData');
-      localStorage.removeItem('streak');
-      localStorage.removeItem('streakLastDate');
-      updateMacros();
-      updateStreak();
+    function download(content, filename) {
+      const a = document.createElement('a');
+      const file = new Blob([content], {type: 'text/plain'});
+      a.href = URL.createObjectURL(file);
+      a.download = filename;
+      a.click();
+      setTimeout(()=>URL.revokeObjectURL(a.href), 800);
     }
-
-    // ========== STREAK DISPLAY ==========
-    function updateStreak() {
-      let streakNum = streak || parseInt(localStorage.getItem('streak')||"0");
-      let phraseIdx = (streakNum-1) % phrases.length;
-      document.getElementById('streakNum').textContent = streakNum||"0";
-      document.getElementById('streakPhrase').textContent = phrases[phraseIdx] || "";
-      // Animate ring
-      let ring = document.getElementById('streakRing');
-      let max = 52; // "weeks in a year" scale
-      let frac = Math.min(1,streakNum/max);
-      ring.setAttribute('stroke-dashoffset', 282.74 * (1-frac));
-    }
-
-    // ========== TOAST ==========
+    // ========== TOAST POPUP ==========
     function showToast(msg) {
-      let toast = document.createElement('div');
-      toast.className = 'csv-toast';
-      toast.innerText = msg;
-      document.body.appendChild(toast);
-      setTimeout(() => { toast.remove(); }, 1800);
+      const el = document.createElement('div');
+      el.className = 'toast'; el.textContent = msg;
+      document.body.appendChild(el);
+      setTimeout(()=>el.remove(), 2100);
     }
-
+    // ========== BARCODE SCANNER ==========
+    let scanning = false;
+    function scanBarcode() {
+      if (scanning) return;
+      scanning = true;
+      document.getElementById('barcodeVideo').style.display = 'block';
+      document.getElementById('barcodeOverlay').style.display = 'block';
+      document.getElementById('barcodeCancelBtn').style.display = 'block';
+      Quagga.init({
+        inputStream: {
+          name: "Live",
+          type: "LiveStream",
+          target: document.querySelector('#barcodeVideo'),
+          constraints: { facingMode: "environment" }
+        },
+        decoder: { readers: ["ean_reader", "ean_13_reader","upc_reader","upc_e_reader"] }
+      }, function (err) {
+        if (err) { showToast('Camera error'); stopBarcodeScan(); return; }
+        Quagga.start();
+      });
+      Quagga.onDetected(barcodeDetected);
+    }
+    function barcodeDetected(data) {
+      stopBarcodeScan();
+      let code = data.codeResult.code;
+      showToast("Scanned: "+code);
+      // Fetch from OpenFoodFacts
+      fetch(`https://world.openfoodfacts.org/api/v0/product/${code}.json`).then(r=>r.json()).then(info=>{
+        if (info.status === 1 && info.product && info.product.nutriments) {
+          let n = info.product.nutriments;
+          let name = info.product.product_name || info.product.brands || "Barcode Food";
+          let cals = Math.round(n['energy-kcal_serving']||n['energy-kcal_100g']||0);
+          let p = Math.round(n['proteins_serving']||n['proteins_100g']||0);
+          let car = Math.round(n['carbohydrates_serving']||n['carbohydrates_100g']||0);
+          let fat = Math.round(n['fat_serving']||n['fat_100g']||0);
+          if (!cals) cals = Math.round((n['energy_100g']||0)/4.184);
+          mealLog.push({name,calories:cals,protein:p,carbs:car,fat:fat,date:Date.now()});
+          saveData(); renderAll();
+          showToast("Added "+name);
+        } else {
+          showToast("No food info found");
+        }
+      }).catch(()=>showToast("Scan failed!"));
+    }
+    function stopBarcodeScan() {
+      Quagga.stop();
+      document.getElementById('barcodeVideo').style.display = 'none';
+      document.getElementById('barcodeOverlay').style.display = 'none';
+      document.getElementById('barcodeCancelBtn').style.display = 'none';
+      scanning = false;
+      Quagga.offDetected(barcodeDetected);
+    }
+    // ========== ALL RENDERS ==========
+    function renderAll() {
+      updateTotals();
+      if (document.getElementById('tabCalc').classList.contains('active')) renderCalculatorTab();
+      else renderProgressionTab();
+    }
     // ========== INIT ==========
-    window.onload = function() {
-      macroData = JSON.parse(localStorage.getItem('macroData')||"[]");
-      streak = parseInt(localStorage.getItem('streak')||"0");
-      streakLastDate = localStorage.getItem('streakLastDate')||"";
-      updateMacros();
-      updateStreak();
-    }
+    renderTab('calc');
+    // Handle tab click logic (because we re-render dom)
+    document.getElementById('tabCalc').onclick = ()=>showTab('calc');
+    document.getElementById('tabProg').onclick = ()=>showTab('prog');
+    // Theme buttons
+    document.getElementById('appleLightBtn').onclick = ()=>setTheme('light');
+    document.getElementById('ringModeBtn').onclick = ()=>setTheme('ring');
+    // On reload, restore streak UI in the right place
+    setTimeout(()=>{ renderStreak(); }, 80);
   </script>
 </body>
 </html>
