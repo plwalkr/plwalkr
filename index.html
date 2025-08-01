@@ -1,996 +1,1251 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>MacroLegend</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
-<link href="https://fonts.cdnfonts.com/css/ringbearer" rel="stylesheet">
-<style>
-:root {
-  --light-bg: #f6f6fa;
-  --light-card: #fff;
-  --light-text: #1a1a1a;
-  --light-accent: #2b78e4;
-  --light-bar: #d6eaff;
-  --light-shadow: 0 4px 32px #0002;
-  --gold: #fbe62c;
-  --ring-shadow: 0 0 18px 6px #edb94144;
-  --ring-bar: #f8c944;
-  --ring-green: #7dc271;
-  --ring-blue: #5ba4fa;
-  --ring-orange: #f5a94d;
-  --ring-bg: #2a2009;
-  --ring-card: #382a00;
-  --ring-txt: #fbe62c;
-  --ring-inscription: #bd8c19;
-  --chart-bar: #2b78e4;
-  --chart-bg: #e5ecfa;
-  --progress-radius: 13px;
-}
-
-body {
-  font-family: 'Inter', sans-serif;
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
-  background: var(--light-bg);
-  color: var(--light-text);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  transition: background 0.3s, color 0.3s;
-}
-.container {
-  background: var(--light-card);
-  box-shadow: var(--light-shadow);
-  border-radius: 22px;
-  max-width: 450px;
-  width: 100vw;
-  margin: 2vw 0 16vw 0;
-  padding: 1.5em 1em 2.5em 1em;
-  transition: background 0.3s;
-  position: relative;
-  min-width: 0;
-}
-h1 {
-  font-family: 'Inter', 'Ringbearer', serif;
-  font-size: 2.1rem;
-  letter-spacing: 2px;
-  margin-bottom: 0.7em;
-  text-align: center;
-  color: var(--light-accent);
-  transition: color 0.3s, text-shadow 0.3s;
-}
-.ringmode h1 {
-  font-family: 'Ringbearer', 'Inter', serif;
-  color: var(--gold);
-  text-shadow: 0 2px 14px #edb94199;
-  letter-spacing: 2px;
-}
-.theme-toggle {
-  position: absolute;
-  right: 16px; top: 16px;
-  display: flex;
-  gap: 8px;
-}
-.theme-btn {
-  background: var(--light-bar);
-  border: none;
-  border-radius: 16px;
-  padding: 4px 12px;
-  font-size: 1.03rem;
-  color: var(--light-accent);
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: 0 2px 7px #0001;
-  margin-left: 4px;
-  transition: background 0.2s, color 0.2s;
-}
-.theme-btn.active,
-.theme-btn:focus {
-  background: var(--gold);
-  color: #3b2e08;
-  outline: none;
-}
-
-/* Tabs */
-.tabs {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 1.1em;
-}
-.tab-btn {
-  background: #e9eef6;
-  border: none;
-  border-radius: 9px 9px 0 0;
-  padding: 0.68em 1.55em;
-  font-weight: 700;
-  color: #2b78e4;
-  cursor: pointer;
-  font-size: 1.05em;
-  border-bottom: 2px solid transparent;
-  margin: 0 1px;
-  transition: background 0.14s, color 0.12s, border 0.14s;
-}
-.tab-btn.active,
-.tab-btn:focus {
-  background: #fff;
-  color: #2b78e4;
-  border-bottom: 2.8px solid #2b78e4;
-  z-index: 2;
-}
-.ringmode .tab-btn { background: #382a00; color: #fbe62c;}
-.ringmode .tab-btn.active { background: #211700; border-bottom: 2.8px solid #fbe62c;}
-
-/* Macro Calculator Wizard (Modern, Tight) */
-.macro-calc-wizard {
-  background: #f6f6fa;
-  border-radius: 16px;
-  padding: 1.1em 1.1em 1.5em 1.1em;
-  box-shadow: 0 2px 8px #0001;
-  max-width: 400px;
-  margin: 0 auto 2em auto;
-  display: flex;
-  flex-direction: column;
-  gap: 0.3em;
-}
-.macro-calc-wizard label { font-weight: 600; font-size: 1.08em; margin-top: 0.7em;}
-.macro-calc-wizard input, .macro-calc-wizard select {
-  border-radius: 7px; font-size: 1.07em; padding: 0.45em 0.6em; margin-bottom: 0.22em;
-  border: 1.2px solid #b6c6e1;
-  background: #f6faff; color: #1a2a2a;
-}
-.macro-calc-slider-row { margin: 0.5em 0; }
-.macro-calc-slider-row label {margin-right: 1em;}
-.macro-calc-slider-row input[type="range"] { width: 70%; }
-.macro-calc-goal-btn {
-  background: #2b78e4; color: #fff; border: none; border-radius: 9px; font-weight: 700;
-  padding: 0.7em 1.5em; font-size: 1em; cursor: pointer; margin-top: 1.2em;
-  box-shadow: 0 1px 4px #2b78e444;
-}
-.macro-calc-goal-btn:hover, .macro-calc-goal-btn:focus { background: #49a858; color: #fff;}
-.macro-calc-result {
-  background: #e8f2ff; border-radius: 10px; font-size: 1.07em;
-  margin: 1.3em 0 0.4em 0; padding: 0.6em 1em; min-height: 2.1em;
-  color: #346;
-}
-.ringmode .macro-calc-wizard {background: #291c00; color: #fbe62c;}
-.ringmode .macro-calc-wizard input, .ringmode .macro-calc-wizard select {background: #382a00; color: #fbe62c; border: 1.2px solid #b49c24;}
-.ringmode .macro-calc-result {background: #2a2009; color: #fbe62c;}
-
-/* Progression */
-.goal-line {
-  font-size: 1.09em;
-  color: #4c4c4c;
-  background: #f6f6fa;
-  border-radius: 9px;
-  margin: 0 auto 0.7em auto;
-  text-align: center;
-  padding: 0.27em 1em;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  display: flex;
-  justify-content: center;
-  gap: 1.1em;
-  flex-wrap: wrap;
-  max-width: 99vw;
-  white-space: nowrap;
-}
-.goal-line span {
-  font-weight: 700;
-  letter-spacing: 0.2px;
-  padding: 0 2px;
-}
-.goal-macro-p { color: #49a858; }
-.goal-macro-c { color: #3677c6; }
-.goal-macro-f { color: #e8a200; }
-.goal-macro-cal { color: #d4b117; }
-
-/* Progress bars */
-.macro-bars { margin-bottom: 0.7em; margin-top: 0.5em; display: flex; flex-direction: column; gap: 0.38em;}
-.macro-bar-outer { background: var(--light-bar); border-radius: var(--progress-radius); overflow: hidden; position: relative; height: 26px; margin: 0 0.1em;}
-.macro-bar-inner { height: 100%; display: flex; align-items: center; font-weight: 600; font-size: 1em; justify-content: flex-start; padding-left: 11px; border-radius: var(--progress-radius); transition: width 0.45s cubic-bezier(.35,1.65,.6,1.1); color: #fff; letter-spacing: 0.5px; text-shadow: 0 1px 8px #0004; white-space: nowrap; position: relative;}
-.bar-cal { background: linear-gradient(90deg,#fbe62c,#f5c80f); color: #735900;}
-.bar-p { background: linear-gradient(90deg,#51c16e,#379956);}
-.bar-c { background: linear-gradient(90deg,#61aaff,#396ebb);}
-.bar-f { background: linear-gradient(90deg,#f5a94d,#d1850b);}
-.macro-bar-label { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); color: #fff; font-size: 1em; font-weight: 700; text-shadow: 0 1px 4px #0006; width: 100%; text-align: center; pointer-events: none; letter-spacing: 0.5px; }
-.macro-bar-outer .macro-bar-label { z-index: 2; }
-
-/* Chart area */
-#macroChart {
-  width: 100% !important; max-width: 98vw; height: 170px; background: #e8f2ff;
-  border-radius: 11px; margin: 0.8em 0 1.6em 0; box-shadow: 0 2px 8px #0002;
-}
-.ringmode #macroChart {background: #231b07;}
-/* Meal log table */
-.meal-log-table {
-  width: 100%;
-  margin-bottom: 0.6em;
-  border-collapse: collapse;
-  font-size: 1.02em;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 1px 8px #0001;
-  overflow-x: auto;
-}
-.meal-log-table th, .meal-log-table td {
-  padding: 5px 6px;
-  border: none;
-  text-align: center;
-  white-space: nowrap;
-  font-size: 0.99em;
-}
-.meal-log-table th {
-  background: #f2f6fc;
-  color: #5179c2;
-  font-weight: 700;
-}
-.meal-log-table tbody tr:nth-child(even) {background: #f7faff;}
-/* Export buttons */
-.export-row {
-  display: flex;
-  gap: 0.8em;
-  justify-content: flex-end;
-  margin-bottom: 0.5em;
-}
-.export-btn {
-  background: #e9eef6;
-  color: #2b78e4;
-  font-size: 0.99em;
-  padding: 4px 17px;
-  border-radius: 7px;
-  border: none;
-  font-weight: 700;
-  cursor: pointer;
-  margin: 0;
-  box-shadow: 0 1px 3px #0001;
-  transition: background 0.13s, color 0.13s;
-}
-.export-btn:hover, .export-btn:focus { background: #d6eaff; color: #0c51a4;}
-/* Streak ring area */
-.streak-ring-wrap {
-  margin: 0 auto;
-  margin-top: 2.0em;
-  width: 144px;
-  height: 144px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  transition: filter 0.3s;
-}
-.streak-ring-svg {
-  width: 100%; height: 100%; display: block;
-  filter: drop-shadow(var(--ring-shadow));
-  /* 3D-style shadow for ring */
-}
-.streak-center-label {
-  position: absolute; left: 50%; top: 50%;
-  transform: translate(-50%,-50%);
-  width: 82px; text-align: center; color: var(--ring-txt);
-  font-family: 'Ringbearer', 'Inter', serif; font-size: 1.23em;
-  font-weight: 700; text-shadow: 0 0 13px #edb941c5, 0 1px 2px #000c;
-  pointer-events: none; letter-spacing: 1.5px;
-}
-.quote-bar {
-  background: #e9eef6; color: #5179c2;
-  border-radius: 11px; padding: 0.9em 0.9em 0.9em 1em;
-  margin: 1.6em 0 1em 0; text-align: center; font-size: 1.07em; font-style: italic; font-weight: 600;
-  box-shadow: 0 1px 8px #0001;
-}
-.ringmode .quote-bar { background: #392d04; color: #fbe62c; font-family: 'Ringbearer', 'Inter', serif; font-size: 1.08em;}
-/* Minimal streak bar for light mode */
-.streak-bar-wrap {
-  width: 100%; max-width: 390px; margin: 1.8em auto 0.3em auto;
-  background: #d6eaff; border-radius: 16px; box-shadow: 0 1px 4px #0001;
-  padding: 0.5em 0.7em; font-size: 1.08em; color: #2b78e4; font-weight: 700;
-  letter-spacing: 1px; display: flex; align-items: center; gap: 9px; justify-content: center;
-}
-.streak-bar-value {
-  background: #2b78e4; color: #fff; border-radius: 12px;
-  padding: 1.5px 10px; margin: 0 7px; font-size: 1em; font-weight: 700;
-  box-shadow: 0 2px 6px #2b78e411;
-}
-.auto-barcode-row {
-  display: flex; gap: 7px; margin-bottom: 0.5em; align-items: center; justify-content: center;
-}
-.food-autocomplete {min-width: 110px; flex: 1; font-size: 1em; padding: 7px; border-radius: 6px;}
-.barcode-btn {
-  background: #ffe285; color: #b29a20; border: none; border-radius: 7px; font-weight: 700;
-  padding: 7px 12px; font-size: 1em; cursor: pointer; margin-left: 5px;
-  box-shadow: 0 1px 4px #edb94155;
-  transition: background 0.13s, color 0.13s;
-}
-.barcode-btn:hover { background: #fff9c9; color: #3b2e08; }
-@media (max-width: 600px) {
-  .container { padding: 0.7em 0.5em 1em 0.5em; border-radius: 8px; }
-  h1 { font-size: 1.27rem; }
-  .goal-line { font-size: 0.95em; gap: 0.45em;}
-  .macro-bar-inner, .macro-bar-label { font-size: 0.95em;}
-  #macroChart { height: 115px;}
-  .streak-ring-wrap { width: 95vw; height: 95vw; max-width: 134px; max-height: 134px;}
-  .streak-center-label { width: 53vw; max-width: 95px; font-size: 0.97em;}
-  .quote-bar {font-size: 0.98em; padding: 0.75em 0.6em;}
-  .macro-calc-wizard {max-width: 100vw; padding: 0.5em 0.2em 1.1em 0.2em;}
-}
-.ringmode body, .ringmode {
-  background: url('https://cdn.pixabay.com/photo/2017/10/24/12/33/paper-2886279_1280.jpg') center center/cover no-repeat, var(--ring-bg) !important;
-  color: var(--ring-txt) !important; transition: background 0.4s, color 0.3s;
-}
-.ringmode .container { background: var(--ring-card) !important; color: var(--ring-txt) !important; box-shadow: 0 4px 32px #5c4b0a99; }
-.ringmode .goal-line, .ringmode .meal-log-table th, .ringmode .macro-bar-label { background: #2e2208 !important; color: #fbe62c !important; }
-.ringmode .macro-bar-outer { background: #b49c24 !important; }
-.ringmode .bar-cal { background: linear-gradient(90deg,#fbe62c,#cfa211) !important; color: #5d4b04;}
-.ringmode .bar-p { background: linear-gradient(90deg,#7dc271,#3b7f2d);}
-.ringmode .bar-c { background: linear-gradient(90deg,#5ba4fa,#30426e);}
-.ringmode .bar-f { background: linear-gradient(90deg,#f5a94d,#ad7a1d);}
-.ringmode .macro-bar-label { color: #fff9db !important;}
-.ringmode .streak-bar-wrap { background: #3a3008 !important; color: #fbe62c !important;}
-.ringmode .export-btn { background: #3e3108; color: #fbe62c;}
-.ringmode .theme-btn { background: #fbe62c; color: #3b2e08;}
-.ringmode .theme-btn.active { background: #fff; color: #a28907;}
-.ringmode .meal-log-table th { color: #edb941;}
-.ringmode .meal-log-table { background: #382a00; }
-.ringmode .meal-log-table td { color: #fbe62c;}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MacroLegend</title>
+  <!-- LOTR-style font for the title and Ring Mode -->
+  <link href="https://fonts.cdnfonts.com/css/ringbearer" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- QuaggaJS for Barcode Scanning -->
+  <script src="https://unpkg.com/@ericblade/quagga2/dist/quagga.min.js"></script>
+  <style>
+    :root {
+      --light-bg: #f7f5f0;
+      --light-card: #fff;
+      --light-text: #18191a;
+      --light-accent: #4074f9;
+      --light-bar: #dde5f8;
+      --light-shadow: 0 4px 32px #0002;
+      --gold: #fbe62c;
+      --ring-shadow: 0 0 18px 6px #edb94144;
+      --ring-bar: #f8c944;
+      --ring-green: #7dc271;
+      --ring-blue: #5ba4fa;
+      --ring-orange: #f5a94d;
+      --ring-bg: #2d2409;
+      --ring-card: #382a00;
+      --ring-txt: #fbe62c;
+      --ring-inscription: #bd8c19;
+      --progress-radius: 14px;
+      --texture-url: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80');
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--light-bg);
+      color: var(--light-text);
+      margin: 0;
+      min-height: 100vh;
+      transition: background 0.5s, color 0.5s;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-sizing: border-box;
+    }
+    .container {
+      background: var(--light-card);
+      box-shadow: var(--light-shadow);
+      border-radius: 28px;
+      max-width: 520px;
+      width: 95vw;
+      margin: 2vw 0 10vw 0;
+      padding: 2.1em 1em 2.5em 1em;
+      transition: background 0.4s;
+      position: relative;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1.6em;
+    }
+    h1 {
+      font-family: 'Inter', 'Ringbearer', serif;
+      font-size: 2.3rem;
+      letter-spacing: 2px;
+      margin: 0.7em 0 0.6em 0;
+      text-align: center;
+      color: var(--light-accent);
+      text-shadow: 0 1.5px 10px #0001;
+      transition: color 0.3s, text-shadow 0.3s;
+    }
+    .ringmode h1 {
+      font-family: 'Ringbearer', 'Inter', serif;
+      color: var(--gold);
+      text-shadow: 0 3px 19px #edb941cc;
+    }
+    .theme-toggle {
+      position: absolute;
+      right: 24px;
+      top: 17px;
+      display: flex;
+      gap: 12px;
+      z-index: 30;
+      flex-wrap: wrap;
+    }
+    .theme-btn {
+      background: var(--light-bar);
+      border: none;
+      border-radius: 16px;
+      padding: 5px 16px;
+      font-size: 1.07rem;
+      color: var(--light-accent);
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 7px #0001;
+      margin-left: 4px;
+      transition: background 0.18s, color 0.2s;
+    }
+    .theme-btn.active,
+    .theme-btn:focus {
+      background: var(--gold);
+      color: #3b2e08;
+      outline: none;
+    }
+    /* Tabs */
+    .tabs-row {
+      display: flex;
+      gap: 0.7em;
+      margin: 0 0 1em 0;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      background: #ececec;
+      color: #2751a3;
+      font-weight: 700;
+      font-size: 1.01em;
+      padding: 7px 20px;
+      border: none;
+      border-radius: 12px 12px 0 0;
+      cursor: pointer;
+      border-bottom: 3px solid #f7f5f0;
+      margin-bottom: -2px;
+      transition: background 0.16s, color 0.16s;
+    }
+    .tab-btn.active {
+      background: var(--light-bar);
+      color: var(--light-accent);
+      border-bottom: 3px solid var(--light-accent);
+    }
+    .ringmode .tab-btn { background: #382a00; color: #eec84a;}
+    .ringmode .tab-btn.active { background: #fbe62c33; color: #382a00; border-bottom: 3px solid #fbe62c;}
+    /* Macro Inputs */
+    .macro-input-row, .macro-calculator-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1em 1em;
+      margin-bottom: 0.7em;
+      justify-content: center;
+    }
+    .macro-input-box {
+      flex: 1 1 120px;
+      min-width: 110px;
+      max-width: 185px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      background: #f5f8ff;
+      border-radius: 11px;
+      box-shadow: 0 1.5px 10px #acb6cc19;
+      padding: 10px 10px 12px 13px;
+      margin-bottom: 2px;
+      margin-right: 5px;
+      margin-left: 5px;
+    }
+    .macro-input-box label {
+      font-size: 1em;
+      font-weight: 600;
+      color: #3677c6;
+      margin-bottom: 3px;
+      margin-left: 2px;
+      letter-spacing: 0.1px;
+    }
+    .macro-input, .macro-select {
+      width: 100%;
+      border: 1.4px solid #b6c6e1;
+      background: #fafdff;
+      border-radius: 7px;
+      padding: 8px 10px;
+      font-size: 1.09em;
+      color: #202020;
+      font-family: inherit;
+      transition: border 0.13s;
+      margin-bottom: 1px;
+      outline: none;
+    }
+    .macro-input:focus, .macro-select:focus {
+      border: 1.4px solid #4074f9;
+    }
+    .ringmode .macro-input-box { background: #221905;}
+    .ringmode .macro-input, .ringmode .macro-select { background: #fffad8; color: #403200;}
+    /* Calculate button */
+    .macro-calc-btn {
+      background: #2b78e4;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      padding: 11px 33px;
+      font-size: 1.08em;
+      cursor: pointer;
+      margin: 7px 0 6px 0;
+      transition: background 0.13s;
+      box-shadow: 0 2px 8px #9bb2de15;
+    }
+    .macro-calc-btn:hover { background: #49a858; color:#fff;}
+    /* Progress Bars */
+    .macro-bars {
+      margin-bottom: 0.7em;
+      margin-top: 0.5em;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45em;
+    }
+    .macro-bar-outer {
+      background: var(--light-bar);
+      border-radius: var(--progress-radius);
+      overflow: hidden;
+      position: relative;
+      height: 28px;
+      margin: 0 0.1em;
+    }
+    .macro-bar-inner {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      font-weight: 600;
+      font-size: 1em;
+      justify-content: flex-start;
+      padding-left: 11px;
+      border-radius: var(--progress-radius);
+      transition: width 0.4s cubic-bezier(.35,1.5,.6,1.09);
+      color: #fff;
+      letter-spacing: 0.5px;
+      text-shadow: 0 1px 8px #0004;
+      white-space: nowrap;
+      position: relative;
+    }
+    .bar-cal { background: linear-gradient(90deg,#fbe62c,#f5c80f); color: #735900; }
+    .bar-p { background: linear-gradient(90deg,#51c16e,#379956); }
+    .bar-c { background: linear-gradient(90deg,#61aaff,#396ebb); }
+    .bar-f { background: linear-gradient(90deg,#f5a94d,#d1850b); }
+    .macro-bar-label {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%,-50%);
+      color: #fff;
+      font-size: 1em;
+      font-weight: 700;
+      text-shadow: 0 1px 4px #0006;
+      width: 100%;
+      text-align: center;
+      pointer-events: none;
+      letter-spacing: 0.5px;
+      z-index: 2;
+    }
+    /* Chart Area */
+    #macroChart {
+      width: 100% !important;
+      max-width: 99vw;
+      height: 170px;
+      background: #e8f2ff;
+      border-radius: 12px;
+      margin: 0.8em 0 1.6em 0;
+      box-shadow: 0 2px 8px #0001;
+    }
+    .ringmode #macroChart { background: #382a00; }
+    /* Meal Log Table */
+    .meal-log-table {
+      width: 100%;
+      margin-bottom: 0.6em;
+      border-collapse: collapse;
+      font-size: 1.09em;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 1px 8px #0001;
+      overflow-x: auto;
+    }
+    .meal-log-table th, .meal-log-table td {
+      padding: 8px 6px;
+      border: none;
+      text-align: center;
+      white-space: nowrap;
+      font-size: 0.99em;
+    }
+    .meal-log-table th {
+      background: #f2f6fc;
+      color: #5179c2;
+      font-weight: 700;
+    }
+    .meal-log-table tbody tr:nth-child(even) {
+      background: #f7faff;
+    }
+    .meal-log-table td:last-child { padding: 0 1px;}
+    .meal-remove-btn {
+      color: #e34747;
+      font-weight: 700;
+      font-size: 1.1em;
+      border: none;
+      background: none;
+      cursor: pointer;
+    }
+    .ringmode .meal-log-table th { color: #edb941; background: #322405;}
+    .ringmode .meal-log-table { background: #382a00;}
+    .ringmode .meal-log-table td { color: #fbe62c; }
+    /* Export buttons */
+    .export-row {
+      display: flex;
+      gap: 0.8em;
+      justify-content: flex-end;
+      margin-bottom: 0.5em;
+    }
+    .export-btn {
+      background: #e9eef6;
+      color: #2b78e4;
+      font-size: 0.99em;
+      padding: 4px 17px;
+      border-radius: 7px;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+      margin: 0;
+      box-shadow: 0 1px 3px #0001;
+      transition: background 0.13s, color 0.13s;
+    }
+    .export-btn:hover, .export-btn:focus { background: #d6eaff; color: #0c51a4;}
+    /* Streak ring area */
+    .streak-ring-wrap {
+      margin: 0 auto;
+      margin-top: 2.0em;
+      width: 140px;
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: filter 0.3s;
+    }
+    .streak-ring-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      filter: drop-shadow(var(--ring-shadow));
+    }
+    .streak-center-label {
+      position: absolute;
+      left: 50%; top: 50%;
+      transform: translate(-50%,-50%);
+      width: 90px;
+      text-align: center;
+      color: var(--ring-txt);
+      font-family: 'Ringbearer', 'Inter', serif;
+      font-size: 1.25em;
+      line-height: 1.22;
+      font-weight: 700;
+      text-shadow: 0 0 11px #edb941c5, 0 1px 2px #000c;
+      pointer-events: none;
+    }
+    /* Streak Quote Box */
+    .quote-box {
+      background: #fafae3;
+      border-radius: 11px;
+      box-shadow: 0 1.5px 14px #dacd991b;
+      margin: 2.7em auto 0.2em auto;
+      padding: 1.1em 1em 0.7em 1em;
+      color: #372f12;
+      font-size: 1.07em;
+      font-family: 'Inter', serif;
+      font-weight: 600;
+      text-align: center;
+      max-width: 390px;
+      letter-spacing: 0.13px;
+      min-height: 45px;
+      position: relative;
+      z-index: 4;
+    }
+    .ringmode .quote-box {
+      background: #3c320b;
+      color: #fbe62c;
+      border: 1.7px solid #edb94194;
+      box-shadow: 0 2.5px 18px #edb94122;
+      font-family: 'Ringbearer', 'Inter', serif;
+    }
+    /* Barcode scanner modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0; width: 100vw; height: 100vh;
+      background: #191b20ee;
+      justify-content: center;
+      align-items: center;
+      animation: fadein 0.21s;
+    }
+    @keyframes fadein { from{opacity:0} to{opacity:1} }
+    .modal-content {
+      background: #fff;
+      border-radius: 15px;
+      padding: 2em 2em 1em 2em;
+      box-shadow: 0 4px 48px #000b;
+      text-align: center;
+    }
+    .modal-close-btn {
+      background: #fbe62c;
+      color: #322405;
+      border: none;
+      font-weight: 700;
+      padding: 8px 19px;
+      border-radius: 9px;
+      margin: 1.3em 0 0.3em 0;
+      font-size: 1.1em;
+      cursor: pointer;
+    }
+    /* Toasts */
+    .toast {
+      position: fixed;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #222c28e9;
+      color: #fbe62c;
+      padding: 12px 30px;
+      border-radius: 22px;
+      font-size: 1.09em;
+      box-shadow: 0 4px 22px #000c;
+      opacity: 0.98;
+      z-index: 9000;
+      pointer-events: none;
+      animation: fadeToast 2.2s linear;
+    }
+    @keyframes fadeToast {
+      0%{opacity:0;}
+      10%{opacity:1;}
+      90%{opacity:0.98;}
+      100%{opacity:0;}
+    }
+    /* Mobile tweaks */
+    @media (max-width: 600px) {
+      .container { padding: 1.05em 1vw 1.3em 1vw; border-radius: 0; max-width: 99vw;}
+      h1 { font-size: 1.11rem; margin-top: 1.6em; }
+      .theme-toggle { right: 7vw; top: 12px;}
+      .macro-input-box { min-width: 90vw; max-width: 98vw; padding: 6px 6px 10px 8px; }
+      .macro-input, .macro-select { font-size: 1em; padding: 8px 5px;}
+      .tabs-row { gap: 0.1em;}
+      .macro-calc-btn { width: 100%; padding: 13px 0;}
+      .streak-ring-wrap { width: 86vw; height: 86vw; max-width: 170px; max-height: 170px;}
+      .streak-center-label { font-size: 1.09em; }
+      .quote-box { max-width: 93vw; font-size: 0.95em; }
+      #macroChart { height: 110px;}
+      .meal-log-table th, .meal-log-table td { font-size: 0.98em;}
+      .export-row { flex-direction: column; align-items: stretch;}
+    }
+    /* Ring mode special styles & textured background */
+    .ringmode body, .ringmode {
+      background: var(--ring-bg) !important;
+      color: var(--ring-txt) !important;
+      transition: background 0.4s, color 0.3s;
+    }
+    .ringmode .container {
+      background: var(--ring-card) !important;
+      color: var(--ring-txt) !important;
+      box-shadow: 0 4px 32px #5c4b0a99;
+      border: 1.5px solid #bfa23b44;
+    }
+    .ringmode {
+      background: var(--ring-bg) !important;
+      background-image:
+        linear-gradient(120deg, #fbe62c09 0%, #0c0b01 100%),
+        url('https://www.transparenttextures.com/patterns/arches.png'),
+        var(--texture-url);
+      background-size: cover, 210px, cover;
+      background-blend-mode: overlay;
+    }
+    /* Fallback for ring mode background if image fails */
+    .ringmode-fallback {
+      background: repeating-linear-gradient(145deg,#2a2009 0 40px,#46380e 40px 80px) !important;
+    }
+  </style>
 </head>
 <body>
-<div class="container" id="macroLegendContainer">
-  <div class="theme-toggle">
-    <button class="theme-btn active" id="appleLightBtn" onclick="setTheme('light')">Apple Light</button>
-    <button class="theme-btn" id="ringModeBtn" onclick="setTheme('ring')">Ring Mode</button>
-  </div>
-  <h1>MacroLegend</h1>
-  <div class="tabs">
-    <button class="tab-btn active" id="tabCalcBtn" onclick="switchTab('calc')">Macro Calculator</button>
-    <button class="tab-btn" id="tabProgBtn" onclick="switchTab('progress')">Progression</button>
-  </div>
-  <!-- Macro Calculator Tab -->
-  <div id="tabCalc" style="display:block;">
-    <form class="macro-calc-wizard" id="macroCalcForm" onsubmit="return setGoalsFromCalc(event)">
-      <label>Weight (lbs):</label>
-      <input type="number" id="wizardWeight" min="80" max="600" placeholder="e.g. 180" required />
-      <label>Gender:</label>
-      <select id="wizardGender">
-        <option value="male">Male</option>
-        <option value="female">Female</option>
-        <option value="other">Other / Prefer not to say</option>
-      </select>
-      <label>Height (inches):</label>
-      <input type="number" id="wizardHeight" min="36" max="96" placeholder="e.g. 70"/>
-      <label>Goal:</label>
-      <select id="wizardGoal">
-        <option value="maintain">Maintain Weight</option>
-        <option value="lose">Lose Weight</option>
-        <option value="gain">Gain Weight</option>
-      </select>
-      <label>Daily Calories (optional):</label>
-      <input type="number" id="wizardCalories" min="1000" max="7000" placeholder="e.g. 2000" />
-      <div class="macro-calc-slider-row">
-        <label>Protein %: <span id="wizardProteinVal">30</span>%</label>
-        <input type="range" id="wizardProtein" min="0" max="100" value="30" />
-      </div>
-      <div class="macro-calc-slider-row">
-        <label>Fat %: <span id="wizardFatVal">30</span>%</label>
-        <input type="range" id="wizardFat" min="0" max="100" value="30" />
-      </div>
-      <div class="macro-calc-slider-row">
-        <label>Carbs %: <span id="wizardCarbVal">40</span>%</label>
-        <input type="range" id="wizardCarb" min="0" max="100" value="40" />
-      </div>
-      <button class="macro-calc-goal-btn" type="submit">Set Goals → Progression</button>
-      <div class="macro-calc-result" id="macroCalcResult"></div>
-    </form>
-  </div>
-  <!-- Progression Tab -->
-  <div id="tabProg" style="display:none;">
-    <div class="goal-line" id="goalLine"></div>
-    <div class="macro-bars" id="macroBars"></div>
-    <canvas id="macroChart"></canvas>
-    <form onsubmit="addMeal(event)">
-      <div class="auto-barcode-row">
-        <input class="food-autocomplete" id="foodSearch" placeholder="Search food..." autocomplete="off" list="foodDatalist">
-        <datalist id="foodDatalist"></datalist>
-        <button class="barcode-btn" type="button" onclick="scanBarcode()">Scan Barcode 📷</button>
-      </div>
-      <div class="macro-input-row">
-        <input class="meal-amt-input" id="mealName" placeholder="Meal name/food" autocomplete="off" required>
-        <input class="meal-amt-input" id="mealCalories" type="number" min="0" placeholder="Calories" required>
-        <input class="meal-amt-input" id="mealProtein" type="number" min="0" placeholder="Protein (g)">
-        <input class="meal-amt-input" id="mealCarbs" type="number" min="0" placeholder="Carbs (g)">
-        <input class="meal-amt-input" id="mealFat" type="number" min="0" placeholder="Fat (g)">
-        <button class="add-meal-btn" type="submit">+ Add</button>
-      </div>
-    </form>
-    <table class="meal-log-table" id="mealLogTable"></table>
-    <div class="export-row">
-      <button class="export-btn" onclick="exportCSV()">Export CSV</button>
-      <button class="export-btn" onclick="exportTXT()">Export TXT</button>
-      <button class="export-btn" onclick="window.print()">Print / PDF</button>
+  <div class="container ringmode-bg-fallback" id="macroLegendContainer">
+    <div class="theme-toggle" id="themeRow">
+      <button class="theme-btn active" id="appleLightBtn" onclick="setTheme('light')">Apple Light</button>
+      <button class="theme-btn" id="ringModeBtn" onclick="setTheme('ring')">Ring Mode</button>
     </div>
-    <div id="streakArea"></div>
-    <div id="quoteBar" class="quote-bar"></div>
+    <h1>MacroLegend</h1>
+    <div class="tabs-row">
+      <button class="tab-btn active" id="tabMacroCalc" onclick="showTab('macro')">Macro Calculator</button>
+      <button class="tab-btn" id="tabLog" onclick="showTab('progress')">Macro Progression</button>
+    </div>
+
+    <!-- Macro Calculator Tab -->
+    <div id="macroTab" class="tab-content" style="display:block;">
+      <form class="macro-calculator-group" id="macroCalcForm" onsubmit="event.preventDefault(); calculateMacros();">
+        <div class="macro-input-box">
+          <label for="inputWeight">Weight (lbs)</label>
+          <input type="number" min="60" max="450" step="1" id="inputWeight" class="macro-input" placeholder="e.g. 180" required>
+        </div>
+        <div class="macro-input-box">
+          <label for="inputHeight">Height (in)</label>
+          <input type="number" min="48" max="90" step="1" id="inputHeight" class="macro-input" placeholder="e.g. 70">
+        </div>
+        <div class="macro-input-box">
+          <label for="inputAge">Age</label>
+          <input type="number" min="12" max="110" step="1" id="inputAge" class="macro-input" placeholder="e.g. 35">
+        </div>
+        <div class="macro-input-box">
+          <label for="inputGender">Gender</label>
+          <select id="inputGender" class="macro-select">
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="macro-input-box">
+          <label for="inputActivity">Activity Level</label>
+          <select id="inputActivity" class="macro-select">
+            <option value="sedentary">Sedentary</option>
+            <option value="light">Light</option>
+            <option value="moderate">Moderate</option>
+            <option value="active">Active</option>
+            <option value="athlete">Athlete</option>
+          </select>
+        </div>
+        <div class="macro-input-box">
+          <label for="inputGoal">Goal</label>
+          <select id="inputGoal" class="macro-select">
+            <option value="maintain">Maintain</option>
+            <option value="lose">Lose</option>
+            <option value="gain">Gain</option>
+          </select>
+        </div>
+      </form>
+      <div class="macro-input-row" style="margin-top:-8px; margin-bottom:18px;">
+        <div class="macro-input-box" style="max-width:140px; min-width:120px;">
+          <label for="inputCals">Goal Calories</label>
+          <input type="number" min="1000" max="6000" id="inputCals" class="macro-input" readonly>
+        </div>
+        <div class="macro-input-box" style="max-width:145px; min-width:120px;">
+          <label>Protein %</label>
+          <input type="range" id="inputProteinPct" min="15" max="40" value="30" oninput="syncSliderLabels()" class="macro-input">
+          <span id="proteinSliderLabel"></span>
+        </div>
+        <div class="macro-input-box" style="max-width:145px; min-width:120px;">
+          <label>Fat %</label>
+          <input type="range" id="inputFatPct" min="15" max="35" value="25" oninput="syncSliderLabels()" class="macro-input">
+          <span id="fatSliderLabel"></span>
+        </div>
+        <div class="macro-input-box" style="max-width:145px; min-width:120px;">
+          <label>Carbs %</label>
+          <input type="range" id="inputCarbPct" min="25" max="65" value="45" oninput="syncSliderLabels()" class="macro-input">
+          <span id="carbSliderLabel"></span>
+        </div>
+      </div>
+      <button class="macro-calc-btn" onclick="pushMacros()">Push to Progression &rarr;</button>
+    </div>
+
+    <!-- Macro Progression Tab -->
+    <div id="progressTab" class="tab-content" style="display:none;">
+      <!-- Progress bars -->
+      <div class="macro-bars" id="macroBars"></div>
+      <!-- Chart -->
+      <canvas id="macroChart"></canvas>
+      <!-- Add Meal -->
+      <form class="macro-input-row" onsubmit="addMeal(event)">
+        <div class="macro-input-box" style="min-width:160px;max-width:195px;">
+          <label>Food/Meal</label>
+          <input type="text" class="macro-input" id="mealName" placeholder="Name or scan barcode" autocomplete="off" list="foodList">
+          <datalist id="foodList"></datalist>
+        </div>
+        <div class="macro-input-box" style="min-width:110px;">
+          <label>Calories</label>
+          <input type="number" class="macro-input" id="mealCalories" placeholder="Kcal">
+        </div>
+        <div class="macro-input-box" style="min-width:100px;">
+          <label>Protein (g)</label>
+          <input type="number" class="macro-input" id="mealProtein" placeholder="g">
+        </div>
+        <div class="macro-input-box" style="min-width:100px;">
+          <label>Carbs (g)</label>
+          <input type="number" class="macro-input" id="mealCarbs" placeholder="g">
+        </div>
+        <div class="macro-input-box" style="min-width:100px;">
+          <label>Fat (g)</label>
+          <input type="number" class="macro-input" id="mealFat" placeholder="g">
+        </div>
+        <button class="macro-calc-btn" type="button" onclick="showBarcodeScanner()">📷</button>
+        <button class="macro-calc-btn" type="submit" style="background:#4cae4c;">+ Add</button>
+      </form>
+      <table class="meal-log-table" id="mealLogTable"></table>
+      <div class="export-row">
+        <button class="export-btn" onclick="exportCSV()">Export CSV</button>
+        <button class="export-btn" onclick="exportTXT()">Export TXT</button>
+        <button class="export-btn" onclick="window.print()">Print / PDF</button>
+      </div>
+      <div id="streakArea"></div>
+      <div id="quoteArea"></div>
+    </div>
+    <!-- Barcode Scanner Modal -->
+    <div class="modal" id="barcodeModal">
+      <div class="modal-content">
+        <div id="barcodePreview" style="width:310px; height:270px;"></div>
+        <button class="modal-close-btn" onclick="closeBarcodeModal()">Close</button>
+      </div>
+    </div>
+    <!-- Toast -->
+    <div id="toast" style="display:none;" class="toast"></div>
+    <!-- Streak Sound -->
+    <audio id="streakSound" preload="auto">
+      <source src="https://cdn.pixabay.com/audio/2022/07/26/audio_124b01f3be.mp3" type="audio/mp3">
+    </audio>
   </div>
-</div>
-<audio id="streakSound" preload="auto"><source src="https://cdn.pixabay.com/audio/2022/07/26/audio_124b01f3be.mp3" type="audio/mp3"></audio>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-// --------------- DATA / STATE -----------------
-let macroGoals = { calories: 2000, protein: 150, carbs: 200, fat: 70 };
-let macroTotals = { calories: 0, protein: 0, carbs: 0, fat: 0 };
-let mealLog = [];
-let streak = { days: 1, best: 1, lastDate: null, weekPhrase: 0 };
-try {
-  if (localStorage.getItem('macroGoals')) macroGoals = JSON.parse(localStorage.getItem('macroGoals'));
-  if (localStorage.getItem('mealLog')) mealLog = JSON.parse(localStorage.getItem('mealLog'));
-  if (localStorage.getItem('streak')) streak = JSON.parse(localStorage.getItem('streak'));
-} catch (e) {}
-let chart;
-let currentTab = 'calc';
-
-// --------------- LOTR & LIGHT QUOTES ---------------
-const lotrQuotes = [
-  "Even the smallest person can change the course of the future.",
-  "Not all those who wander are lost.",
-  "The road goes ever on and on.",
-  "Deeds will not be less valiant because they are unpraised.",
-  "Faithless is he that says farewell when the road darkens.",
-  "All we have to decide is what to do with the time that is given us.",
-  "There’s some good in this world, and it’s worth fighting for.",
-  "I am glad you are here with me. Here at the end of all things.",
-  "The world is indeed full of peril, and in it there are many dark places.",
-  "A wizard is never late, nor is he early, he arrives precisely when he means to.",
-  "You shall not pass!",
-  "Courage is found in unlikely places.",
-  "The shadow is only a passing thing.",
-  "Hope remains while the Company is true.",
-  "The board is set, the pieces are moving.",
-  "One does not simply walk into Mordor.",
-  "I would rather share one lifetime with you than face all the ages of this world alone.",
-  "May it be a light to you in dark places, when all other lights go out.",
-  "It's a dangerous business, going out your door.",
-  "The wise speak only of what they know.",
-  "Many that live deserve death. And some that die deserve life.",
-  "Even darkness must pass. A new day will come.",
-  "The strength of the ring-bearer is in his heart.",
-  "There’s always hope.",
-  "For Frodo.",
-  "The journey doesn’t end here.",
-  "I am no man!",
-  "The Ring has awoken.",
-  "Speak, friend, and enter.",
-  "There and back again.",
-  "Let him not vow to walk in the dark, who has not seen the nightfall.",
-  "Renewed shall be blade that was broken.",
-  "I will take the Ring, though I do not know the way.",
-  "A day may come when the courage of men fails… but it is not this day.",
-  "My friends, you bow to no one.",
-  "White shores, and beyond, a far green country under a swift sunrise.",
-  "You have my sword.",
-  "The Shire must truly be a great place.",
-  "If by my life or death I can protect you, I will.",
-  "End? No, the journey doesn't end here.",
-  "Where there's life, there's hope.",
-  "It’s the job that’s never started as takes longest to finish.",
-  "But in the end, it’s only a passing thing, this shadow.",
-  "I can't carry it for you, but I can carry you!",
-  "The hands of a king are the hands of a healer.",
-  "Shadowfax, show us the meaning of haste.",
-  "There is no curse in Elvish, Entish, or the tongues of Men for this treachery.",
-  "Mithrandir, why did you leave us?",
-  "You shall be the Fellowship of the Ring.",
-  "I will not say: do not weep; for not all tears are an evil.",
-  "The fire of your heart outshines the darkness.",
-  "May your path be green and the breeze on your back.",
-  "Streaks are for heroes. Today you are legend.",
-  "Let the courage of the Eldar guide you.",
-];
-const genericQuotes = [
-  "The journey of a thousand miles begins with a single step.",
-  "Consistency is the key to progress.",
-  "Great things never come from comfort zones.",
-  "You don’t have to be extreme, just consistent.",
-  "Little by little, a little becomes a lot.",
-  "You are your only limit.",
-  "Push yourself, because no one else is going to do it for you.",
-  "Success is the sum of small efforts, repeated day in and day out.",
-  "You’re stronger than you think.",
-  "Every day is a new beginning.",
-  "Small steps every day.",
-  "Don’t wish for it. Work for it.",
-  "Discipline is choosing between what you want now and what you want most.",
-  "You got this.",
-  "The best project you’ll ever work on is yourself.",
-  "Progress, not perfection.",
-  "The future depends on what you do today.",
-  "Stay patient and trust your journey.",
-  "One healthy meal at a time.",
-  "Results happen over time, not overnight.",
-  "Success starts with self-discipline.",
-  "Better an oops than a what if.",
-  "One day or day one. You decide.",
-  "A little progress each day adds up to big results.",
-  "Sore today, strong tomorrow.",
-  "The only bad workout is the one you didn’t do.",
-  "Strive for progress, not perfection.",
-  "Believe in yourself and all that you are.",
-  "Make yourself proud.",
-  "Celebrate every victory.",
-  "A year from now, you’ll wish you had started today.",
-];
-
-// --------------- TABS -----------------
-function switchTab(tab) {
-  document.getElementById('tabCalc').style.display = tab === 'calc' ? 'block' : 'none';
-  document.getElementById('tabProg').style.display = tab === 'progress' ? 'block' : 'none';
-  document.getElementById('tabCalcBtn').classList.toggle('active', tab === 'calc');
-  document.getElementById('tabProgBtn').classList.toggle('active', tab === 'progress');
-  currentTab = tab;
-  if (tab === 'calc') fillMacroWizard();
-  renderQuote();
-}
-
-// --------------- THEMES -----------------
-function setTheme(theme) {
-  const body = document.body;
-  const cont = document.getElementById('macroLegendContainer');
-  if (theme === 'ring') {
-    body.classList.add('ringmode');
-    cont.classList.add('ringmode');
-    document.getElementById('appleLightBtn').classList.remove('active');
-    document.getElementById('ringModeBtn').classList.add('active');
-    document.body.style.background = "radial-gradient(ellipse at center, #fbe62c33 0%, #271e0570 100%)";
-  } else {
-    body.classList.remove('ringmode');
-    cont.classList.remove('ringmode');
-    document.getElementById('appleLightBtn').classList.add('active');
-    document.getElementById('ringModeBtn').classList.remove('active');
-    document.body.style.background = "var(--light-bg)";
-  }
-  renderStreak();
-  renderQuote();
-}
-setTheme('light');
-
-// --------------- MACRO CALC WIZARD -----------------
-const wizardProtein = document.getElementById('wizardProtein');
-const wizardFat = document.getElementById('wizardFat');
-const wizardCarb = document.getElementById('wizardCarb');
-wizardProtein.addEventListener('input', updateMacroSliderLabels);
-wizardFat.addEventListener('input', updateMacroSliderLabels);
-wizardCarb.addEventListener('input', updateMacroSliderLabels);
-function updateMacroSliderLabels() {
-  document.getElementById('wizardProteinVal').textContent = wizardProtein.value;
-  document.getElementById('wizardFatVal').textContent = wizardFat.value;
-  document.getElementById('wizardCarbVal').textContent = wizardCarb.value;
-}
-function setGoalsFromCalc(e) {
-  e.preventDefault();
-  const weight = parseFloat(document.getElementById('wizardWeight').value);
-  const gender = document.getElementById('wizardGender').value;
-  const height = parseFloat(document.getElementById('wizardHeight').value);
-  const goal = document.getElementById('wizardGoal').value;
-  const calories = parseFloat(document.getElementById('wizardCalories').value);
-  let proteinPerLb = (gender === 'male') ? 1.1 : (gender === 'female' ? 0.9 : 1.0);
-  let goalMultiplier = (goal === 'lose') ? 0.8 : (goal === 'gain' ? 1.2 : 1.0);
-  let heightAdj = 1.0;
-  if (!isNaN(height)) {
-    if (height < 60) heightAdj = 0.9;
-    else if (height > 75) heightAdj = 1.1;
-  }
-  let macroProtein, macroFat, macroCarbs, macroCalories;
-  if (calories && calories > 0) {
-    let pPct = parseFloat(wizardProtein.value)/100;
-    let fPct = parseFloat(wizardFat.value)/100;
-    let cPct = parseFloat(wizardCarb.value)/100;
-    const totalPct = pPct + fPct + cPct;
-    if (totalPct !== 1) {
-      pPct /= totalPct; fPct /= totalPct; cPct /= totalPct;
+  <script>
+    // ======= State ========
+    let macroGoals = {
+      calories: 2200,
+      protein: 180,
+      carbs: 220,
+      fat: 70
+    };
+    let macroTotals = {
+      calories: 0,
+      protein: 0,
+      carbs: 0,
+      fat: 0
+    };
+    let mealLog = [];
+    let streak = {
+      days: 1,
+      best: 1,
+      lastDate: null,
+      weekPhrase: 0
+    };
+    // Quotes: 52+ week cycle, generic for light, epic for ring!
+    const phrasesLight = [
+      "Every day is a chance to get better.",
+      "Small steps add up to big change.",
+      "Consistency is the magic ingredient.",
+      "Celebrate every win—big or small.",
+      "Strong today, stronger tomorrow.",
+      "Fuel your legend, one meal at a time.",
+      "You don’t have to be perfect—just consistent.",
+      "Progress, not perfection.",
+      "Eat to nourish, move to thrive.",
+      "Trust the process.",
+      "Keep the main thing the main thing.",
+      "Action is the foundation of success.",
+      "Be proud of every effort.",
+      "Healthy looks different on everyone.",
+      "Motivation gets you going—habit keeps you growing.",
+      "Well done is better than well said.",
+      "Savor the journey.",
+      "You’re stronger than you think.",
+      "Let each meal move you closer.",
+      "Legendary isn’t built in a day.",
+      "Never too late to start anew.",
+      "Listen to your body.",
+      "Stay humble. Stay hungry.",
+      "Great things are done by a series of small things.",
+      "Give yourself grace.",
+      "It’s not a diet, it’s a lifestyle.",
+      "Progress over perfection.",
+      "Step by step, meal by meal.",
+      "Be your own inspiration.",
+      "Eat well, live well.",
+      "Energy follows intention.",
+      "Results happen over time.",
+      "Let’s get after it!",
+      "Nourish to flourish.",
+      "Today’s choices, tomorrow’s results.",
+      "Keep forging your legend.",
+      "The only bad workout is the one you didn’t do.",
+      "Eat smart, feel strong.",
+      "Proud but never satisfied.",
+      "This is your story.",
+      "Stay legendary.",
+      "Make it count.",
+      "The legend grows.",
+      "Be your own hero.",
+      "Find your strength.",
+      "Embrace the challenge.",
+      "For the legend in you.",
+      "Finish strong.",
+      "One meal at a time.",
+      "You’re crushing it.",
+      "For the Shire."
+    ];
+    const phrasesLOTR = [
+      "Even the smallest person can change the course of the future.",
+      "Not all those who wander are lost.",
+      "The road goes ever on and on.",
+      "Deeds will not be less valiant because they are unpraised.",
+      "Faithless is he that says farewell when the road darkens.",
+      "All we have to decide is what to do with the time that is given us.",
+      "There’s some good in this world, and it’s worth fighting for.",
+      "I am glad you are here with me. Here at the end of all things.",
+      "The world is indeed full of peril, and in it there are many dark places.",
+      "A wizard is never late, nor is he early, he arrives precisely when he means to.",
+      "You shall not pass!",
+      "Courage is found in unlikely places.",
+      "The shadow is only a passing thing.",
+      "Hope remains while the Company is true.",
+      "The board is set, the pieces are moving.",
+      "One does not simply walk into Mordor.",
+      "I would rather share one lifetime with you than face all the ages of this world alone.",
+      "May it be a light to you in dark places, when all other lights go out.",
+      "It's a dangerous business, going out your door.",
+      "The wise speak only of what they know.",
+      "Many that live deserve death. And some that die deserve life.",
+      "Even darkness must pass. A new day will come.",
+      "The strength of the ring-bearer is in his heart.",
+      "There’s always hope.",
+      "For Frodo.",
+      "The journey doesn’t end here.",
+      "I am no man!",
+      "The Ring has awoken.",
+      "Speak, friend, and enter.",
+      "There and back again.",
+      "Let him not vow to walk in the dark, who has not seen the nightfall.",
+      "Renewed shall be blade that was broken.",
+      "I will take the Ring, though I do not know the way.",
+      "A day may come when the courage of men fails… but it is not this day.",
+      "My friends, you bow to no one.",
+      "White shores, and beyond, a far green country under a swift sunrise.",
+      "You have my sword.",
+      "The Shire must truly be a great place.",
+      "If by my life or death I can protect you, I will.",
+      "End? No, the journey doesn't end here.",
+      "Where there's life, there's hope.",
+      "It’s the job that’s never started as takes longest to finish.",
+      "But in the end, it’s only a passing thing, this shadow.",
+      "I can't carry it for you, but I can carry you!",
+      "The hands of a king are the hands of a healer.",
+      "Shadowfax, show us the meaning of haste.",
+      "There is no curse in Elvish, Entish, or the tongues of Men for this treachery.",
+      "Mithrandir, why did you leave us?",
+      "You shall be the Fellowship of the Ring.",
+      "I will not say: do not weep; for not all tears are an evil.",
+      "The fire of your heart outshines the darkness.",
+      "May your path be green and the breeze on your back.",
+      "Streaks are for heroes. Today you are legend.",
+      "Let the courage of the Eldar guide you.",
+    ];
+    let chart;
+    let foodDatabase = [];
+    // ====== Tabs, Theme, Toasts ======
+    function showTab(tab) {
+      document.getElementById('tabMacroCalc').classList.toggle('active', tab === 'macro');
+      document.getElementById('tabLog').classList.toggle('active', tab === 'progress');
+      document.getElementById('macroTab').style.display = (tab === 'macro') ? "block" : "none";
+      document.getElementById('progressTab').style.display = (tab === 'progress') ? "block" : "none";
+      if (tab === 'progress') renderAll();
     }
-    macroProtein = (calories * pPct) / 4;
-    macroFat = (calories * fPct) / 9;
-    macroCarbs = (calories * cPct) / 4;
-    macroCalories = calories;
-  } else {
-    macroProtein = weight * proteinPerLb * heightAdj * goalMultiplier;
-    macroFat = weight * 0.4 * heightAdj * goalMultiplier;
-    macroCarbs = weight * 2 * heightAdj * goalMultiplier;
-    macroCalories = (macroProtein*4 + macroCarbs*4 + macroFat*9);
-  }
-  document.getElementById('macroCalcResult').textContent =
-    `Protein: ${macroProtein.toFixed(1)}g | Fat: ${macroFat.toFixed(1)}g | Carbs: ${macroCarbs.toFixed(1)}g | Calories: ${Math.round(macroCalories)}`;
-  macroGoals.calories = Math.round(macroCalories);
-  macroGoals.protein = Math.round(macroProtein);
-  macroGoals.carbs = Math.round(macroCarbs);
-  macroGoals.fat = Math.round(macroFat);
-  saveData();
-  renderAll();
-  switchTab('progress');
-  showCopyToast("Goals sent to Progression!");
-  return false;
-}
-function fillMacroWizard() {
-  document.getElementById('wizardWeight').value = '';
-  document.getElementById('wizardGender').value = 'male';
-  document.getElementById('wizardHeight').value = '';
-  document.getElementById('wizardGoal').value = 'maintain';
-  document.getElementById('wizardCalories').value = '';
-  wizardProtein.value = 30; wizardFat.value = 30; wizardCarb.value = 40;
-  updateMacroSliderLabels();
-}
-fillMacroWizard();
-
-// --------------- QUOTES ---------------
-function renderQuote() {
-  let phrase = "";
-  if (document.body.classList.contains('ringmode')) {
-    phrase = lotrQuotes[streak.weekPhrase % lotrQuotes.length];
-  } else {
-    phrase = genericQuotes[Math.floor(Math.random()*genericQuotes.length)];
-  }
-  document.getElementById('quoteBar').textContent = `"${phrase}"`;
-}
-
-// --------------- PROGRESSION BAR, LOG, CHART ---------------
-function renderGoalLine() {
-  const {calories, protein, carbs, fat} = macroGoals;
-  document.getElementById('goalLine').innerHTML =
-    `<span class="goal-macro-cal">Calories: <b>${calories}</b></span>
-     <span class="goal-macro-p">P: <b>${protein}g</b></span>
-     <span class="goal-macro-c">C: <b>${carbs}g</b></span>
-     <span class="goal-macro-f">F: <b>${fat}g</b></span>`;
-}
-function renderMacroBars() {
-  const {calories, protein, carbs, fat} = macroGoals;
-  const t = macroTotals;
-  function pct(val, goal) { return Math.min(100, Math.round(100 * val/goal)); }
-  document.getElementById('macroBars').innerHTML = `
-    <div class="macro-bar-outer"><div class="macro-bar-inner bar-cal" style="width:${pct(t.calories,calories)}%">
-      <span class="macro-bar-label">${t.calories}/${calories} kcal</span></div></div>
-    <div class="macro-bar-outer"><div class="macro-bar-inner bar-p" style="width:${pct(t.protein,protein)}%">
-      <span class="macro-bar-label">${t.protein}/${protein}g Protein</span></div></div>
-    <div class="macro-bar-outer"><div class="macro-bar-inner bar-c" style="width:${pct(t.carbs,carbs)}%">
-      <span class="macro-bar-label">${t.carbs}/${carbs}g Carbs</span></div></div>
-    <div class="macro-bar-outer"><div class="macro-bar-inner bar-f" style="width:${pct(t.fat,fat)}%">
-      <span class="macro-bar-label">${t.fat}/${fat}g Fat</span></div></div>
-  `;
-}
-function updateTotals() {
-  macroTotals = {calories:0,protein:0,carbs:0,fat:0};
-  mealLog.forEach(m=>{
-    macroTotals.calories += Number(m.calories)||0;
-    macroTotals.protein += Number(m.protein)||0;
-    macroTotals.carbs += Number(m.carbs)||0;
-    macroTotals.fat += Number(m.fat)||0;
-  });
-}
-function renderMealLog() {
-  let rows = mealLog.map((m,i) =>
-    `<tr>
-      <td>${m.name}</td>
-      <td>${m.calories}</td>
-      <td>${m.protein}</td>
-      <td>${m.carbs}</td>
-      <td>${m.fat}</td>
-      <td><button onclick="removeMeal(${i})" style="color:#e34747;font-weight:700;font-size:0.93em;border:none;background:none;cursor:pointer;">✕</button></td>
-    </tr>`
-  ).join('');
-  document.getElementById('mealLogTable').innerHTML = `
-    <thead>
-      <tr>
-        <th>Meal</th>
-        <th>Cal</th>
-        <th>P</th>
-        <th>C</th>
-        <th>F</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>${rows}</tbody>
-  `;
-}
-function removeMeal(idx) {
-  mealLog.splice(idx,1);
-  saveData();
-  renderAll();
-}
-function renderChart() {
-  const ctx = document.getElementById('macroChart').getContext('2d');
-  if (chart) chart.destroy();
-  chart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ['Calories','Protein','Carbs','Fat'],
-      datasets: [
-        {
-          label: 'Current',
-          data: [macroTotals.calories, macroTotals.protein, macroTotals.carbs, macroTotals.fat],
-          backgroundColor: [
-            'rgba(251,230,44,0.82)',  // Calories: gold
-            'rgba(81,193,110,0.85)',  // Protein: green
-            'rgba(97,170,255,0.85)',  // Carbs: blue
-            'rgba(245,169,77,0.85)'   // Fat: orange
-          ],
-          borderRadius: 10,
-          maxBarThickness: 40,
-          yAxisID: 'A'
-        },
-        {
-          label: 'Goal',
-          data: [macroGoals.calories, macroGoals.protein, macroGoals.carbs, macroGoals.fat],
-          backgroundColor: [
-            'rgba(251,230,44,0.19)',
-            'rgba(81,193,110,0.18)',
-            'rgba(97,170,255,0.18)',
-            'rgba(245,169,77,0.17)'
-          ],
-          borderRadius: 10,
-          borderWidth: 0,
-          yAxisID: 'A'
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {display: false},
-        tooltip: {enabled: true},
-      },
-      scales: {
-        x: {grid: {display: false}, ticks: {color: '#888', font: {weight:700}}},
-        A: {beginAtZero: true, ticks: {color: '#888', font: {weight:700}}, grid: {color:'#e5ecfa'},}
+    function setTheme(theme) {
+      const body = document.body;
+      const cont = document.getElementById('macroLegendContainer');
+      if (theme === 'ring') {
+        body.classList.add('ringmode');
+        cont.classList.add('ringmode');
+        document.getElementById('appleLightBtn').classList.remove('active');
+        document.getElementById('ringModeBtn').classList.add('active');
+        document.body.style.background = "radial-gradient(ellipse at center, #fbe62c33 0%, #271e0570 100%)";
+      } else {
+        body.classList.remove('ringmode');
+        cont.classList.remove('ringmode');
+        document.getElementById('appleLightBtn').classList.add('active');
+        document.getElementById('ringModeBtn').classList.remove('active');
+        document.body.style.background = "var(--light-bg)";
       }
+      renderStreak();
+      renderQuote();
     }
-  });
-}
+    // Toasts!
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.innerText = msg;
+      t.style.display = "block";
+      setTimeout(()=>t.style.display="none", 2200);
+    }
+    // ===== Macro Calculator logic ======
+    // (Auto-calculates TDEE and default macros)
+    function calculateMacros() {
+      const weight = +document.getElementById('inputWeight').value || 0;
+      const height = +document.getElementById('inputHeight').value || 70;
+      const age = +document.getElementById('inputAge').value || 30;
+      const gender = document.getElementById('inputGender').value;
+      const activity = document.getElementById('inputActivity').value;
+      const goal = document.getElementById('inputGoal').value;
 
-// --------------- MEAL ENTRY, FOOD AUTOCOMPLETE, BARCODE ---------------
-const sampleFoods = [
-  {name:'Chicken Breast',calories:165,protein:31,carbs:0,fat:3.6},
-  {name:'Brown Rice',calories:216,protein:5,carbs:44.8,fat:1.8},
-  {name:'Broccoli',calories:55,protein:3.7,carbs:11.2,fat:0.6},
-  {name:'Egg',calories:78,protein:6.3,carbs:0.6,fat:5.3},
-  {name:'Apple',calories:95,protein:0.5,carbs:25,fat:0.3},
-  {name:'Greek Yogurt',calories:100,protein:17,carbs:6,fat:0},
-  {name:'Salmon',calories:206,protein:22,carbs:0,fat:13},
-  {name:'Peanut Butter',calories:188,protein:8,carbs:6,fat:16},
-  {name:'Banana',calories:105,protein:1.3,carbs:27,fat:0.3},
-  {name:'Oats',calories:154,protein:6,carbs:27,fat:2.7},
-  {name:'Avocado',calories:160,protein:2,carbs:9,fat:15},
-  {name:'Ground Beef',calories:250,protein:26,carbs:0,fat:17},
-  {name:'Quinoa',calories:120,protein:4.1,carbs:21,fat:1.9}
-];
-function updateFoodDatalist() {
-  const dataList = document.getElementById('foodDatalist');
-  dataList.innerHTML = '';
-  sampleFoods.forEach(food => {
-    const option = document.createElement('option');
-    option.value = food.name;
-    dataList.appendChild(option);
-  });
-}
-updateFoodDatalist();
+      // 1. BMR (Mifflin-St Jeor, in lbs/inches)
+      let bmr = 10 * (weight * 0.4536) + 6.25 * (height * 2.54) - 5 * age;
+      bmr += (gender === "male") ? 5 : (gender === "female" ? -161 : -78);
 
-document.getElementById('foodSearch').addEventListener('input', function() {
-  const val = this.value.toLowerCase();
-  const found = sampleFoods.find(f=>f.name.toLowerCase()===val);
-  if (found) {
-    document.getElementById('mealName').value = found.name;
-    document.getElementById('mealCalories').value = found.calories;
-    document.getElementById('mealProtein').value = found.protein;
-    document.getElementById('mealCarbs').value = found.carbs;
-    document.getElementById('mealFat').value = found.fat;
-  }
-});
-// Barcode scanner: Use QuaggaJS or built-in, fallback to prompt
-function scanBarcode() {
-  if ('BarcodeDetector' in window) {
-    navigator.mediaDevices.getUserMedia({video:true}).then(stream=>{
-      let track = stream.getVideoTracks()[0];
-      const detector = new BarcodeDetector();
-      const video = document.createElement('video');
-      video.srcObject = stream;
-      video.setAttribute('playsinline', true);
-      video.play();
-      video.style.position = "fixed"; video.style.top = "0"; video.style.left = "0"; video.style.width = "100vw"; video.style.zIndex = 9999;
-      document.body.appendChild(video);
-      function stopScan() {
-        video.pause(); track.stop(); video.remove();
+      // 2. Activity multiplier
+      let multiplier = {
+        sedentary: 1.2, light: 1.35, moderate: 1.55, active: 1.75, athlete: 2.0
+      }[activity];
+
+      // 3. Goal multiplier
+      let goalMult = { maintain: 1, lose: 0.85, gain: 1.13 }[goal];
+
+      // 4. Calculate
+      let calories = Math.round(bmr * multiplier * goalMult);
+
+      // 5. Macro splits
+      let pPct = +document.getElementById('inputProteinPct').value;
+      let fPct = +document.getElementById('inputFatPct').value;
+      let cPct = +document.getElementById('inputCarbPct').value;
+      let totalPct = pPct + fPct + cPct;
+      if (totalPct !== 100) { // normalize
+        pPct = Math.round(pPct * 100 / totalPct);
+        fPct = Math.round(fPct * 100 / totalPct);
+        cPct = 100 - pPct - fPct;
+        document.getElementById('inputProteinPct').value = pPct;
+        document.getElementById('inputFatPct').value = fPct;
+        document.getElementById('inputCarbPct').value = cPct;
+        syncSliderLabels();
       }
-      video.addEventListener('click', stopScan);
-      video.addEventListener('play', ()=>{
-        const canvas = document.createElement('canvas');
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        let detected = false;
-        const interval = setInterval(()=>{
-          if (detected) return;
-          canvas.getContext('2d').drawImage(video,0,0,canvas.width,canvas.height);
-          detector.detect(canvas).then(codes=>{
-            if (codes.length) {
-              detected = true;
-              stopScan();
-              const code = codes[0].rawValue;
-              showCopyToast('Scanned: '+code);
-              // Try to match barcode in food DB? For now, just fill name
-              document.getElementById('mealName').value = code;
-            }
-          }).catch(()=>{});
-        }, 350);
+      document.getElementById('inputCals').value = calories;
+
+      macroGoals.calories = calories;
+      macroGoals.protein = Math.round(calories * pPct / 4 / 100);
+      macroGoals.fat = Math.round(calories * fPct / 9 / 100);
+      macroGoals.carbs = Math.round(calories * cPct / 4 / 100);
+
+      showToast('Goal macros updated!');
+      renderAll();
+    }
+    // Slider labels
+    function syncSliderLabels() {
+      document.getElementById('proteinSliderLabel').innerText = document.getElementById('inputProteinPct').value + "%";
+      document.getElementById('fatSliderLabel').innerText = document.getElementById('inputFatPct').value + "%";
+      document.getElementById('carbSliderLabel').innerText = document.getElementById('inputCarbPct').value + "%";
+    }
+    syncSliderLabels();
+
+    // Push macros to Progression
+    function pushMacros() {
+      calculateMacros();
+      showTab('progress');
+    }
+
+    // ========== Progress Bars & Chart =============
+    function renderGoalLine() {
+      // Not needed, we use progress bars below
+    }
+    function renderMacroBars() {
+      const {calories, protein, carbs, fat} = macroGoals;
+      const t = macroTotals;
+      function pct(val, goal) { return Math.min(100, Math.round(100 * val/goal)); }
+      document.getElementById('macroBars').innerHTML = `
+        <div class="macro-bar-outer">
+          <div class="macro-bar-inner bar-cal" style="width:${pct(t.calories,calories)}%">
+            <span class="macro-bar-label">${t.calories}/${calories} kcal</span>
+          </div>
+        </div>
+        <div class="macro-bar-outer">
+          <div class="macro-bar-inner bar-p" style="width:${pct(t.protein,protein)}%">
+            <span class="macro-bar-label">${t.protein}/${protein}g Protein</span>
+          </div>
+        </div>
+        <div class="macro-bar-outer">
+          <div class="macro-bar-inner bar-c" style="width:${pct(t.carbs,carbs)}%">
+            <span class="macro-bar-label">${t.carbs}/${carbs}g Carbs</span>
+          </div>
+        </div>
+        <div class="macro-bar-outer">
+          <div class="macro-bar-inner bar-f" style="width:${pct(t.fat,fat)}%">
+            <span class="macro-bar-label">${t.fat}/${fat}g Fat</span>
+          </div>
+        </div>
+      `;
+    }
+
+    // ========== Meal Log ==========
+    function addMeal(e) {
+      e.preventDefault();
+      const name = document.getElementById('mealName').value.trim();
+      const calories = Number(document.getElementById('mealCalories').value);
+      const protein = Number(document.getElementById('mealProtein').value) || 0;
+      const carbs = Number(document.getElementById('mealCarbs').value) || 0;
+      const fat = Number(document.getElementById('mealFat').value) || 0;
+      if (!name || !calories) return;
+      mealLog.push({name,calories,protein,carbs,fat,date:Date.now()});
+      saveData();
+      document.getElementById('mealName').value = '';
+      document.getElementById('mealCalories').value = '';
+      document.getElementById('mealProtein').value = '';
+      document.getElementById('mealCarbs').value = '';
+      document.getElementById('mealFat').value = '';
+      renderAll();
+      checkStreak();
+      showToast("Meal added to log!");
+    }
+    function renderMealLog() {
+      let rows = mealLog.map((m,i) =>
+        `<tr>
+          <td>${m.name}</td>
+          <td>${m.calories}</td>
+          <td>${m.protein}</td>
+          <td>${m.carbs}</td>
+          <td>${m.fat}</td>
+          <td><button class="meal-remove-btn" onclick="removeMeal(${i})">✕</button></td>
+        </tr>`
+      ).join('');
+      document.getElementById('mealLogTable').innerHTML = `
+        <thead>
+          <tr>
+            <th>Meal</th>
+            <th>Cal</th>
+            <th>P</th>
+            <th>C</th>
+            <th>F</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      `;
+    }
+    function removeMeal(idx) {
+      mealLog.splice(idx,1);
+      saveData();
+      renderAll();
+    }
+
+    // ========== Macro Totals ==========
+    function updateTotals() {
+      macroTotals = {calories:0,protein:0,carbs:0,fat:0};
+      mealLog.forEach(m=>{
+        macroTotals.calories += Number(m.calories)||0;
+        macroTotals.protein += Number(m.protein)||0;
+        macroTotals.carbs += Number(m.carbs)||0;
+        macroTotals.fat += Number(m.fat)||0;
       });
-    }).catch(()=>{alert('Camera not allowed or no BarcodeDetector.');});
-  } else {
-    let code = prompt("Barcode scanning is not supported on this browser.\nEnter barcode number manually:");
-    if (code) document.getElementById('mealName').value = code;
-  }
-}
-function addMeal(e) {
-  e.preventDefault();
-  const name = document.getElementById('mealName').value.trim();
-  const calories = Number(document.getElementById('mealCalories').value);
-  const protein = Number(document.getElementById('mealProtein').value)||0;
-  const carbs = Number(document.getElementById('mealCarbs').value)||0;
-  const fat = Number(document.getElementById('mealFat').value)||0;
-  if (!name || !calories) return;
-  mealLog.push({name,calories,protein,carbs,fat,date:Date.now()});
-  saveData();
-  document.getElementById('mealName').value = '';
-  document.getElementById('mealCalories').value = '';
-  document.getElementById('mealProtein').value = '';
-  document.getElementById('mealCarbs').value = '';
-  document.getElementById('mealFat').value = '';
-  document.getElementById('foodSearch').value = '';
-  renderAll();
-  checkStreak();
-}
-
-// --------------- EXPORT -----------------
-function exportCSV() {
-  let csv = "Meal,Calories,Protein,Carbs,Fat\n";
-  mealLog.forEach(m=>{
-    csv+=`${m.name},${m.calories},${m.protein},${m.carbs},${m.fat}\n`;
-  });
-  download(csv, "macrolegend.csv");
-}
-function exportTXT() {
-  let txt = "MacroLegend Log\n==================\n";
-  mealLog.forEach(m=>{
-    txt+=`${m.name.padEnd(16)} | Cal: ${m.calories} P: ${m.protein} C: ${m.carbs} F: ${m.fat}\n`;
-  });
-  download(txt, "macrolegend.txt");
-}
-function download(content, filename) {
-  const a = document.createElement('a');
-  const file = new Blob([content], {type: 'text/plain'});
-  a.href = URL.createObjectURL(file);
-  a.download = filename;
-  a.click();
-  setTimeout(()=>URL.revokeObjectURL(a.href), 800);
-}
-
-// --------------- STREAK SYSTEM ---------------
-function checkStreak() {
-  const today = new Date();
-  const todayStr = today.toISOString().slice(0,10);
-  if (streak.lastDate !== todayStr) {
-    const yesterday = new Date(today);
-    yesterday.setDate(yesterday.getDate()-1);
-    const ystr = yesterday.toISOString().slice(0,10);
-    if (streak.lastDate === ystr) {
-      streak.days += 1;
-      if (streak.days > streak.best) {
-        streak.best = streak.days;
-        playStreakSound();
-      }
-    } else {
-      streak.days = 1;
     }
-    streak.lastDate = todayStr;
-    streak.weekPhrase = ((streak.days-1) % lotrQuotes.length);
-    saveData();
-    renderStreak();
-    renderQuote();
-  }
-}
-function renderStreak() {
-  const streakArea = document.getElementById('streakArea');
-  const isRing = document.body.classList.contains('ringmode');
-  if (isRing) {
-    // SVG for golden One Ring 3D style
-    streakArea.innerHTML = `
-    <div class="streak-ring-wrap">
-      <svg class="streak-ring-svg" width="144" height="144" viewBox="0 0 144 144">
-        <defs>
-          <radialGradient id="gold" cx="72" cy="72" r="72" gradientUnits="userSpaceOnUse">
-            <stop offset="10%" stop-color="#fff8c6"/>
-            <stop offset="50%" stop-color="#fbe62c"/>
-            <stop offset="85%" stop-color="#d1a214"/>
-            <stop offset="100%" stop-color="#9a7b07"/>
-          </radialGradient>
-          <filter id="ring3dshadow" x="-15%" y="-15%" width="130%" height="130%">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="4" result="blur"/>
-            <feOffset in="blur" dx="0" dy="7" result="offsetBlur"/>
-            <feMerge><feMergeNode in="offsetBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
-        </defs>
-        <ellipse cx="72" cy="72" rx="62" ry="49" fill="url(#gold)" stroke="#d4b117" stroke-width="7" filter="url(#ring3dshadow)"/>
-        <text x="72" y="74" text-anchor="middle" fill="#bd8c19" font-family="Ringbearer, serif"
-          font-size="15" font-weight="bold" dy="22" letter-spacing="1">
-          ${toElvishInscription(streak.days)}
-        </text>
-      </svg>
-      <div class="streak-center-label">
-        ${streak.days}
-      </div>
-    </div>
-    `;
-  } else {
-    streakArea.innerHTML = `
-      <div class="streak-bar-wrap">
-        Streak
-        <span class="streak-bar-value">${streak.days}</span>
-        | Best: <span class="streak-bar-value">${streak.best}</span>
-      </div>
-    `;
-  }
-}
-function toElvishInscription(num) {
-  // Roman numeral plus "Ash nazg" (gimmick)
-  const roman = ["","I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII","XIII","XIV","XV","XVI","XVII","XVIII","XIX","XX","XXI","XXII","XXIII","XXIV","XXV","XXVI","XXVII","XXVIII","XXIX","XXX","XXXI","XXXII","XXXIII","XXXIV","XXXV","XXXVI","XXXVII","XXXVIII","XXXIX","XL","XLI","XLII","XLIII","XLIV","XLV","XLVI","XLVII","XLVIII","XLIX","L"];
-  let romanNum = num < roman.length ? roman[num] : num;
-  return "Ash nazg " + romanNum + " burzum-ishi";
-}
-function playStreakSound() {
-  if (document.body.classList.contains('ringmode')) {
-    try {
-      document.getElementById('streakSound').currentTime = 0;
-      document.getElementById('streakSound').play();
-    } catch (e) {}
-  }
-}
 
-// --------------- TOASTS -----------------
-function showCopyToast(msg) {
-  let toast = document.createElement('div');
-  toast.textContent = msg;
-  toast.style.position = 'fixed';
-  toast.style.bottom = '32px';
-  toast.style.left = '50%';
-  toast.style.transform = 'translateX(-50%)';
-  toast.style.background = '#333';
-  toast.style.color = '#fff';
-  toast.style.padding = '11px 28px';
-  toast.style.fontSize = '1.07em';
-  toast.style.fontWeight = '700';
-  toast.style.borderRadius = '13px';
-  toast.style.boxShadow = '0 2px 8px #1116';
-  toast.style.zIndex = 99999;
-  toast.style.opacity = 1;
-  document.body.appendChild(toast);
-  setTimeout(()=>{toast.style.opacity=0; setTimeout(()=>toast.remove(),400)},1600);
-}
+    // ========== Chart ==========
+    function renderChart() {
+      const ctx = document.getElementById('macroChart').getContext('2d');
+      if (chart) chart.destroy();
+      chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Calories','Protein','Carbs','Fat'],
+          datasets: [
+            {
+              label: 'Current',
+              data: [macroTotals.calories, macroTotals.protein, macroTotals.carbs, macroTotals.fat],
+              backgroundColor: [
+                'rgba(251,230,44,0.82)',  // Calories: gold
+                'rgba(81,193,110,0.85)',  // Protein: green
+                'rgba(97,170,255,0.85)',  // Carbs: blue
+                'rgba(245,169,77,0.85)'   // Fat: orange
+              ],
+              borderRadius: 10,
+              maxBarThickness: 36,
+              yAxisID: 'A'
+            },
+            {
+              label: 'Goal',
+              data: [macroGoals.calories, macroGoals.protein, macroGoals.carbs, macroGoals.fat],
+              backgroundColor: [
+                'rgba(251,230,44,0.19)',
+                'rgba(81,193,110,0.18)',
+                'rgba(97,170,255,0.18)',
+                'rgba(245,169,77,0.17)'
+              ],
+              borderRadius: 10,
+              borderWidth: 0,
+              yAxisID: 'A'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {display: false},
+            tooltip: {enabled: true},
+          },
+          scales: {
+            x: {
+              grid: {display: false},
+              ticks: {color: '#888', font: {weight:700}}
+            },
+            A: {
+              beginAtZero: true,
+              ticks: {color: '#888', font: {weight:700}},
+              grid: {color:'#e5ecfa55', lineWidth: 0.8, borderDash: [2,6]},
+              min: 0
+            },
+            B: { // Secondary axis for protein/carb/fat
+              position: 'right',
+              beginAtZero: true,
+              grid: {display: false},
+              ticks: {
+                color: '#888',
+                callback: function(value, index, values) {
+                  if (index === 0) return '';
+                  return value;
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+    // ========== Barcode Scanner ==========
+    let scannerActive = false;
+    function showBarcodeScanner() {
+      document.getElementById('barcodeModal').style.display = 'flex';
+      if (!scannerActive) {
+        Quagga.init({
+          inputStream: {
+            name: "Live",
+            type: "LiveStream",
+            target: document.getElementById('barcodePreview')
+          },
+          decoder: { readers: ["ean_reader","upc_reader"] }
+        }, function(err) {
+          if (!err) {
+            Quagga.start();
+            scannerActive = true;
+            Quagga.onDetected(barcodeDetected);
+          }
+        });
+      }
+    }
+    function barcodeDetected(data) {
+      Quagga.stop();
+      scannerActive = false;
+      document.getElementById('barcodeModal').style.display = 'none';
+      // Simulate a food lookup (should connect to real API!)
+      const code = data.codeResult.code;
+      fetchFoodByBarcode(code);
+    }
+    function closeBarcodeModal() {
+      if (scannerActive) {
+        Quagga.stop();
+        scannerActive = false;
+      }
+      document.getElementById('barcodeModal').style.display = 'none';
+    }
+    function fetchFoodByBarcode(barcode) {
+      // Simulated lookup, real would be fetch to OpenFoodFacts, etc.
+      let fakeFoods = [
+        {barcode:'012345678912',name:'Lembas Bread',calories:240,protein:7,carbs:44,fat:4},
+        {barcode:'978020137962',name:'Elven Waybread',calories:310,protein:6,carbs:49,fat:5}
+      ];
+      let found = fakeFoods.find(f=>f.barcode===barcode);
+      if (found) {
+        document.getElementById('mealName').value = found.name;
+        document.getElementById('mealCalories').value = found.calories;
+        document.getElementById('mealProtein').value = found.protein;
+        document.getElementById('mealCarbs').value = found.carbs;
+        document.getElementById('mealFat').value = found.fat;
+        showToast("Barcode found: " + found.name);
+      } else {
+        showToast("Barcode not found!");
+      }
+    }
+    // ====== Food Search with Autocomplete ======
+    // For demo, load ~20 popular foods; in production use a full DB or OpenFoodFacts/USDA API.
+    foodDatabase = [
+      {name:"Chicken Breast",calories:165,protein:31,carbs:0,fat:4},
+      {name:"Eggs",calories:78,protein:6,carbs:1,fat:5},
+      {name:"White Rice",calories:205,protein:4,carbs:45,fat:0.4},
+      {name:"Salmon",calories:232,protein:25,carbs:0,fat:14},
+      {name:"Banana",calories:105,protein:1,carbs:27,fat:0.3},
+      {name:"Almonds",calories:161,protein:6,carbs:6,fat:14},
+      {name:"Apple",calories:95,protein:0,carbs:25,fat:0.3},
+      {name:"Peanut Butter",calories:188,protein:8,carbs:6,fat:16},
+      {name:"Greek Yogurt",calories:100,protein:17,carbs:6,fat:0},
+      {name:"Cottage Cheese",calories:163,protein:28,carbs:6,fat:2.3},
+      {name:"Oats",calories:150,protein:5,carbs:27,fat:3},
+      {name:"Ground Beef",calories:217,protein:26,carbs:0,fat:12},
+      {name:"Milk",calories:122,protein:8,carbs:12,fat:5},
+      {name:"Turkey",calories:135,protein:29,carbs:0,fat:1},
+      {name:"Broccoli",calories:55,protein:4,carbs:11,fat:0.6},
+      {name:"Potato",calories:161,protein:4,carbs:37,fat:0.2},
+      {name:"Avocado",calories:160,protein:2,carbs:8,fat:15},
+      {name:"Pasta",calories:221,protein:8,carbs:43,fat:1.3},
+      {name:"Whey Protein",calories:120,protein:24,carbs:3,fat:1},
+      {name:"Lembas Bread",calories:240,protein:7,carbs:44,fat:4},
+      {name:"Elven Waybread",calories:310,protein:6,carbs:49,fat:5}
+    ];
+    function fillFoodList() {
+      const dataList = document.getElementById('foodList');
+      dataList.innerHTML = '';
+      foodDatabase.forEach(f=>{
+        const opt = document.createElement('option');
+        opt.value = f.name;
+        dataList.appendChild(opt);
+      });
+    }
+    document.getElementById('mealName').addEventListener('input', function(e) {
+      const name = e.target.value;
+      const f = foodDatabase.find(f=>f.name.toLowerCase()===name.toLowerCase());
+      if (f) {
+        document.getElementById('mealCalories').value = f.calories;
+        document.getElementById('mealProtein').value = f.protein;
+        document.getElementById('mealCarbs').value = f.carbs;
+        document.getElementById('mealFat').value = f.fat;
+      }
+    });
 
-// --------------- DATA STORAGE ---------------
-function saveData() {
-  localStorage.setItem('macroGoals', JSON.stringify(macroGoals));
-  localStorage.setItem('mealLog', JSON.stringify(mealLog));
-  localStorage.setItem('streak', JSON.stringify(streak));
-}
+    // ========== Export ==========
+    function exportCSV() {
+      let csv = "Meal,Calories,Protein,Carbs,Fat\n";
+      mealLog.forEach(m=>{
+        csv+=`${m.name},${m.calories},${m.protein},${m.carbs},${m.fat}\n`;
+      });
+      download(csv, "macrolegend.csv");
+    }
+    function exportTXT() {
+      let txt = "MacroLegend Log\n==================\n";
+      mealLog.forEach(m=>{
+        txt+=`${m.name.padEnd(16)} | Cal: ${m.calories} P: ${m.protein} C: ${m.carbs} F: ${m.fat}\n`;
+      });
+      download(txt, "macrolegend.txt");
+    }
+    function download(content, filename) {
+      const a = document.createElement('a');
+      const file = new Blob([content], {type: 'text/plain'});
+      a.href = URL.createObjectURL(file);
+      a.download = filename;
+      a.click();
+      setTimeout(()=>URL.revokeObjectURL(a.href), 800);
+    }
 
-// --------------- RENDER ALL -----------------
-function renderAll() {
-  updateTotals();
-  renderGoalLine();
-  renderMacroBars();
-  renderMealLog();
-  renderChart();
-  renderStreak();
-  renderQuote();
-}
-renderAll();
-</script>
+    // ========== Streak System & Quote ==========
+    function checkStreak() {
+      const today = new Date();
+      const todayStr = today.toISOString().slice(0,10);
+      // If we haven't logged a meal today, streak breaks
+      if (streak.lastDate !== todayStr) {
+        // If last log was yesterday, increment
+        const yesterday = new Date(today);
+        yesterday.setDate(yesterday.getDate()-1);
+        const ystr = yesterday.toISOString().slice(0,10);
+        if (streak.lastDate === ystr) {
+          streak.days += 1;
+          if (streak.days > streak.best) {
+            streak.best = streak.days;
+            playStreakSound();
+          }
+        } else {
+          streak.days = 1;
+        }
+        streak.lastDate = todayStr;
+        streak.weekPhrase = ((streak.days-1) % phrasesLOTR.length);
+        saveData();
+        renderStreak();
+      }
+    }
+    function renderStreak() {
+      const streakArea = document.getElementById('streakArea');
+      const isRing = document.body.classList.contains('ringmode');
+      if (isRing) {
+        // SVG for golden One Ring w/ inscription + 3D effect
+        streakArea.innerHTML = `
+        <div class="streak-ring-wrap">
+          <svg class="streak-ring-svg" width="140" height="140" viewBox="0 0 140 140">
+            <defs>
+              <radialGradient id="gold" cx="70" cy="70" r="70" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#fffad4"/>
+                <stop offset="62%" stop-color="#edb941"/>
+                <stop offset="100%" stop-color="#9e7a11"/>
+              </radialGradient>
+              <filter id="innerShadow">
+                <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur"/>
+                <feOffset dx="0" dy="2" result="offsetBlur"/>
+                <feComposite in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowDiff"/>
+                <feFlood flood-color="#a48221" flood-opacity="0.3"/>
+                <feComposite in2="shadowDiff" operator="in"/>
+                <feComposite in2="SourceGraphic" operator="over" result="firstfilter"/>
+              </filter>
+            </defs>
+            <ellipse cx="70" cy="70" rx="61" ry="48" fill="url(#gold)" filter="url(#innerShadow)" />
+            <ellipse cx="70" cy="70" rx="57" ry="44" fill="none" stroke="#d4b117" stroke-width="4" />
+            <text x="70" y="56" text-anchor="middle" fill="#bd8c19" font-family="Ringbearer, serif"
+              font-size="13" font-weight="bold" letter-spacing="2" filter="url(#innerShadow)">
+              Ash nazg durbatulûk
+            </text>
+            <text x="70" y="119" text-anchor="middle" fill="#bd8c19" font-family="Ringbearer, serif"
+              font-size="13" font-weight="bold" letter-spacing="2">
+              Ash nazg gimbatul
+            </text>
+          </svg>
+          <div class="streak-center-label" style="z-index:7;">
+            <span style="font-size:1.95em;letter-spacing:2px;">${streak.days}</span>
+          </div>
+        </div>
+        `;
+      } else {
+        streakArea.innerHTML = `
+          <div class="streak-ring-wrap" style="margin-bottom:0.5em;">
+            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
+              <span style="font-size:2.05em;font-weight:700;color:#2b78e4;letter-spacing:1.2px;line-height:1.2;">${streak.days}</span>
+              <span style="color:#515171;font-size:1.01em;margin-top:-1.1em;">Day Streak</span>
+            </div>
+          </div>
+        `;
+      }
+    }
+    function renderQuote() {
+      const quoteArea = document.getElementById('quoteArea');
+      const isRing = document.body.classList.contains('ringmode');
+      let phrase = (isRing ? phrasesLOTR : phrasesLight)[streak.weekPhrase % phrasesLOTR.length];
+      quoteArea.innerHTML = `<div class="quote-box">${phrase}</div>`;
+    }
+    function playStreakSound() {
+      if (document.body.classList.contains('ringmode')) {
+        try {
+          document.getElementById('streakSound').currentTime = 0;
+          document.getElementById('streakSound').play();
+        } catch (e) {}
+      }
+    }
+
+    // ========== Data Storage ==========
+    function saveData() {
+      localStorage.setItem('macroGoals', JSON.stringify(macroGoals));
+      localStorage.setItem('mealLog', JSON.stringify(mealLog));
+      localStorage.setItem('streak', JSON.stringify(streak));
+    }
+    function loadData() {
+      try {
+        if (localStorage.getItem('macroGoals')) macroGoals = JSON.parse(localStorage.getItem('macroGoals'));
+        if (localStorage.getItem('mealLog')) mealLog = JSON.parse(localStorage.getItem('mealLog'));
+        if (localStorage.getItem('streak')) streak = JSON.parse(localStorage.getItem('streak'));
+      } catch (e) {}
+    }
+
+    // ========== All Render ==========
+    function renderAll() {
+      updateTotals();
+      renderMacroBars();
+      renderMealLog();
+      renderChart();
+      renderStreak();
+      renderQuote();
+      fillFoodList();
+    }
+
+    // ========== Setup ==========
+    loadData();
+    renderAll();
+    document.getElementById('macroCalcForm').addEventListener('input', calculateMacros);
+    setTheme('light');
+    window.addEventListener('resize', function() {
+      renderAll();
+    });
+
+    // Add little bleed on sides for mobile
+    document.body.style.paddingLeft = 'max(2vw,8px)';
+    document.body.style.paddingRight = 'max(2vw,8px)';
+  </script>
 </body>
 </html>
