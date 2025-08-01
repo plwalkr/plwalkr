@@ -107,6 +107,41 @@
       text-shadow: 0 1px 8px #0003;
       user-select: none;
     }
+    .date-row {
+      display: flex; justify-content: center; align-items: center; gap: 0.7em;
+      margin-bottom: 0.3em;
+    }
+    .date-btn, .date-today-btn {
+      border: none;
+      background: var(--theme-accent);
+      color: #232733;
+      font-weight: 600;
+      font-size: 1em;
+      border-radius: 7px;
+      padding: 0.27em 0.75em;
+      cursor: pointer;
+      box-shadow: 0 1px 6px #0002;
+      transition: background 0.13s;
+      margin-right: 2px;
+      margin-left: 2px;
+    }
+    .date-today-btn {
+      background: #c6faee;
+      color: #1a2b18;
+      font-weight: bold;
+      padding: 0.27em 1.1em;
+      border: 2px solid var(--theme-accent);
+      font-size: 1.04em;
+    }
+    .calendar-input {
+      border: 1.3px solid var(--theme-accent);
+      border-radius: 7px;
+      background: #252733;
+      color: var(--theme-text);
+      font-size: 1em;
+      padding: 0.28em 0.58em;
+      margin-left: 2px;
+    }
     .card {
       background: var(--theme-card);
       box-shadow: 0 2px 14px #0005;
@@ -169,6 +204,31 @@
     .scan-btn:active {
       filter: brightness(1.1) saturate(1.2);
     }
+    .autocomplete-box {
+      background: #192320;
+      border: 1.3px solid var(--theme-accent);
+      border-radius: 7px;
+      max-height: 180px;
+      overflow-y: auto;
+      position: absolute;
+      left: 0; right: 0;
+      z-index: 80;
+      margin-top: 2px;
+      box-shadow: 0 2px 10px #0006;
+    }
+    .autocomplete-item {
+      padding: 0.48em 0.7em;
+      cursor: pointer;
+      color: #b7fff4;
+      font-size: 1em;
+      font-family: 'Inter',sans-serif;
+      border-bottom: 1px solid #214a45;
+    }
+    .autocomplete-item:last-child { border-bottom: none; }
+    .autocomplete-item.selected, .autocomplete-item:hover {
+      background: #1ec9a7;
+      color: #132a24;
+    }
     .log-list {
       list-style: none;
       padding: 0; margin: 0.2em 0 0 0;
@@ -184,17 +244,6 @@
     }
     .log-entry .time {
       color: var(--theme-accent); font-size: 0.96em; font-family: 'Fira Mono', monospace;
-    }
-    .chart-placeholder {
-      background: linear-gradient(90deg, #1e2b27 60%, #30473e 100%);
-      border-radius: 17px;
-      min-height: 130px;
-      color: #9ce8b8;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.13em; margin-top: 0.5em;
-      box-shadow: 0 1px 8px #0003;
-      text-align: center;
-      font-family: 'Fira Mono', monospace;
     }
     .chart-canvas {
       background: var(--goal-bg);
@@ -279,6 +328,18 @@
     .goal-setting-group { display: flex; flex-wrap:wrap; gap:0.5em;}
     .goal-setting-group input { max-width:90px; text-align:right;}
     .goal-setting-label { font-size:0.97em; color:var(--theme-accent); font-weight:600; margin-right:4px;}
+    .share-btn {
+      background: #b7a3f5;
+      color: #201c33;
+      border-radius: 7px;
+      font-weight: 700;
+      padding: 0.54em 1.11em;
+      font-size: 1.04em;
+      margin-top: 0.19em;
+      margin-bottom: 0.4em;
+      box-shadow: 0 1px 6px #11084142;
+    }
+    .share-btn:hover { filter: brightness(1.11); }
     @media (max-width: 600px) {
       .container { max-width: 99vw; padding: 0.4rem 1.2vw 1.6rem 1.2vw; }
       .card { padding: 0.8em 0.7em; }
@@ -310,6 +371,13 @@
   </div>
   <div class="container">
     <div class="app-title">MacroLegend – One Calculator to Rule Them All</div>
+    <div class="date-row">
+      <button class="date-btn" onclick="prevDay()">&#8592;</button>
+      <span id="dateDisplay" style="font-size:1.05em; font-weight:600; color:var(--theme-accent);"></span>
+      <button class="date-btn" onclick="nextDay()">&#8594;</button>
+      <button class="date-today-btn" onclick="goToday()">Today</button>
+      <input type="date" class="calendar-input" id="calendarInput" onchange="pickDate(this.value)">
+    </div>
     <!-- Macro goals card -->
     <div class="card" id="goalCard">
       <div class="section-title">Set Your Daily Macro Goals</div>
@@ -331,9 +399,12 @@
       <div id="bars"></div>
     </div>
     <!-- Meal entry card -->
-    <div class="card" id="mealEntry">
+    <div class="card" id="mealEntry" style="position:relative;">
       <div class="section-title">Add Meal</div>
-      <input type="text" id="mealName" placeholder="Meal name (or scan barcode)"/>
+      <div style="position:relative;">
+        <input type="text" id="mealName" placeholder="Meal name or search food…" autocomplete="off" oninput="foodAutocomplete()" />
+        <div id="autocompleteBox" class="autocomplete-box" style="display:none; position:absolute; left:0; right:0; top:48px;"></div>
+      </div>
       <input type="number" id="mealCals" placeholder="Calories"/>
       <input type="number" id="mealProtein" placeholder="Protein (g)"/>
       <input type="number" id="mealCarbs" placeholder="Carbs (g)"/>
@@ -341,7 +412,7 @@
       <button class="scan-btn" onclick="scanBarcode()">🔎 Scan Barcode</button>
       <button onclick="addMeal()">Add to Log</button>
       <div style="font-size:0.91em; color:#c3b05a; margin-top:2px;">
-        (Scan a food barcode or enter manually!)
+        (Scan a food barcode or search a food name, or enter manually!)
       </div>
       <div id="scanArea"></div>
     </div>
@@ -350,6 +421,7 @@
       <div class="section-title">Meal Log</div>
       <button class="export-btn" onclick="exportCSV()">Export CSV</button>
       <button class="export-btn" onclick="exportTXT()">Export TXT</button>
+      <button class="share-btn" onclick="shareDay()">Share Day</button>
       <ul class="log-list" id="logList"></ul>
       <div id="totals" style="margin-top:0.45em; color:var(--theme-accent); font-weight:600;"></div>
     </div>
@@ -361,7 +433,7 @@
     </div>
   </div>
   <script>
-    // THEME/FONT LOGIC
+    // ====== THEME/FONT LOGIC ======
     function setTheme(idx) {
       const themes = [
         ['--theme-1-bg','--theme-1-accent','--theme-1-card','--theme-1-text'],
@@ -384,8 +456,38 @@
       document.documentElement.style.setProperty('--theme-font', fonts[idx]);
       document.querySelectorAll('.font-btn').forEach((el,i)=>el.classList.toggle('selected',i===idx));
     }
-    // MACRO GOALS PERSISTENCE
+
+    // ====== DATE LOGIC ======
+    function dateToKey(dateObj) {
+      return dateObj.toISOString().slice(0,10);
+    }
+    let currentDay = dateToKey(new Date());
+    function renderDateDisplay() {
+      const d = new Date(currentDay);
+      document.getElementById('dateDisplay').textContent =
+        d.toLocaleDateString(undefined,{weekday:'short',year:'numeric',month:'short',day:'numeric'});
+      document.getElementById('calendarInput').value = currentDay;
+    }
+    function prevDay() {
+      const d = new Date(currentDay); d.setDate(d.getDate()-1);
+      currentDay = dateToKey(d); loadLog(); renderDateDisplay();
+    }
+    function nextDay() {
+      const d = new Date(currentDay); d.setDate(d.getDate()+1);
+      currentDay = dateToKey(d); loadLog(); renderDateDisplay();
+    }
+    function goToday() {
+      currentDay = dateToKey(new Date()); loadLog(); renderDateDisplay();
+    }
+    function pickDate(val) {
+      if (val) { currentDay = val; loadLog(); renderDateDisplay(); }
+    }
+
+    // ====== MACRO GOALS PERSISTENCE (per day) ======
     function getGoals() {
+      const dayGoals = JSON.parse(localStorage.getItem("macroGoalsLog")||"{}")[currentDay];
+      if (dayGoals) return dayGoals;
+      // fallback to global or default
       return JSON.parse(localStorage.getItem("macroGoals") || '{"cals":2000,"protein":150,"carbs":200,"fat":70}');
     }
     function saveGoals() {
@@ -395,20 +497,29 @@
         carbs: parseInt(document.getElementById('goalCarbs').value) || 200,
         fat: parseInt(document.getElementById('goalFat').value) || 70,
       };
+      // save globally as fallback
       localStorage.setItem("macroGoals", JSON.stringify(goals));
-      showToast("Goals saved!");
+      // save per day
+      let goalsLog = JSON.parse(localStorage.getItem("macroGoalsLog")||"{}");
+      goalsLog[currentDay] = goals;
+      localStorage.setItem("macroGoalsLog", JSON.stringify(goalsLog));
+      showToast("Goals saved for this day!");
       renderBars();
     }
-    // MEAL LOG PERSISTENCE
+
+    // ====== MEAL LOG PERSISTENCE (per day) ======
     let mealLog = [];
     function loadLog() {
-      mealLog = JSON.parse(localStorage.getItem("macroLog") || "[]");
+      let allLogs = JSON.parse(localStorage.getItem("macroLogDays")||"{}");
+      mealLog = allLogs[currentDay] || [];
       renderLog();
       renderBars();
       updateCharts();
     }
     function saveLog() {
-      localStorage.setItem("macroLog", JSON.stringify(mealLog));
+      let allLogs = JSON.parse(localStorage.getItem("macroLogDays")||"{}");
+      allLogs[currentDay] = mealLog;
+      localStorage.setItem("macroLogDays", JSON.stringify(allLogs));
       renderBars();
       updateCharts();
     }
@@ -433,6 +544,7 @@
       document.getElementById('mealProtein').value = '';
       document.getElementById('mealCarbs').value = '';
       document.getElementById('mealFat').value = '';
+      document.getElementById('autocompleteBox').style.display = "none";
     }
     function renderLog() {
       let html = mealLog.map(m=>`
@@ -451,14 +563,14 @@
       document.getElementById('totals').textContent =
         mealLog.length ? `Total: ${totals.cals} cal, ${totals.p}g P, ${totals.c}g C, ${totals.f}g F` : '';
     }
-    // GOAL PROGRESS BARS
+
+    // ====== GOAL PROGRESS BARS ======
     function renderBars() {
       const goals = getGoals();
       const totals = mealLog.reduce((tot,m)=>({
         cals: tot.cals+m.cals, p: tot.p+m.p, c: tot.c+m.c, f: tot.f+m.f
       }),{cals:0,p:0,c:0,f:0});
       let barsHtml = '';
-      // Helper: percent, class, value
       function bar(val, goal, label, unit) {
         let pct = goal ? Math.min(val/goal, 1) : 0;
         let extra = '';
@@ -477,20 +589,21 @@
       barsHtml += bar(totals.f, goals.fat, "Fat", "g");
       document.getElementById('bars').innerHTML = barsHtml;
     }
-    // EXPORT BUTTONS
+
+    // ====== EXPORT BUTTONS ======
     function exportCSV() {
       let csv = "Time,Meal,Calories,Protein,Carbs,Fat\n";
       mealLog.slice().reverse().forEach(m => {
         csv += `${m.time},"${m.name}",${m.cals},${m.p},${m.c},${m.f}\n`;
       });
-      downloadFile(csv, "macrolegend_log.csv", "text/csv");
+      downloadFile(csv, `macrolegend_log_${currentDay}.csv`, "text/csv");
     }
     function exportTXT() {
-      let txt = "MacroLegend Meal Log\n\n";
+      let txt = `MacroLegend Meal Log for ${currentDay}\n\n`;
       mealLog.slice().reverse().forEach(m => {
         txt += `${m.time} – ${m.name}  [${m.cals} cal | ${m.p}g P | ${m.c}g C | ${m.f}g F]\n`;
       });
-      downloadFile(txt, "macrolegend_log.txt", "text/plain");
+      downloadFile(txt, `macrolegend_log_${currentDay}.txt`, "text/plain");
     }
     function downloadFile(data, filename, type) {
       let blob = new Blob([data], {type});
@@ -501,7 +614,7 @@
       setTimeout(()=>{ document.body.removeChild(a); URL.revokeObjectURL(url); },500);
       showToast("Exported!");
     }
-    // CHARTS
+    // ====== CHARTS ======
     let pieChart, barChart;
     function updateCharts() {
       const totals = mealLog.reduce((tot,m)=>({
@@ -577,7 +690,8 @@
         }
       });
     }
-    // TOAST NOTIFICATION
+
+    // ====== TOAST NOTIFICATION ======
     function showToast(msg) {
       let toast = document.createElement('div');
       toast.style.position = 'fixed';
@@ -596,7 +710,8 @@
       document.body.appendChild(toast);
       setTimeout(()=>{toast.remove()},1700);
     }
-    // BARCODE SCAN LOGIC
+
+    // ====== BARCODE SCAN LOGIC ======
     let scanning = false, codeReader = null;
     async function scanBarcode() {
       if (scanning) return; // Prevent double scan
@@ -666,16 +781,86 @@
           Lookup failed. Enter manually if needed.</div>`;
       }
     }
-    // INIT: LOAD LOG, BARS, CHARTS, GOALS
+
+    // ====== FOOD AUTOCOMPLETE LOGIC ======
+    let lastAutocompleteReq = "";
+    async function foodAutocomplete() {
+      const box = document.getElementById('autocompleteBox');
+      const q = document.getElementById('mealName').value.trim();
+      if (!q || q.length < 2) { box.style.display = "none"; return; }
+      lastAutocompleteReq = q;
+      box.innerHTML = `<div class="autocomplete-item">Searching…</div>`;
+      box.style.display = "block";
+      let resp = await fetch("https://world.openfoodfacts.org/cgi/search.pl?search_terms=" + encodeURIComponent(q) + "&search_simple=1&action=process&json=1&page_size=12");
+      if (!resp.ok) { box.innerHTML = `<div class="autocomplete-item">Error. Try again.</div>`; return; }
+      let data = await resp.json();
+      if (lastAutocompleteReq !== q) return; // Only show latest
+      if (!data.products || !data.products.length) {
+        box.innerHTML = `<div class="autocomplete-item">No matches. Try another food.</div>`;
+        return;
+      }
+      box.innerHTML = data.products.map((p,i)=>`
+        <div class="autocomplete-item" onclick="pickFood('${escapeStr(p.product_name||p.brands||p.generic_name||'Food')}',${JSON.stringify(p.nutriments||{})})">${p.product_name ? escapeHTML(p.product_name) : "(No Name)"}</div>
+      `).join('');
+    }
+    function escapeHTML(s) {
+      return (s||"").replace(/[<>&"']/g,function(c){return{"<":"&lt;",">":"&gt;","&":"&amp;",'"':"&quot;","'":"&#39;"}[c]});
+    }
+    function escapeStr(s) {
+      return (s||"").replace(/\\/g,"\\\\").replace(/'/g,"\\'");
+    }
+    function pickFood(name, nutriments) {
+      document.getElementById('mealName').value = name || "";
+      if (nutriments) {
+        document.getElementById('mealCals').value = nutriments['energy-kcal_100g'] || nutriments['energy-kcal'] || '';
+        document.getElementById('mealProtein').value = nutriments['proteins_100g'] || '';
+        document.getElementById('mealCarbs').value = nutriments['carbohydrates_100g'] || '';
+        document.getElementById('mealFat').value = nutriments['fat_100g'] || '';
+      }
+      document.getElementById('autocompleteBox').style.display = "none";
+    }
+
+    // ====== SHARE DAY BUTTON ======
+    function shareDay() {
+      let d = new Date(currentDay);
+      let summary = `MacroLegend Meal Log – ${d.toLocaleDateString()}:\n\n`;
+      mealLog.slice().reverse().forEach(m => {
+        summary += `${m.time} – ${m.name}  [${m.cals} cal | ${m.p}g P | ${m.c}g C | ${m.f}g F]\n`;
+      });
+      let totals = mealLog.reduce((tot,m)=>({
+        cals: tot.cals+m.cals, p: tot.p+m.p, c: tot.c+m.c, f: tot.f+m.f
+      }),{cals:0,p:0,c:0,f:0});
+      summary += `\nTotal: ${totals.cals} cal, ${totals.p}g P, ${totals.c}g C, ${totals.f}g F\n`;
+      // Try navigator.share if available
+      if (navigator.share) {
+        navigator.share({title:"My Macro Log",text:summary}).catch(()=>copyShare(summary));
+      } else copyShare(summary);
+    }
+    function copyShare(summary) {
+      navigator.clipboard.writeText(summary);
+      showToast("Summary copied! Paste it anywhere.");
+    }
+
+    // ====== INIT APP ======
     window.onload = function() {
       setTheme(1); setFont(0);
+      currentDay = dateToKey(new Date());
+      renderDateDisplay();
+      // Load today's log
+      loadLog();
       // Load goals if present
       const goals = getGoals();
       document.getElementById('goalCals').value = goals.cals;
       document.getElementById('goalProtein').value = goals.protein;
       document.getElementById('goalCarbs').value = goals.carbs;
       document.getElementById('goalFat').value = goals.fat;
-      loadLog();
+      // Hide autocomplete on click elsewhere
+      document.body.addEventListener('click', function(e) {
+        if (!document.getElementById('mealName').contains(e.target) &&
+            !document.getElementById('autocompleteBox').contains(e.target)) {
+          document.getElementById('autocompleteBox').style.display = "none";
+        }
+      });
     };
   </script>
 </body>
