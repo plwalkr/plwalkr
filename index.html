@@ -344,10 +344,707 @@
     <div id="barcodeOverlay"></div>
     <button id="barcodeCancelBtn" onclick="stopBarcodeScan()">Cancel Scan</button>
   </div>
-  <!-- Chart.js and Quagga2 -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2@1.2.6/dist/quagga.min.js"></script>
-  <!-- Your full JS goes here (unchanged from the last version except where you want tweaks for quoteRow, spacing, and new backgrounds). -->
-  <!-- Paste your JS here. If you want me to update JS with more spacing/tweaks, let me know! -->
+  <script>
+    // Quotes: 52 LOTR, 52 generic
+    const lotrQuotes = [
+      "Even the smallest person can change the course of the future.",
+      "Not all those who wander are lost.",
+      "The road goes ever on and on.",
+      "Deeds will not be less valiant because they are unpraised.",
+      "Faithless is he that says farewell when the road darkens.",
+      "All we have to decide is what to do with the time that is given us.",
+      "There’s some good in this world, and it’s worth fighting for.",
+      "I am glad you are here with me. Here at the end of all things.",
+      "The world is indeed full of peril, and in it there are many dark places.",
+      "A wizard is never late, nor is he early, he arrives precisely when he means to.",
+      "You shall not pass!",
+      "Courage is found in unlikely places.",
+      "The shadow is only a passing thing.",
+      "Hope remains while the Company is true.",
+      "The board is set, the pieces are moving.",
+      "One does not simply walk into Mordor.",
+      "I would rather share one lifetime with you than face all the ages of this world alone.",
+      "May it be a light to you in dark places, when all other lights go out.",
+      "It's a dangerous business, going out your door.",
+      "The wise speak only of what they know.",
+      "Many that live deserve death. And some that die deserve life.",
+      "Even darkness must pass. A new day will come.",
+      "The strength of the ring-bearer is in his heart.",
+      "There’s always hope.",
+      "For Frodo.",
+      "The journey doesn’t end here.",
+      "I am no man!",
+      "The Ring has awoken.",
+      "Speak, friend, and enter.",
+      "There and back again.",
+      "Let him not vow to walk in the dark, who has not seen the nightfall.",
+      "Renewed shall be blade that was broken.",
+      "I will take the Ring, though I do not know the way.",
+      "A day may come when the courage of men fails… but it is not this day.",
+      "My friends, you bow to no one.",
+      "White shores, and beyond, a far green country under a swift sunrise.",
+      "You have my sword.",
+      "The Shire must truly be a great place.",
+      "If by my life or death I can protect you, I will.",
+      "End? No, the journey doesn't end here.",
+      "Where there's life, there's hope.",
+      "It’s the job that’s never started as takes longest to finish.",
+      "But in the end, it’s only a passing thing, this shadow.",
+      "I can't carry it for you, but I can carry you!",
+      "The hands of a king are the hands of a healer.",
+      "Shadowfax, show us the meaning of haste.",
+      "There is no curse in Elvish, Entish, or the tongues of Men for this treachery.",
+      "Mithrandir, why did you leave us?",
+      "You shall be the Fellowship of the Ring.",
+      "I will not say: do not weep; for not all tears are an evil.",
+      "The fire of your heart outshines the darkness.",
+      "May your path be green and the breeze on your back."
+    ];
+    const genericQuotes = [
+      "Every journey begins with a single step.",
+      "Consistency is the key to growth.",
+      "Small actions every day create big change.",
+      "Your only competition is yourself.",
+      "Progress over perfection.",
+      "Champions are made in the off-season.",
+      "Discipline is choosing between what you want now and what you want most.",
+      "The best project you’ll ever work on is you.",
+      "Little by little, one travels far.",
+      "You don't have to be great to start, but you have to start to be great.",
+      "Motivation gets you going, but habit keeps you growing.",
+      "You miss 100% of the shots you don’t take.",
+      "Don't watch the clock; do what it does. Keep going.",
+      "Strength grows in the moments you think you can't go on but you keep going anyway.",
+      "Great things never come from comfort zones.",
+      "You are what you repeatedly do.",
+      "Energy and persistence conquer all things.",
+      "Believe you can and you're halfway there.",
+      "Doubt kills more dreams than failure ever will.",
+      "Success is the sum of small efforts repeated day in and day out.",
+      "Push yourself, because no one else is going to do it for you.",
+      "Don’t limit your challenges, challenge your limits.",
+      "Do something today that your future self will thank you for.",
+      "Sweat is fat crying.",
+      "Your body can stand almost anything. It’s your mind you have to convince.",
+      "Nothing will work unless you do.",
+      "If it doesn’t challenge you, it doesn’t change you.",
+      "Dream big, work hard, stay focused.",
+      "It always seems impossible until it's done.",
+      "You’re stronger than you think.",
+      "The pain you feel today will be the strength you feel tomorrow.",
+      "If you’re tired of starting over, stop giving up.",
+      "Winners never quit and quitters never win.",
+      "Act as if what you do makes a difference. It does.",
+      "Action is the foundational key to all success.",
+      "Don’t count the days, make the days count.",
+      "If you believe it will work out, you’ll see opportunities.",
+      "Opportunities don’t happen, you create them.",
+      "Work hard in silence. Let success make the noise.",
+      "Doubt whom you will, but never yourself.",
+      "It’s not about having time. It’s about making time.",
+      "The secret to getting ahead is getting started.",
+      "Success isn’t always about greatness. It’s about consistency.",
+      "A little progress each day adds up to big results.",
+      "Well done is better than well said.",
+      "If you want it, work for it.",
+      "Your future is created by what you do today.",
+      "Don’t wish for it, work for it.",
+      "Don’t stop until you’re proud.",
+      "If not now, when?",
+      "Wake up. Kick ass. Repeat.",
+      "Be legendary."
+    ];
+
+    let macroGoals = {calories: 2000, protein: 150, carbs: 200, fat: 70};
+    let macroTotals = {calories: 0, protein: 0, carbs: 0, fat: 0};
+    let mealLog = [];
+    let streak = { days: 1, best: 1, lastDate: null, weekPhrase: 0 };
+    try {
+      if (localStorage.getItem('macroGoals')) macroGoals = JSON.parse(localStorage.getItem('macroGoals'));
+      if (localStorage.getItem('mealLog')) mealLog = JSON.parse(localStorage.getItem('mealLog'));
+      if (localStorage.getItem('streak')) streak = JSON.parse(localStorage.getItem('streak'));
+    } catch (e) {}
+
+    let chart;
+    let scanning = false;
+    let foodNames = [];
+    let foodCache = {};
+
+    function setTheme(theme) {
+      const body = document.body;
+      const cont = document.getElementById('macroLegendContainer');
+      if (theme === 'ring') {
+        body.classList.add('ringmode');
+        cont.classList.add('ringmode');
+        document.getElementById('appleLightBtn').classList.remove('active');
+        document.getElementById('ringModeBtn').classList.add('active');
+        document.body.style.background = "radial-gradient(ellipse at center, #fbe62c33 0%, #271e0570 100%)";
+      } else {
+        body.classList.remove('ringmode');
+        cont.classList.remove('ringmode');
+        document.getElementById('appleLightBtn').classList.add('active');
+        document.getElementById('ringModeBtn').classList.remove('active');
+        document.body.style.background = "var(--light-bg)";
+      }
+      renderAll();
+    }
+    setTheme('light');
+
+    function showTab(tab) {
+      document.getElementById('tabCalc').classList.remove('active');
+      document.getElementById('tabProg').classList.remove('active');
+      if (tab === 'calc') document.getElementById('tabCalc').classList.add('active');
+      else document.getElementById('tabProg').classList.add('active');
+      renderTab(tab);
+    }
+
+    function renderTab(tab) {
+      if (tab === 'calc') renderCalculatorTab();
+      else renderProgressionTab();
+    }
+
+    function renderCalculatorTab() {
+      document.getElementById('tabArea').innerHTML = `
+      <form onsubmit="setGoalsFromInputs(event)" class="macro-input-row">
+        <input class="macro-input" id="inputWeight" type="number" min="70" placeholder="Weight (lbs)">
+        <input class="macro-input" id="inputHeight" type="number" min="48" placeholder="Height (in)">
+        <input class="macro-input" id="inputAge" type="number" min="8" max="99" placeholder="Age">
+        <select class="macro-input" id="inputGender">
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+        <select class="macro-input" id="inputActivity">
+          <option value="1.2">Sedentary</option>
+          <option value="1.375">Light (1-3 days/wk)</option>
+          <option value="1.55">Moderate (3-5 days/wk)</option>
+          <option value="1.725">Active (6-7 days/wk)</option>
+          <option value="1.9">Very Active</option>
+        </select>
+        <select class="macro-input" id="inputGoal">
+          <option value="maintain">Maintain</option>
+          <option value="lose">Lose Weight</option>
+          <option value="gain">Gain Weight</option>
+        </select>
+        <button class="add-meal-btn" style="min-width:99px" type="submit">Set Macros</button>
+      </form>
+      <div style="color:#687; font-size:0.96em;text-align:center; margin-bottom:1.7em">
+        Use the calculator to estimate daily calorie/macros.<br>
+        <span style="color:#4275ba;font-weight:600;">Your settings transfer to Progression tab instantly.</span>
+      </div>
+      <div class="macro-input-row" style="gap:1.1em;">
+        <input class="macro-input" id="goalCalories" type="number" min="0" placeholder="Goal Calories">
+        <input class="macro-input" id="goalProtein" type="number" min="0" placeholder="Goal Protein (g)">
+        <input class="macro-input" id="goalCarbs" type="number" min="0" placeholder="Goal Carbs (g)">
+        <input class="macro-input" id="goalFat" type="number" min="0" placeholder="Goal Fat (g)">
+        <button class="add-meal-btn" style="min-width:97px" onclick="saveGoalInputs()" type="button">Update Goal</button>
+      </div>
+      `;
+      document.getElementById('goalCalories').value = macroGoals.calories;
+      document.getElementById('goalProtein').value = macroGoals.protein;
+      document.getElementById('goalCarbs').value = macroGoals.carbs;
+      document.getElementById('goalFat').value = macroGoals.fat;
+    }
+    function setGoalsFromInputs(e) {
+      e.preventDefault();
+      let w = Number(document.getElementById('inputWeight').value);
+      let h = Number(document.getElementById('inputHeight').value);
+      let a = Number(document.getElementById('inputAge').value);
+      let g = document.getElementById('inputGender').value;
+      let act = Number(document.getElementById('inputActivity').value);
+      let goal = document.getElementById('inputGoal').value;
+      if (!w || !h || !a) return showToast("Fill in all fields!");
+      let bmr = (g==="male")
+        ? 66 + (6.23 * w) + (12.7 * h) - (6.8 * a)
+        : 655 + (4.35 * w) + (4.7 * h) - (4.7 * a);
+      let tdee = bmr * act;
+      let cal = tdee;
+      if (goal === "lose") cal -= 500;
+      if (goal === "gain") cal += 300;
+      macroGoals.calories = Math.round(cal);
+      macroGoals.protein = Math.round(w*0.8);
+      macroGoals.carbs = Math.round((cal*0.45)/4);
+      macroGoals.fat = Math.round((cal*0.25)/9);
+      saveData(); renderAll();
+      showToast("Goals updated!");
+    }
+    function saveGoalInputs() {
+      macroGoals.calories = Number(document.getElementById('goalCalories').value)||0;
+      macroGoals.protein = Number(document.getElementById('goalProtein').value)||0;
+      macroGoals.carbs = Number(document.getElementById('goalCarbs').value)||0;
+      macroGoals.fat = Number(document.getElementById('goalFat').value)||0;
+      saveData(); renderAll();
+      showToast("Macros saved!");
+    }
+
+    function renderProgressionTab() {
+      document.getElementById('tabArea').innerHTML = `
+      <div class="goal-line" id="goalLine"></div>
+      <div class="macro-bars" id="macroBars"></div>
+      <canvas id="macroChart"></canvas>
+      <form onsubmit="addMeal(event)" class="add-meal-row" style="position:relative;">
+        <div style="flex:2;min-width:180px;position:relative;">
+          <input class="meal-name-input" id="mealName" placeholder="Meal name/food" autocomplete="off" required style="width:100%;">
+          <div id="foodAutocomplete" class="autocomplete-list" style="display:none"></div>
+        </div>
+        <input class="meal-amt-input" id="mealCalories" type="number" min="0" placeholder="Calories" required>
+        <input class="meal-amt-input" id="mealProtein" type="number" min="0" placeholder="Protein (g)">
+        <input class="meal-amt-input" id="mealCarbs" type="number" min="0" placeholder="Carbs (g)">
+        <input class="meal-amt-input" id="mealFat" type="number" min="0" placeholder="Fat (g)">
+        <button class="add-meal-btn" type="submit">+ Add</button>
+        <button type="button" class="scan-btn" onclick="scanBarcode()">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="5" height="5"/><rect x="16" y="3" width="5" height="5"/><rect x="3" y="16" width="5" height="5"/><rect x="16" y="16" width="5" height="5"/><path d="M9 5h6M19 9v6M5 9v6M9 19h6"/></svg>
+        </button>
+      </form>
+      <table class="meal-log-table" id="mealLogTable"></table>
+      <div class="export-row">
+        <button class="export-btn" onclick="exportCSV()">Export CSV</button>
+        <button class="export-btn" onclick="exportTXT()">Export TXT</button>
+        <button class="export-btn" onclick="window.print()">Print / PDF</button>
+      </div>
+      <div id="streakArea"></div>
+      `;
+      renderGoalLine();
+      renderMacroBars();
+      renderMealLog();
+      renderChart();
+      renderStreak();
+      setupFoodAutocomplete();
+    }
+    function renderGoalLine() {
+      const {calories, protein, carbs, fat} = macroGoals;
+      document.getElementById('goalLine').innerHTML =
+        `<span class="goal-macro-cal">Calories: <b>${calories}</b></span>
+         <span class="goal-macro-p">P: <b>${protein}g</b></span>
+         <span class="goal-macro-c">C: <b>${carbs}g</b></span>
+         <span class="goal-macro-f">F: <b>${fat}g</b></span>`;
+    }
+    function renderMacroBars() {
+      const {calories, protein, carbs, fat} = macroGoals;
+      const t = macroTotals;
+      function pct(val, goal) { return Math.min(100, Math.round(100 * val/goal)); }
+      document.getElementById('macroBars').innerHTML = `
+        <div class="macro-bar-outer">
+          <div class="macro-bar-inner bar-cal" style="width:${pct(t.calories,calories)}%">
+            <span class="macro-bar-label">${t.calories}/${calories} kcal</span>
+          </div>
+        </div>
+        <div class="macro-bar-outer">
+          <div class="macro-bar-inner bar-p" style="width:${pct(t.protein,protein)}%">
+            <span class="macro-bar-label">${t.protein}/${protein}g Protein</span>
+          </div>
+        </div>
+        <div class="macro-bar-outer">
+          <div class="macro-bar-inner bar-c" style="width:${pct(t.carbs,carbs)}%">
+            <span class="macro-bar-label">${t.carbs}/${carbs}g Carbs</span>
+          </div>
+        </div>
+        <div class="macro-bar-outer">
+          <div class="macro-bar-inner bar-f" style="width:${pct(t.fat,fat)}%">
+            <span class="macro-bar-label">${t.fat}/${fat}g Fat</span>
+          </div>
+        </div>
+      `;
+    }
+    function addMeal(e) {
+      e.preventDefault();
+      const name = document.getElementById('mealName').value.trim();
+      const calories = Number(document.getElementById('mealCalories').value);
+      const protein = Number(document.getElementById('mealProtein').value) || 0;
+      const carbs = Number(document.getElementById('mealCarbs').value) || 0;
+      const fat = Number(document.getElementById('mealFat').value) || 0;
+      if (!name || !calories) return showToast("Enter meal name and calories!");
+      mealLog.push({name,calories,protein,carbs,fat,date:Date.now()});
+      saveData();
+      document.getElementById('mealName').value = '';
+      document.getElementById('mealCalories').value = '';
+      document.getElementById('mealProtein').value = '';
+      document.getElementById('mealCarbs').value = '';
+      document.getElementById('mealFat').value = '';
+      renderAll();
+      checkStreak();
+      showToast("Meal added!");
+    }
+    function renderMealLog() {
+      let rows = mealLog.map((m,i) =>
+        `<tr>
+          <td>${m.name}</td>
+          <td>${m.calories}</td>
+          <td>${m.protein}</td>
+          <td>${m.carbs}</td>
+          <td>${m.fat}</td>
+          <td><button onclick="removeMeal(${i})" style="color:#e34747;font-weight:700;font-size:1.11em;border:none;background:none;cursor:pointer;">✕</button></td>
+        </tr>`
+      ).join('');
+      document.getElementById('mealLogTable').innerHTML = `
+        <thead>
+          <tr>
+            <th>Meal</th>
+            <th>Cal</th>
+            <th>P</th>
+            <th>C</th>
+            <th>F</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      `;
+    }
+    function removeMeal(idx) {
+      mealLog.splice(idx,1);
+      saveData();
+      renderAll();
+      showToast("Meal removed.");
+    }
+    function updateTotals() {
+      macroTotals = {calories:0,protein:0,carbs:0,fat:0};
+      mealLog.forEach(m=>{
+        macroTotals.calories += Number(m.calories)||0;
+        macroTotals.protein += Number(m.protein)||0;
+        macroTotals.carbs += Number(m.carbs)||0;
+        macroTotals.fat += Number(m.fat)||0;
+      });
+    }
+    function renderChart() {
+      const ctx = document.getElementById('macroChart').getContext('2d');
+      if (chart) chart.destroy();
+      chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Calories','Protein','Carbs','Fat'],
+          datasets: [
+            {
+              label: 'Current',
+              data: [macroTotals.calories, macroTotals.protein, macroTotals.carbs, macroTotals.fat],
+              backgroundColor: [
+                'rgba(251,230,44,0.82)',  // Calories: gold
+                'rgba(81,193,110,0.85)',  // Protein: green
+                'rgba(97,170,255,0.85)',  // Carbs: blue
+                'rgba(245,169,77,0.85)'   // Fat: orange
+              ],
+              borderRadius: 10,
+              maxBarThickness: 40,
+            },
+            {
+              label: 'Goal',
+              data: [macroGoals.calories, macroGoals.protein, macroGoals.carbs, macroGoals.fat],
+              backgroundColor: [
+                'rgba(251,230,44,0.19)',
+                'rgba(81,193,110,0.18)',
+                'rgba(97,170,255,0.18)',
+                'rgba(245,169,77,0.17)'
+              ],
+              borderRadius: 10,
+              borderWidth: 0,
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {display: false},
+            tooltip: {enabled: true},
+          },
+          scales: {
+            x: { grid: {display: false}, ticks: {color: '#888', font: {weight:700}}},
+            y: {
+              beginAtZero: true,
+              ticks: {color: '#888', font: {weight:700}},
+              grid: {color:'#e5ecfa'},
+            }
+          }
+        }
+      });
+    }
+
+    // ===== Streak logic
+    function checkStreak() {
+      const today = new Date();
+      const todayStr = today.toISOString().slice(0,10);
+      if (streak.lastDate !== todayStr) {
+        const yesterday = new Date(today);
+        yesterday.setDate(yesterday.getDate()-1);
+        const ystr = yesterday.toISOString().slice(0,10);
+        if (streak.lastDate === ystr) {
+          streak.days += 1;
+          if (streak.days > streak.best) {
+            streak.best = streak.days;
+            playStreakSound();
+          }
+        } else {
+          streak.days = 1;
+        }
+        streak.lastDate = todayStr;
+        streak.weekPhrase = ((streak.days-1) % lotrQuotes.length);
+        saveData();
+        renderStreak();
+      }
+    }
+    function renderStreak() {
+      const streakArea = document.getElementById('streakArea');
+      const isRing = document.body.classList.contains('ringmode');
+      const phrase = isRing
+        ? lotrQuotes[streak.weekPhrase % lotrQuotes.length]
+        : genericQuotes[streak.weekPhrase % genericQuotes.length];
+      if (isRing) {
+        streakArea.innerHTML = `
+        <div class="streak-ring-wrap">
+          <svg class="streak-ring-svg" width="140" height="140" viewBox="0 0 140 140">
+            <defs>
+              <radialGradient id="gold" cx="70" cy="70" r="70" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#fff9c9"/>
+                <stop offset="65%" stop-color="#edb941"/>
+                <stop offset="100%" stop-color="#a28209"/>
+              </radialGradient>
+            </defs>
+            <circle cx="70" cy="70" r="58" fill="url(#gold)" stroke="#d4b117" stroke-width="7"/>
+            <text x="70" y="70" text-anchor="middle" fill="#bd8c19" font-family="Ringbearer, serif"
+              font-size="13" font-weight="bold" dy="10" letter-spacing="2">
+              ${toElvishInscription(streak.days)}
+            </text>
+          </svg>
+          <div class="streak-center-label">
+            Streak<br>
+            <span style="font-size:1.65em;letter-spacing:2px;">${streak.days}</span>
+            <br>Best: <b>${streak.best}</b>
+          </div>
+          <div class="streak-week-phrase">${phrase}</div>
+        </div>
+        `;
+        document.getElementById('quoteRow').innerHTML = "";
+      } else {
+        streakArea.innerHTML = `
+          <div class="streak-bar-wrap">
+            Streak
+            <span class="streak-bar-value">${streak.days}</span>
+            | Best: <span class="streak-bar-value">${streak.best}</span>
+          </div>
+        `;
+        document.getElementById('quoteRow').innerHTML = `"${phrase}"`;
+      }
+    }
+    function toElvishInscription(num) {
+      const roman = ["","I","II","III","IV","V","VI","VII","VIII","IX","X",
+        "XI","XII","XIII","XIV","XV","XVI","XVII","XVIII","XIX","XX",
+        "XXI","XXII","XXIII","XXIV","XXV","XXVI","XXVII","XXVIII","XXIX","XXX",
+        "XXXI","XXXII","XXXIII","XXXIV","XXXV","XXXVI","XXXVII","XXXVIII","XXXIX","XL",
+        "XLI","XLII","XLIII","XLIV","XLV","XLVI","XLVII","XLVIII","XLIX","L"];
+      let romanNum = num < roman.length ? roman[num] : num;
+      return "Ash nazg " + romanNum + " burzum-ishi";
+    }
+    function playStreakSound() {
+      if (document.body.classList.contains('ringmode')) {
+        try {
+          document.getElementById('streakSound').currentTime = 0;
+          document.getElementById('streakSound').play();
+        } catch (e) {}
+      }
+    }
+
+    // ========== Food autocomplete (smart, OpenFoodFacts API) ==========
+    function setupFoodAutocomplete() {
+      const input = document.getElementById('mealName');
+      const list = document.getElementById('foodAutocomplete');
+      let timer = null, selected = -1, suggestions = [];
+
+      input.oninput = function() {
+        clearTimeout(timer);
+        list.style.display = "none";
+        list.innerHTML = "";
+        const val = input.value.trim();
+        if (!val || val.length < 3) return;
+        timer = setTimeout(() => {
+          // Try cache
+          if (foodCache[val.toLowerCase()]) {
+            showSuggestions(foodCache[val.toLowerCase()]);
+            return;
+          }
+          fetch(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(val)}&search_simple=1&action=process&json=1&page_size=10`)
+            .then(r=>r.json())
+            .then(res=>{
+              const arr = (res.products||[]).map(f=>{
+                return {
+                  name: f.product_name || f.brands || f.generic_name || "Unknown food",
+                  calories: Math.round(f.nutriments['energy-kcal_100g']||0),
+                  protein: Math.round(f.nutriments['proteins_100g']||0),
+                  carbs: Math.round(f.nutriments['carbohydrates_100g']||0),
+                  fat: Math.round(f.nutriments['fat_100g']||0)
+                }
+              }).filter(f=>f.name && (f.calories||f.protein||f.carbs||f.fat));
+              foodCache[val.toLowerCase()] = arr;
+              showSuggestions(arr);
+            }).catch(()=>{});
+        }, 320);
+      };
+      function showSuggestions(arr) {
+        if (!arr.length) {
+          list.innerHTML = `<div class="autocomplete-no">No foods found</div>`;
+          list.style.display = "block"; return;
+        }
+        suggestions = arr;
+        selected = -1;
+        list.innerHTML = arr.map((f,i)=>`
+          <div data-idx="${i}">${f.name}
+            <span style="float:right; font-size:0.93em; opacity:0.75;">${f.calories||"-"} kcal</span>
+          </div>
+        `).join('');
+        list.style.display = "block";
+      }
+      list.onmousedown = function(e) {
+        const idx = e.target.closest('div[data-idx]')?.dataset.idx;
+        if (idx!=null) selectFood(+idx);
+      };
+      input.onkeydown = function(e) {
+        if (!list.style.display || list.style.display === "none") return;
+        if (e.key === "ArrowDown") {
+          selected = (selected+1) % suggestions.length;
+          renderHighlight();
+          e.preventDefault();
+        } else if (e.key === "ArrowUp") {
+          selected = (selected-1+suggestions.length) % suggestions.length;
+          renderHighlight();
+          e.preventDefault();
+        } else if (e.key === "Enter") {
+          if (selected>=0) { selectFood(selected); e.preventDefault(); }
+        } else if (e.key === "Escape") {
+          list.style.display = "none";
+        }
+      };
+      function renderHighlight() {
+        [...list.children].forEach((div,i)=>{
+          div.classList.toggle('selected', i===selected);
+        });
+      }
+      function selectFood(idx) {
+        const food = suggestions[idx];
+        input.value = food.name;
+        document.getElementById('mealCalories').value = food.calories||"";
+        document.getElementById('mealProtein').value = food.protein||"";
+        document.getElementById('mealCarbs').value = food.carbs||"";
+        document.getElementById('mealFat').value = food.fat||"";
+        list.style.display = "none";
+      }
+      document.addEventListener('mousedown', function(e) {
+        if (!input.contains(e.target) && !list.contains(e.target)) {
+          list.style.display = "none";
+        }
+      });
+    }
+
+    // ========== Barcode Scanner ==========
+    function scanBarcode() {
+      if (scanning) return;
+      scanning = true;
+      document.getElementById('barcodeVideo').style.display = 'block';
+      document.getElementById('barcodeOverlay').style.display = 'block';
+      document.getElementById('barcodeCancelBtn').style.display = 'block';
+      Quagga.init({
+        inputStream: {
+          name: "Live",
+          type: "LiveStream",
+          target: document.querySelector('#barcodeVideo'),
+          constraints: { facingMode: "environment" }
+        },
+        decoder: { readers: ["ean_reader", "ean_13_reader","upc_reader","upc_e_reader"] }
+      }, function (err) {
+        if (err) { showToast('Camera error'); stopBarcodeScan(); return; }
+        Quagga.start();
+      });
+      Quagga.onDetected(barcodeDetected);
+    }
+    function barcodeDetected(data) {
+      stopBarcodeScan();
+      let code = data.codeResult.code;
+      showToast("Scanned: "+code);
+      fetch(`https://world.openfoodfacts.org/api/v0/product/${code}.json`).then(r=>r.json()).then(info=>{
+        if (info.status === 1 && info.product && info.product.nutriments) {
+          let n = info.product.nutriments;
+          let name = info.product.product_name || info.product.brands || "Barcode Food";
+          let cals = Math.round(n['energy-kcal_serving']||n['energy-kcal_100g']||0);
+          let p = Math.round(n['proteins_serving']||n['proteins_100g']||0);
+          let car = Math.round(n['carbohydrates_serving']||n['carbohydrates_100g']||0);
+          let fat = Math.round(n['fat_serving']||n['fat_100g']||0);
+          if (!cals) cals = Math.round((n['energy_100g']||0)/4.184);
+          mealLog.push({name,calories:cals,protein:p,carbs:car,fat:fat,date:Date.now()});
+          saveData(); renderAll();
+          showToast("Added "+name);
+        } else {
+          showToast("No food info found");
+        }
+      }).catch(()=>showToast("Scan failed!"));
+    }
+    function stopBarcodeScan() {
+      Quagga.stop();
+      document.getElementById('barcodeVideo').style.display = 'none';
+      document.getElementById('barcodeOverlay').style.display = 'none';
+      document.getElementById('barcodeCancelBtn').style.display = 'none';
+      scanning = false;
+      Quagga.offDetected(barcodeDetected);
+    }
+
+    // ========== Data Storage ========== 
+    function saveData() {
+      localStorage.setItem('macroGoals', JSON.stringify(macroGoals));
+      localStorage.setItem('mealLog', JSON.stringify(mealLog));
+      localStorage.setItem('streak', JSON.stringify(streak));
+    }
+
+    // ========== Export ========== 
+    function exportCSV() {
+      let csv = "Meal,Calories,Protein,Carbs,Fat\n";
+      mealLog.forEach(m=>{
+        csv+=`${m.name},${m.calories},${m.protein},${m.carbs},${m.fat}\n`;
+      });
+      download(csv, "macrolegend.csv");
+    }
+    function exportTXT() {
+      let txt = "MacroLegend Log\n==================\n";
+      mealLog.forEach(m=>{
+        txt+=`${m.name.padEnd(16)} | Cal: ${m.calories} P: ${m.protein} C: ${m.carbs} F: ${m.fat}\n`;
+      });
+      download(txt, "macrolegend.txt");
+    }
+    function download(content, filename) {
+      const a = document.createElement('a');
+      const file = new Blob([content], {type: 'text/plain'});
+      a.href = URL.createObjectURL(file);
+      a.download = filename;
+      a.click();
+      setTimeout(()=>URL.revokeObjectURL(a.href), 800);
+    }
+
+    // ========== Toast ========== 
+    function showToast(msg) {
+      const el = document.createElement('div');
+      el.className = 'toast'; el.textContent = msg;
+      document.body.appendChild(el);
+      setTimeout(()=>el.remove(), 2100);
+    }
+
+    // ========== ALL RENDERS / INIT ==========
+    function renderAll() {
+      updateTotals();
+      if (document.getElementById('tabCalc').classList.contains('active')) renderCalculatorTab();
+      else renderProgressionTab();
+      // renderStreak(); // handled in tab
+      // Update the quote (below streak in light, in ring it's shown in streakArea)
+      renderQuoteRow();
+    }
+    function renderQuoteRow() {
+      const isRing = document.body.classList.contains('ringmode');
+      const phrase = isRing
+        ? ""
+        : `"${genericQuotes[streak.weekPhrase % genericQuotes.length]}"`;
+      document.getElementById('quoteRow').innerHTML = phrase;
+    }
+
+    renderTab('calc');
+    document.getElementById('tabCalc').onclick = ()=>showTab('calc');
+    document.getElementById('tabProg').onclick = ()=>showTab('prog');
+    document.getElementById('appleLightBtn').onclick = ()=>setTheme('light');
+    document.getElementById('ringModeBtn').onclick = ()=>setTheme('ring');
+    setTimeout(()=>{ renderStreak(); renderQuoteRow(); }, 120);
+  </script>
 </body>
 </html>
