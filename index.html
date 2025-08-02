@@ -8,30 +8,30 @@
   <link href="https://fonts.cdnfonts.com/css/ringbearer" rel="stylesheet">
   <style>
     :root {
-      /* SILVER (Light) THEME */
-      --light-bg: #f6f7f9;        /* pale gray */
-      --light-card: #e5e8ee;      /* silver card */
-      --light-text: #272b32;      /* iron gray */
-      --light-accent: #949ca9;    /* deep silver accent */
-      --light-bar: #bfcad9;       /* lighter silver bar */
-      --light-shadow: 0 4px 32px #94a2b919;
-      --button-hover: #b8cdf6;    /* moonlight blue */
-      --tab-bg: #f1f2f6;
-      --tab-active-bg: #949ca9;
-      --tab-active-text: #fff;
-      --ring-silver: #c3c9d5;
-      /* RING MODE COLORS */
+      --light-bg: #f6f6fa;
+      --light-card: #fff;
+      --light-text: #1a1a1a;
+      --light-accent: #2b78e4;
+      --light-bar: #d6eaff;
+      --light-shadow: 0 4px 32px #0002;
       --gold: #fbe62c;
       --ring-shadow: 0 0 18px 6px #edb94144;
       --ring-bar: #f8c944;
       --ring-green: #7dc271;
       --ring-blue: #5ba4fa;
       --ring-orange: #f5a94d;
-      --ring-bg: #2a2009;
+      --ring-bg: #282312;
       --ring-card: #382a00;
-      --ring-txt: #fbe62c;
+      --ring-txt: #d8d9db;
       --ring-inscription: #bd8c19;
+      --chart-bar: #949ca9;
+      --chart-bg: #e5ecfa;
       --progress-radius: 13px;
+      --section-space: 2.2em;
+      --section-space-sm: 1.2em;
+      --gap-lg: 2.3em;
+      --gap: 1.3em;
+      --gap-sm: 0.8em;
     }
     body {
       font-family: 'Inter', sans-serif;
@@ -45,17 +45,19 @@
       background: var(--light-card);
       box-shadow: var(--light-shadow);
       border-radius: 22px;
-      max-width: 470px; width: 100vw;
-      margin: 2vw 0 16vw 0;
-      padding: 1.3em 1em 2.3em 1em;
+      max-width: 500px; width: 98vw;
+      margin: var(--gap-lg) 0 var(--gap-lg) 0;
+      padding: 2.1em 2em 3.4em 2em;
       transition: background 0.3s;
       position: relative; min-width: 0;
+      border: 1.5px solid #e6e9f0;
     }
     h1 {
       font-family: 'Inter', 'Ringbearer', serif;
-      font-size: 2.1rem;
+      font-size: 2.25rem;
       letter-spacing: 2px;
-      margin-bottom: 0.7em;
+      margin-bottom: 0.8em;
+      margin-top: 0.7em;
       text-align: center;
       color: var(--light-accent);
       transition: color 0.3s, text-shadow 0.3s;
@@ -69,15 +71,15 @@
     }
     .theme-toggle {
       position: absolute;
-      right: 20px; top: 18px;
-      display: flex; gap: 8px;
+      right: 26px; top: 22px;
+      display: flex; gap: 14px;
     }
     .theme-btn {
-      background: var(--tab-bg);
+      background: var(--light-bar);
       border: none;
       border-radius: 16px;
-      padding: 4px 12px;
-      font-size: 1.03rem;
+      padding: 5px 16px;
+      font-size: 1.11rem;
       color: var(--light-accent);
       font-weight: 700;
       cursor: pointer;
@@ -86,106 +88,116 @@
       transition: background 0.2s, color 0.2s;
     }
     .theme-btn.active, .theme-btn:focus {
-      background: var(--tab-active-bg);
-      color: var(--tab-active-text);
+      background: var(--gold);
+      color: #3b2e08;
       outline: none;
     }
-    /* Tab row */
     .tab-row {
       display: flex; justify-content: center;
-      gap: 9px; margin: 0 0 1.4em 0;
+      gap: 18px; margin: var(--gap) 0 var(--gap) 0;
     }
     .tab-btn {
-      background: var(--tab-bg); 
-      color: var(--light-accent);
+      background: #eceefe; color: #4275ba;
       border: none; border-radius: 9px 9px 0 0;
-      padding: 7px 24px; font-weight: 700; font-size: 1.01em;
+      padding: 11px 36px; font-weight: 700; font-size: 1.13em;
       cursor: pointer; box-shadow: 0 2px 7px #0001;
       transition: background 0.17s, color 0.17s;
     }
     .tab-btn.active, .tab-btn:focus {
-      background: var(--tab-active-bg);
-      color: var(--tab-active-text);
+      background: var(--light-accent);
+      color: #fff;
     }
     .ringmode .tab-btn {
       background: #2e2208;
-      color: #fbe62c;
+      color: #d8d9db;
     }
     .ringmode .tab-btn.active { background: #fbe62c; color: #382a00; }
-    /* Macro goal line */
     .goal-line {
-      font-size: 1.07em; color: #43464e; background: #e5e8ee;
-      border-radius: 9px; margin: 0 auto 0.8em auto; text-align: center;
-      padding: 0.25em 0.9em; font-weight: 500; letter-spacing: 0.5px;
-      display: flex; justify-content: center; gap: 1.2em; flex-wrap: wrap;
+      font-size: 1.17em; color: #4c4c4c; background: #f6f6fa;
+      border-radius: 11px; margin: 0 auto 1.3em auto; text-align: center;
+      padding: 0.5em 1.3em; font-weight: 500; letter-spacing: 0.5px;
+      display: flex; justify-content: center; gap: 2.2em; flex-wrap: wrap;
       max-width: 99vw; white-space: nowrap;
     }
     .goal-line span { font-weight: 700; letter-spacing: 0.2px; padding: 0 2px; }
-    .goal-macro-p { color: #687e7c; }
-    .goal-macro-c { color: #5179c2; }
-    .goal-macro-f { color: #b29456; }
-    .goal-macro-cal { color: #8f95a3; }
-    /* Progress bars */
-    .macro-bars { margin-bottom: 0.7em; margin-top: 0.5em; display: flex; flex-direction: column; gap: 0.45em;}
-    .macro-bar-outer { background: var(--light-bar); border-radius: var(--progress-radius); overflow: hidden; position: relative; height: 28px; margin: 0 0.1em;}
-    .macro-bar-inner { height: 100%; display: flex; align-items: center; font-weight: 600; font-size: 1em; justify-content: flex-start; padding-left: 11px; border-radius: var(--progress-radius); transition: width 0.45s cubic-bezier(.35,1.65,.6,1.1); color: #fff; letter-spacing: 0.5px; text-shadow: 0 1px 8px #0004; white-space: nowrap; position: relative;}
-    .bar-cal, .bar-p, .bar-c, .bar-f {
-      background: linear-gradient(90deg, #949ca9 0%, #bfcad9 100%);
-      color: #272b32;
-    }
-    .macro-bar-label { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); color: #272b32; font-size: 1em; font-weight: 700; text-shadow: 0 1px 4px #c3c9d599; width: 100%; text-align: center; pointer-events: none; letter-spacing: 0.5px; z-index: 2;}
-    /* Chart area */
-    #macroChart { width: 100% !important; max-width: 98vw; height: 170px; background: #f1f2f6; border-radius: 11px; margin: 0.8em 0 1.6em 0; box-shadow: 0 2px 8px #949ca933;}
-    /* Meal log table */
-    .meal-log-table { width: 100%; margin-bottom: 0.6em; border-collapse: collapse; font-size: 1.04em; background: #fff; border-radius: 10px; box-shadow: 0 1px 8px #0001; overflow-x: auto;}
-    .meal-log-table th, .meal-log-table td { padding: 5px 6px; border: none; text-align: center; white-space: nowrap; font-size: 0.99em;}
-    .meal-log-table th { background: #e5e8ee; color: #949ca9; font-weight: 700;}
+    .goal-macro-p { color: #49a858; }
+    .goal-macro-c { color: #3677c6; }
+    .goal-macro-f { color: #e8a200; }
+    .goal-macro-cal { color: #d4b117; }
+    .macro-bars { margin-bottom: 1.6em; margin-top: 0.5em; display: flex; flex-direction: column; gap: 1.1em;}
+    .macro-bar-outer { background: var(--light-bar); border-radius: var(--progress-radius); overflow: hidden; position: relative; height: 32px; margin: 0 0.1em;}
+    .macro-bar-inner { height: 100%; display: flex; align-items: center; font-weight: 600; font-size: 1.12em; justify-content: flex-start; padding-left: 16px; border-radius: var(--progress-radius); transition: width 0.45s cubic-bezier(.35,1.65,.6,1.1); color: #fff; letter-spacing: 0.5px; text-shadow: 0 1px 8px #0004; white-space: nowrap; position: relative;}
+    .bar-cal { background: linear-gradient(90deg,#fbe62c,#c0c0c0); color: #464646; }
+    .bar-p { background: linear-gradient(90deg,#6cb781,#525a4d);}
+    .bar-c { background: linear-gradient(90deg,#8ea9d6,#425a7e);}
+    .bar-f { background: linear-gradient(90deg,#c2a77b,#888888);}
+    .macro-bar-label { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); color: #fff; font-size: 1em; font-weight: 700; text-shadow: 0 1px 4px #0006; width: 100%; text-align: center; pointer-events: none; letter-spacing: 0.5px; z-index: 2;}
+    #macroChart { width: 100% !important; max-width: 98vw; height: 170px; background: #e8f2ff; border-radius: 11px; margin: 1.5em 0 2em 0; box-shadow: 0 2px 8px #0002;}
+    .meal-log-table { width: 100%; margin-bottom: 1.3em; border-collapse: collapse; font-size: 1.06em; background: #fff; border-radius: 10px; box-shadow: 0 1px 8px #0001; overflow-x: auto;}
+    .meal-log-table th, .meal-log-table td { padding: 8px 8px; border: none; text-align: center; white-space: nowrap; font-size: 0.99em;}
+    .meal-log-table th { background: #f2f6fc; color: #5179c2; font-weight: 700;}
     .meal-log-table tbody tr:nth-child(even) { background: #f7faff;}
-    /* Export buttons */
-    .export-row { display: flex; gap: 0.8em; justify-content: flex-end; margin-bottom: 0.5em;}
-    .export-btn { background: var(--tab-bg); color: var(--light-accent); font-size: 0.99em; padding: 4px 17px; border-radius: 7px; border: none; font-weight: 700; cursor: pointer; margin: 0; box-shadow: 0 1px 3px #949ca91a; transition: background 0.13s, color 0.13s;}
-    .export-btn:hover, .export-btn:focus { background: #dbe3f0; color: #43464e;}
+    .export-row { display: flex; gap: 1em; justify-content: flex-end; margin-bottom: 1.3em;}
+    .export-btn { background: #e9eef6; color: #2b78e4; font-size: 1.08em; padding: 7px 23px; border-radius: 9px; border: none; font-weight: 700; cursor: pointer; margin: 0; box-shadow: 0 1px 3px #0001; transition: background 0.13s, color 0.13s;}
+    .export-btn:hover, .export-btn:focus { background: #d6eaff; color: #0c51a4;}
     /* Streak ring area */
-    .streak-ring-wrap { margin: 0 auto; margin-top: 2.5em; width: 140px; height: 140px; display: flex; align-items: center; justify-content: center; position: relative; transition: filter 0.3s;}
+    .streak-ring-wrap { margin: 0 auto; margin-top: 2.2em; width: 145px; height: 145px; display: flex; align-items: center; justify-content: center; position: relative; transition: filter 0.3s;}
     .streak-ring-svg { width: 100%; height: 100%; display: block; filter: drop-shadow(var(--ring-shadow)); }
-    .streak-center-label { position: absolute; left: 50%; top: 51%; transform: translate(-50%,-50%); width: 90px; text-align: center; color: var(--light-accent); font-family: 'Ringbearer', 'Inter', serif; font-size: 1.12em; line-height: 1.14; font-weight: 700; text-shadow: 0 0 11px #c3c9d5cc, 0 1px 2px #000c; pointer-events: none;}
-    .streak-week-phrase { position: absolute; left: 50%; top: 89%; transform: translate(-50%,0); font-family: 'Ringbearer','Inter',serif; color: var(--light-accent); font-size: 0.97em; text-align: center; width: 135px; filter: brightness(1.05) blur(0.1px); text-shadow: 0 0 10px #c3c9d577, 0 2px 8px #000a; pointer-events: none;}
-    /* Minimal streak bar for light mode */
-    .streak-bar-wrap { width: 100%; max-width: 390px; margin: 1.8em auto 0.3em auto; background: #bfcad9; border-radius: 16px; box-shadow: 0 1px 4px #949ca933; padding: 0.5em 0.7em; font-size: 1.08em; color: #43464e; font-weight: 700; letter-spacing: 1px; display: flex; align-items: center; gap: 9px; justify-content: center;}
-    .streak-bar-value { background: #949ca9; color: #fff; border-radius: 12px; padding: 1.5px 10px; margin: 0 7px; font-size: 1em; font-weight: 700; box-shadow: 0 2px 6px #949ca91a;}
-    /* Input areas */
-    .macro-input-row { display: flex; gap: 0.6em; flex-wrap: wrap; justify-content: center; margin-bottom: 0.4em;}
-    .macro-input { flex: 1 1 41%; min-width: 95px; max-width: 130px; font-size: 1.07em; padding: 7px 6px; margin: 0 0 6px 0; border-radius: 8px; border: 1.2px solid #bfcad9; background: #f1f2f6; color: #272b32; box-shadow: 0 2px 5px #c3c9d511; outline: none; transition: border 0.15s;}
-    .macro-input:focus { border: 1.2px solid #949ca9; }
-    /* Add meal row */
-    .add-meal-row { display: flex; gap: 0.5em; flex-wrap: wrap; margin-bottom: 0.6em; justify-content: center; align-items: flex-end;}
-    .meal-name-input, .meal-amt-input { font-size: 1.04em; border-radius: 7px; padding: 7px 7px; border: 1.2px solid #c3c9d5; outline: none; background: #f7fafc; color: #252525; box-shadow: 0 1px 2px #c3c9d511; transition: border 0.16s;}
-    .meal-name-input:focus, .meal-amt-input:focus { border: 1.2px solid #949ca9; }
+    .streak-center-label { position: absolute; left: 50%; top: 54%; transform: translate(-50%,-50%); width: 99px; text-align: center; color: var(--ring-txt); font-family: 'Ringbearer', 'Inter', serif; font-size: 1.26em; line-height: 1.14; font-weight: 700; text-shadow: 0 0 11px #edb941c5, 0 1px 2px #000c; pointer-events: none;}
+    .streak-week-phrase { position: absolute; left: 50%; top: 88%; transform: translate(-50%,0); font-family: 'Ringbearer','Inter',serif; color: #fbe62c; font-size: 1.03em; text-align: center; width: 139px; filter: brightness(1.07) blur(0.1px); text-shadow: 0 0 10px #edb94188, 0 2px 8px #000a; pointer-events: none;}
+    .quote-row { text-align:center; font-family:'Ringbearer','Inter',serif; color:#9a7b19; margin: 2.1em 0 1.7em 0; font-size:1.16em; letter-spacing:0.4px;}
+    .streak-bar-wrap { width: 100%; max-width: 390px; margin: 2.5em auto 0.8em auto; background: #d6eaff; border-radius: 16px; box-shadow: 0 1px 4px #0001; padding: 0.6em 0.7em; font-size: 1.18em; color: #2b78e4; font-weight: 700; letter-spacing: 1px; display: flex; align-items: center; gap: 12px; justify-content: center;}
+    .streak-bar-value { background: #2b78e4; color: #fff; border-radius: 12px; padding: 2.5px 12px; margin: 0 8px; font-size: 1.12em; font-weight: 700; box-shadow: 0 2px 6px #2b78e411;}
+    .macro-input-row, .add-meal-row { display: flex; gap: 1.2em; flex-wrap: wrap; justify-content: center; margin-bottom: 1.8em;}
+    .macro-input { flex: 1 1 35%; min-width: 100px; max-width: 140px; font-size: 1.17em; padding: 11px 9px; margin: 0 0 8px 0; border-radius: 8px; border: 1.2px solid #b6c6e1; background: #f6faff; color: #1a2a2a; box-shadow: 0 2px 5px #b6d4fa11; outline: none; transition: border 0.15s;}
+    .macro-input:focus { border: 1.2px solid #2b78e4; }
+    .meal-name-input, .meal-amt-input { font-size: 1.08em; border-radius: 7px; padding: 11px 7px; border: 1.2px solid #c0c9db; outline: none; background: #f7fafc; color: #252525; box-shadow: 0 1px 2px #c7e3fa11; transition: border 0.16s;}
+    .meal-name-input:focus, .meal-amt-input:focus { border: 1.2px solid #49a858; }
     .add-meal-btn, .scan-btn {
-      background: #949ca9; color: #fff; border: none; border-radius: 8px; font-weight: 700;
-      padding: 7px 18px; font-size: 1em; cursor: pointer; margin-left: 4px; box-shadow: 0 2px 6px #949ca91a;
+      background: #2b78e4; color: #fff; border: none; border-radius: 8px; font-weight: 700;
+      padding: 11px 24px; font-size: 1.08em; cursor: pointer; margin-left: 4px; box-shadow: 0 2px 6px #0002;
       transition: background 0.16s, color 0.16s;
       display: flex; align-items: center; gap: 0.5em;
     }
     .add-meal-btn:hover, .add-meal-btn:focus,
-    .scan-btn:hover, .scan-btn:focus { background: #bfcad9; color: #272b32;}
-    .scan-btn { background: #c3c9d5; color: #272b32; font-weight: 800; padding: 7px 9px;}
+    .scan-btn:hover, .scan-btn:focus { background: #49a858; color: #fff;}
+    .scan-btn { background: #fbe62c; color: #382a00; font-weight: 800; padding: 11px 11px;}
     .scan-btn svg {width:1.4em;height:1.4em;vertical-align:middle;}
-    /* Toast popup */
-    .toast {
-      position: fixed; left: 50%; bottom: 36px; transform: translateX(-50%);
-      background: #e5e8ee; color: #272b32;
-      padding: 11px 28px; border-radius: 22px;
-      box-shadow: 0 5px 22px #949ca955; font-size: 1.08em; font-weight: 700;
-      opacity: 0.97; z-index: 999; pointer-events: none; animation: fadeToast 2.2s linear;
+    /* --- Autocomplete dropdown --- */
+    .autocomplete-list {
+      position: absolute;
+      background: #fff;
+      z-index: 9999;
+      max-height: 270px;
+      overflow-y: auto;
+      border: 1.2px solid #e2c272;
+      border-radius: 12px;
+      width: 250px;
+      left: 5px;
+      top: 51px;
+      box-shadow: 0 3px 20px #0003;
+      font-size: 1.07em;
+      color: #2e2e2e;
+      margin-top: 3px;
     }
-    @keyframes fadeToast {
-      0%{opacity:0;}
-      10%{opacity:1;}
-      85%{opacity:0.98;}
-      100%{opacity:0;}
+    .autocomplete-list div {
+      padding: 8px 14px;
+      cursor: pointer;
+      border-bottom: 1px solid #f9eaa7;
     }
-    /* Barcode video overlay */
+    .autocomplete-list div:last-child {
+      border-bottom: none;
+    }
+    .autocomplete-list div:hover,
+    .autocomplete-list .selected {
+      background: #fbe62c22;
+      color: #806700;
+    }
+    .autocomplete-no {
+      padding: 11px 20px; color: #a3a3a3; text-align:center;
+      font-style: italic;
+    }
+    /* Barcode */
     #barcodeVideo {
       position: fixed; left:0; top:0; width: 100vw; height: 100vh; object-fit:cover; z-index: 9998; background:#000f;
       display: none;
@@ -195,24 +207,39 @@
     }
     #barcodeOverlay::after {
       content:''; display:block; position:absolute;left:0;top:0;width:100vw;height:100vh;
-      background:radial-gradient(ellipse at center,#fff0 60%,#949ca9aa 100%);
+      background:radial-gradient(ellipse at center,#fff0 60%,#000c 100%);
       pointer-events:none;
     }
     #barcodeCancelBtn {
-      position:fixed;top:15px;right:24px;z-index:10000;background:#bfcad9;color:#272b32;border:none;border-radius:12px;padding:8px 18px;font-size:1.15em;font-weight:800;box-shadow:0 2px 12px #949ca955;cursor:pointer;
+      position:fixed;top:15px;right:24px;z-index:10000;background:#fbe62c;color:#382a00;border:none;border-radius:12px;padding:8px 18px;font-size:1.15em;font-weight:800;box-shadow:0 2px 12px #0009;cursor:pointer;
       display:none;
     }
-    @media (max-width: 500px) {
+    .toast {
+      position: fixed; left: 50%; bottom: 36px; transform: translateX(-50%);
+      background: #fffbe0; color: #2b78e4;
+      padding: 11px 28px; border-radius: 22px;
+      box-shadow: 0 5px 22px #0006; font-size: 1.08em; font-weight: 700;
+      opacity: 0.97; z-index: 999; pointer-events: none; animation: fadeToast 2.2s linear;
+    }
+    @keyframes fadeToast {
+      0%{opacity:0;}
+      10%{opacity:1;}
+      85%{opacity:0.98;}
+      100%{opacity:0;}
+    }
+    @media (max-width: 550px) {
       .container { padding: 0.8em 2vw 2em 2vw; border-radius: 0; }
-      h1 { font-size: 1.17rem; }
-      .goal-line { font-size: 0.98em; gap: 0.5em;}
+      h1 { font-size: 1.16rem; }
+      .goal-line { font-size: 0.98em; gap: 0.7em;}
       .macro-bar-inner, .macro-bar-label { font-size: 0.97em;}
       #macroChart { height: 110px;}
       .streak-ring-wrap { width: 92vw; height: 92vw; max-width: 172px; max-height: 172px;}
       .streak-center-label { width: 61vw; max-width: 112px; font-size: 0.98em;}
       .streak-week-phrase { font-size: 0.92em; width: 90vw; max-width: 145px;}
+      .quote-row { font-size: 0.99em;}
+      .macro-input-row, .add-meal-row { gap: 0.5em;}
     }
-    /* RING MODE (unchanged, still gold/dark) */
+    /* Ring Mode! */
     .ringmode body, .ringmode {
       background: var(--ring-bg) !important;
       color: var(--ring-txt) !important;
@@ -222,7 +249,7 @@
       background: var(--ring-card) !important;
       color: var(--ring-txt) !important;
       box-shadow: 0 4px 32px #5c4b0a99;
-      background-image: url('https://cdn.pixabay.com/photo/2018/01/15/07/51/middle-earth-3081751_1280.jpg');
+      background-image: url('https://cdn.pixabay.com/photo/2016/10/18/21/22/paper-1753210_1280.jpg');
       background-size: cover;
       background-repeat: no-repeat;
       background-position: center top;
@@ -232,10 +259,10 @@
       color: #fbe62c !important;
     }
     .ringmode .macro-bar-outer { background: #b49c24 !important; }
-    .ringmode .bar-cal { background: linear-gradient(90deg,#fbe62c,#cfa211) !important; color: #5d4b04;}
+    .ringmode .bar-cal { background: linear-gradient(90deg,#fbe62c,#aaa88c) !important; color: #343a23;}
     .ringmode .bar-p { background: linear-gradient(90deg,#7dc271,#3b7f2d);}
-    .ringmode .bar-c { background: linear-gradient(90deg,#5ba4fa,#30426e);}
-    .ringmode .bar-f { background: linear-gradient(90deg,#f5a94d,#ad7a1d);}
+    .ringmode .bar-c { background: linear-gradient(90deg,#5ba4fa,#5c6370);}
+    .ringmode .bar-f { background: linear-gradient(90deg,#e2c26d,#767676);}
     .ringmode .macro-bar-label { color: #fff9db !important;}
     .ringmode .streak-bar-wrap { background: #3a3008 !important; color: #fbe62c !important;}
     .ringmode .export-btn { background: #3e3108; color: #fbe62c;}
@@ -244,24 +271,24 @@
     .ringmode .meal-log-table th { color: #edb941;}
     .ringmode .meal-log-table { background: #382a00; }
     .ringmode .meal-log-table td { color: #fbe62c;}
-    .ringmode .streak-center-label { color: #fbe62c; }
-    .ringmode .streak-week-phrase { color: #edb941; text-shadow: 0 0 10px #edb94188, 0 2px 8px #000a; }
+    .ringmode .autocomplete-list {background: #f4ecd2; color: #23211b; border: 1.2px solid #edb941;}
+    .ringmode .autocomplete-list div.selected,
+    .ringmode .autocomplete-list div:hover { background: #fbe62c55 !important; color: #382a00;}
+    .ringmode .quote-row { color: #fbe62c;}
   </style>
 </head>
 <body>
   <div class="container" id="macroLegendContainer">
     <div class="theme-toggle">
-      <button class="theme-btn active" id="appleLightBtn" onclick="setTheme('light')">Silver Light</button>
+      <button class="theme-btn active" id="appleLightBtn" onclick="setTheme('light')">Apple Light</button>
       <button class="theme-btn" id="ringModeBtn" onclick="setTheme('ring')">Ring Mode</button>
     </div>
     <h1>MacroLegend</h1>
     <div class="tab-row">
-      <button class="tab-btn active" id="tabCalc" onclick="showTab('calc')">Calculator</button>
-      <button class="tab-btn" id="tabProg" onclick="showTab('prog')">Progression</button>
+      <button class="tab-btn active" id="tabCalc" onclick="showTab('calc')">Macro Calculator</button>
+      <button class="tab-btn" id="tabProg" onclick="showTab('prog')">Macro Progression</button>
     </div>
-    <div id="tabArea">
-      <!-- Tabs will be filled by JS -->
-    </div>
+    <div id="tabArea"></div>
     <audio id="streakSound" preload="auto">
       <source src="https://cdn.pixabay.com/audio/2022/07/26/audio_124b01f3be.mp3" type="audio/mp3">
     </audio>
@@ -272,8 +299,8 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2@1.2.6/dist/quagga.min.js"></script>
   <script>
-    // ========== QUOTES ==========
-    const lotrQuotes = [
+    // ========== PHRASES ==========
+    const streakPhrases = [
       "Even the smallest person can change the course of the future.",
       "Not all those who wander are lost.",
       "The road goes ever on and on.",
@@ -327,61 +354,60 @@
       "The fire of your heart outshines the darkness.",
       "May your path be green and the breeze on your back.",
       "Streaks are for heroes. Today you are legend.",
-      "Let the courage of the Eldar guide you."
+      "Let the courage of the Eldar guide you.",
     ];
-    const genericQuotes = [
-      "Strength grows in the moments when you think you can’t go on but you keep going anyway.",
-      "Every legend was once a beginner.",
-      "One step at a time is progress.",
-      "Progress, not perfection.",
-      "Great things are done by a series of small things brought together.",
-      "Small daily improvements are the key to staggering long-term results.",
-      "Discipline is choosing between what you want now and what you want most.",
-      "Your body can stand almost anything. It’s your mind you have to convince.",
-      "Fall down seven times, stand up eight.",
-      "Motivation is what gets you started. Habit is what keeps you going.",
-      "Today’s struggles are tomorrow’s strengths.",
-      "The pain you feel today will be the strength you feel tomorrow.",
-      "Don’t count the days. Make the days count.",
-      "You don’t have to be extreme, just consistent.",
-      "You are your only limit.",
-      "Push yourself, because no one else is going to do it for you.",
-      "Sweat is magic. Cover yourself in it daily.",
-      "Remember why you started.",
-      "Willpower is like a muscle: the more you train it, the stronger it gets.",
-      "Victory is always possible for the person who refuses to stop fighting.",
-      "The hard days are what make you stronger.",
-      "Be legendary, not average.",
-      "The secret to your future is hidden in your daily routine.",
-      "Someday you will thank yourself for not giving up.",
-      "Rise and become the legend you are meant to be.",
-      "Legends are made, not born.",
-      "Every day is a chance to get better.",
-      "Champions keep playing until they get it right.",
+    const genericPhrases = [
       "Consistency is more important than perfection.",
-      "Don't watch the clock; do what it does. Keep going.",
-      "What seems impossible today will one day become your warm-up.",
-      "Nothing will work unless you do.",
-      "You are stronger than you think.",
-      "Start where you are. Use what you have. Do what you can.",
-      "Success is the sum of small efforts repeated day in and day out.",
-      "Let your hustle be louder than your excuses.",
-      "The only bad workout is the one you didn’t do.",
-      "Your only competition is you.",
-      "Progress is progress, no matter how small.",
-      "You don’t have to go fast. You just have to go.",
-      "Stay patient and trust your journey.",
-      "Action is the foundational key to all success.",
-      "If you want it, work for it.",
-      "Dream big. Work hard. Stay focused.",
       "The journey of a thousand miles begins with a single step.",
-      "Don't stop when you're tired. Stop when you're done.",
-      "Energy and persistence conquer all things.",
-      "Set your goals high, and don't stop till you get there.",
-      "Your future self will thank you for what you do today.",
-      "Become the legend you would look up to.",
-      "Be your own hero.",
-      "What you do today can improve all your tomorrows."
+      "Discipline equals freedom.",
+      "Little by little, a little becomes a lot.",
+      "Great things never come from comfort zones.",
+      "Every accomplishment starts with the decision to try.",
+      "Progress, not perfection.",
+      "Start where you are. Use what you have. Do what you can.",
+      "Motivation gets you going, habit keeps you growing.",
+      "The only bad workout is the one that didn’t happen.",
+      "Push yourself, because no one else is going to do it for you.",
+      "Don’t watch the clock; do what it does. Keep going.",
+      "Strength does not come from winning, but from struggle.",
+      "Success is what comes after you stop making excuses.",
+      "Sweat is fat crying.",
+      "What seems impossible today will one day become your warm-up.",
+      "You don’t have to be extreme, just consistent.",
+      "It’s not about being the best. It’s about being better than you were yesterday.",
+      "You’re only one workout away from a good mood.",
+      "Make yourself proud.",
+      "No one ever drowned in sweat.",
+      "You are your only limit.",
+      "Be stronger than your strongest excuse.",
+      "If you’re tired of starting over, stop giving up.",
+      "Success starts with self-discipline.",
+      "Sore today, strong tomorrow.",
+      "Strive for progress, not perfection.",
+      "Champions keep playing until they get it right.",
+      "Stay focused and never give up.",
+      "Results happen over time, not overnight.",
+      "Dream big. Work hard. Stay focused.",
+      "Go the extra mile. It’s never crowded.",
+      "You miss 100% of the shots you don’t take.",
+      "Success is no accident.",
+      "Remember why you started.",
+      "It always seems impossible until it’s done.",
+      "Do something today your future self will thank you for.",
+      "You don’t find willpower, you create it.",
+      "It’s never too late to start.",
+      "Don’t limit your challenges. Challenge your limits.",
+      "Believe in yourself and all that you are.",
+      "Doubt kills more dreams than failure ever will.",
+      "A little progress each day adds up to big results.",
+      "You get what you work for, not what you wish for.",
+      "Excuses don’t burn calories.",
+      "The hard days are what make you stronger.",
+      "Don’t count the days, make the days count.",
+      "One day or day one. You decide.",
+      "Don’t stop until you’re proud.",
+      "Hustle for that muscle.",
+      "Difficult roads often lead to beautiful destinations.",
     ];
 
     // ========== STATE ==========
@@ -389,12 +415,16 @@
     let macroTotals = {calories: 0, protein: 0, carbs: 0, fat: 0};
     let mealLog = [];
     let streak = { days: 1, best: 1, lastDate: null, weekPhrase: 0 };
+
     try {
       if (localStorage.getItem('macroGoals')) macroGoals = JSON.parse(localStorage.getItem('macroGoals'));
       if (localStorage.getItem('mealLog')) mealLog = JSON.parse(localStorage.getItem('mealLog'));
       if (localStorage.getItem('streak')) streak = JSON.parse(localStorage.getItem('streak'));
     } catch (e) {}
+
     let chart;
+    let autocompleteTimeout = null;
+    let autocompleteResults = [];
 
     // ========== THEME ==========
     function setTheme(theme) {
@@ -407,6 +437,7 @@
         document.getElementById('ringModeBtn').classList.add('active');
         document.body.style.background = "radial-gradient(ellipse at center, #fbe62c33 0%, #271e0570 100%)";
         renderStreak();
+        renderQuote();
       } else {
         body.classList.remove('ringmode');
         cont.classList.remove('ringmode');
@@ -414,10 +445,10 @@
         document.getElementById('ringModeBtn').classList.remove('active');
         document.body.style.background = "var(--light-bg)";
         renderStreak();
+        renderQuote();
       }
     }
     setTheme('light');
-
     // ========== TAB SYSTEM ==========
     function showTab(tab) {
       document.getElementById('tabCalc').classList.remove('active');
@@ -456,11 +487,11 @@
         </select>
         <button class="add-meal-btn" style="min-width:99px" type="submit">Set Macros</button>
       </form>
-      <div style="color:#687; font-size:0.96em;text-align:center; margin-bottom:1.2em">
+      <div style="color:#687; font-size:0.99em;text-align:center; margin-bottom:1.5em">
         Use the calculator to estimate daily calorie/macros.  
         <br><span style="color:#4275ba;font-weight:600;">Your settings transfer to Progression tab instantly.</span>
       </div>
-      <div class="macro-input-row" style="gap:0.3em;">
+      <div class="macro-input-row" style="gap:0.6em;">
         <input class="macro-input" id="goalCalories" type="number" min="0" placeholder="Goal Calories">
         <input class="macro-input" id="goalProtein" type="number" min="0" placeholder="Goal Protein (g)">
         <input class="macro-input" id="goalCarbs" type="number" min="0" placeholder="Goal Carbs (g)">
@@ -473,6 +504,7 @@
       document.getElementById('goalCarbs').value = macroGoals.carbs;
       document.getElementById('goalFat').value = macroGoals.fat;
     }
+
     // CALCULATOR ACTIONS
     function setGoalsFromInputs(e) {
       e.preventDefault();
@@ -505,15 +537,17 @@
       saveData(); renderAll();
       showToast("Macros saved!");
     }
-
     // ========== PROGRESSION TAB ==========
     function renderProgressionTab() {
       document.getElementById('tabArea').innerHTML = `
       <div class="goal-line" id="goalLine"></div>
       <div class="macro-bars" id="macroBars"></div>
       <canvas id="macroChart"></canvas>
-      <form onsubmit="addMeal(event)" class="add-meal-row">
-        <input class="meal-name-input" id="mealName" placeholder="Meal name/food" autocomplete="off" required>
+      <form onsubmit="addMeal(event)" class="add-meal-row" style="position:relative;">
+        <div style="position:relative;">
+          <input class="meal-name-input" id="mealName" placeholder="Meal name/food" autocomplete="off" required>
+          <div id="autocomplete-list" class="autocomplete-list" style="display:none;"></div>
+        </div>
         <input class="meal-amt-input" id="mealCalories" type="number" min="0" placeholder="Calories" required>
         <input class="meal-amt-input" id="mealProtein" type="number" min="0" placeholder="Protein (g)">
         <input class="meal-amt-input" id="mealCarbs" type="number" min="0" placeholder="Carbs (g)">
@@ -530,7 +564,7 @@
         <button class="export-btn" onclick="window.print()">Print / PDF</button>
       </div>
       <div id="streakArea"></div>
-      <div id="quoteArea" style="margin-top:2.2em; text-align:center; font-family:'Ringbearer','Inter',serif;font-size:1.11em;font-weight:600; color:#949ca9; text-shadow:0 1px 8px #c3c9d550;"></div>
+      <div id="quoteRow" class="quote-row"></div>
       `;
       renderGoalLine();
       renderMacroBars();
@@ -538,9 +572,11 @@
       renderChart();
       renderStreak();
       renderQuote();
+      // --- Setup autocomplete handlers again! ---
+      setupAutocomplete();
     }
 
-    // ========== MACRO PROGRESS ==========
+    // ========== MACRO PROGRESS ========== 
     function renderGoalLine() {
       const {calories, protein, carbs, fat} = macroGoals;
       document.getElementById('goalLine').innerHTML =
@@ -576,8 +612,7 @@
         </div>
       `;
     }
-
-    // ========== MEAL LOG ==========
+    // ========== MEAL LOG ========== 
     function addMeal(e) {
       e.preventDefault();
       const name = document.getElementById('mealName').value.trim();
@@ -628,7 +663,6 @@
       renderAll();
       showToast("Meal removed.");
     }
-
     // ========== MACRO TOTALS ==========
     function updateTotals() {
       macroTotals = {calories:0,protein:0,carbs:0,fat:0};
@@ -639,7 +673,6 @@
         macroTotals.fat += Number(m.fat)||0;
       });
     }
-
     // ========== CHART ==========
     function renderChart() {
       const ctx = document.getElementById('macroChart').getContext('2d');
@@ -653,10 +686,10 @@
               label: 'Current',
               data: [macroTotals.calories, macroTotals.protein, macroTotals.carbs, macroTotals.fat],
               backgroundColor: [
-                'rgba(148,156,169,0.87)',  // Silver
-                'rgba(125,194,113,0.85)',  // Protein: green
-                'rgba(91,164,250,0.82)',   // Carbs: blue
-                'rgba(245,169,77,0.85)'    // Fat: orange
+                'rgba(251,230,44,0.82)',  // Calories: gold
+                'rgba(81,193,110,0.85)',  // Protein: green
+                'rgba(97,170,255,0.85)',  // Carbs: blue
+                'rgba(245,169,77,0.85)'   // Fat: orange
               ],
               borderRadius: 10,
               maxBarThickness: 40,
@@ -665,10 +698,10 @@
               label: 'Goal',
               data: [macroGoals.calories, macroGoals.protein, macroGoals.carbs, macroGoals.fat],
               backgroundColor: [
-                'rgba(148,156,169,0.22)',
-                'rgba(125,194,113,0.18)',
-                'rgba(91,164,250,0.17)',
-                'rgba(245,169,77,0.15)'
+                'rgba(251,230,44,0.19)',
+                'rgba(81,193,110,0.18)',
+                'rgba(97,170,255,0.18)',
+                'rgba(245,169,77,0.17)'
               ],
               borderRadius: 10,
               borderWidth: 0,
@@ -686,9 +719,84 @@
             y: {
               beginAtZero: true,
               ticks: {color: '#888', font: {weight:700}},
-              grid: {color:'#c3c9d533'},
+              grid: {color:'#e5ecfa'},
             }
           }
+        }
+      });
+    }
+
+    // ========== AUTOCOMPLETE FOR FOOD =======
+    function setupAutocomplete() {
+      const input = document.getElementById('mealName');
+      const list = document.getElementById('autocomplete-list');
+      let selectedIdx = -1;
+
+      input.addEventListener('input', function() {
+        let val = input.value.trim();
+        if (autocompleteTimeout) clearTimeout(autocompleteTimeout);
+        list.style.display = 'none';
+        if (val.length < 2) return;
+        autocompleteTimeout = setTimeout(async () => {
+          try {
+            list.innerHTML = `<div class="autocomplete-no">Loading...</div>`;
+            list.style.display = 'block';
+            let q = encodeURIComponent(val);
+            let r = await fetch(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${q}&search_simple=1&action=process&json=1&page_size=8`);
+            let data = await r.json();
+            autocompleteResults = data.products.filter(x=>x.product_name && x.nutriments);
+            if (autocompleteResults.length === 0) {
+              list.innerHTML = `<div class="autocomplete-no">No foods found</div>`;
+            } else {
+              list.innerHTML = autocompleteResults.map((p,i)=>`<div data-idx="${i}"${i===selectedIdx?' class="selected"':''}>${p.product_name.replace(/"/g,'&quot;')}</div>`).join('');
+            }
+            list.style.display = 'block';
+          } catch(e) {
+            list.innerHTML = `<div class="autocomplete-no">Error loading</div>`;
+            list.style.display = 'block';
+          }
+        }, 280);
+      });
+
+      input.addEventListener('keydown', function(e) {
+        let items = list.querySelectorAll('div[data-idx]');
+        if (!items.length) return;
+        if (e.key === "ArrowDown") {
+          e.preventDefault();
+          selectedIdx = Math.min(selectedIdx+1, items.length-1);
+          items.forEach(x=>x.classList.remove('selected'));
+          if (selectedIdx >= 0) items[selectedIdx].classList.add('selected');
+        } else if (e.key === "ArrowUp") {
+          e.preventDefault();
+          selectedIdx = Math.max(selectedIdx-1, 0);
+          items.forEach(x=>x.classList.remove('selected'));
+          if (selectedIdx >= 0) items[selectedIdx].classList.add('selected');
+        } else if (e.key === "Enter") {
+          if (selectedIdx >= 0) {
+            e.preventDefault();
+            items[selectedIdx].click();
+          }
+        }
+      });
+
+      list.onclick = function(e) {
+        let target = e.target;
+        if (!target.dataset.idx) return;
+        let idx = Number(target.dataset.idx);
+        let food = autocompleteResults[idx];
+        if (!food) return;
+        input.value = food.product_name;
+        let n = food.nutriments || {};
+        document.getElementById('mealCalories').value = Math.round(n['energy-kcal_100g']||n['energy-kcal_serving']||n['energy_100g']/4.184||0);
+        document.getElementById('mealProtein').value = Math.round(n['proteins_100g']||n['proteins_serving']||0);
+        document.getElementById('mealCarbs').value = Math.round(n['carbohydrates_100g']||n['carbohydrates_serving']||0);
+        document.getElementById('mealFat').value = Math.round(n['fat_100g']||n['fat_serving']||0);
+        list.style.display = 'none';
+      };
+
+      document.body.addEventListener('click', function(e) {
+        if (!input.contains(e.target) && !list.contains(e.target)) {
+          list.style.display = 'none';
         }
       });
     }
@@ -711,7 +819,7 @@
           streak.days = 1;
         }
         streak.lastDate = todayStr;
-        streak.weekPhrase = ((streak.days-1) % 52);
+        streak.weekPhrase = ((streak.days-1) % streakPhrases.length);
         saveData();
         renderStreak();
         renderQuote();
@@ -720,6 +828,7 @@
     function renderStreak() {
       const streakArea = document.getElementById('streakArea');
       const isRing = document.body.classList.contains('ringmode');
+      const phrase = streakPhrases[streak.weekPhrase % streakPhrases.length];
       if (isRing) {
         streakArea.innerHTML = `
         <div class="streak-ring-wrap">
@@ -742,7 +851,7 @@
             <span style="font-size:1.65em;letter-spacing:2px;">${streak.days}</span>
             <br>Best: <b>${streak.best}</b>
           </div>
-          <div class="streak-week-phrase">${lotrQuotes[streak.weekPhrase % 52]}</div>
+          <div class="streak-week-phrase">${phrase}</div>
         </div>
         `;
       } else {
@@ -755,19 +864,6 @@
         `;
       }
     }
-
-    // ===== QUOTE AREA (below ring streak) =====
-    function renderQuote() {
-      const isRing = document.body.classList.contains('ringmode');
-      const quoteArea = document.getElementById('quoteArea');
-      if (!quoteArea) return;
-      if (isRing) {
-        quoteArea.innerHTML = "";
-      } else {
-        quoteArea.innerHTML = `<span>"${genericQuotes[streak.weekPhrase % genericQuotes.length]}"</span>`;
-      }
-    }
-
     function toElvishInscription(num) {
       const roman = ["","I","II","III","IV","V","VI","VII","VIII","IX","X",
         "XI","XII","XIII","XIV","XV","XVI","XVII","XVIII","XIX","XX",
@@ -786,13 +882,21 @@
       }
     }
 
+    // ========== QUOTES (LOTR / GENERIC) ==========
+    function renderQuote() {
+      let row = document.getElementById('quoteRow');
+      if (!row) return;
+      let isRing = document.body.classList.contains('ringmode');
+      let idx = (streak.days-1) % (isRing ? streakPhrases.length : genericPhrases.length);
+      row.textContent = (isRing ? streakPhrases[idx] : genericPhrases[idx]);
+    }
+
     // ========== DATA STORAGE ==========
     function saveData() {
       localStorage.setItem('macroGoals', JSON.stringify(macroGoals));
       localStorage.setItem('mealLog', JSON.stringify(mealLog));
       localStorage.setItem('streak', JSON.stringify(streak));
     }
-
     // ========== EXPORT ==========
     function exportCSV() {
       let csv = "Meal,Calories,Protein,Carbs,Fat\n";
@@ -816,7 +920,6 @@
       a.click();
       setTimeout(()=>URL.revokeObjectURL(a.href), 800);
     }
-
     // ========== TOAST POPUP ==========
     function showToast(msg) {
       const el = document.createElement('div');
@@ -824,7 +927,6 @@
       document.body.appendChild(el);
       setTimeout(()=>el.remove(), 2100);
     }
-
     // ========== BARCODE SCANNER ==========
     let scanning = false;
     function scanBarcode() {
@@ -877,14 +979,12 @@
       scanning = false;
       Quagga.offDetected(barcodeDetected);
     }
-
     // ========== ALL RENDERS ==========
     function renderAll() {
       updateTotals();
       if (document.getElementById('tabCalc').classList.contains('active')) renderCalculatorTab();
       else renderProgressionTab();
     }
-
     // ========== INIT ==========
     renderTab('calc');
     // Handle tab click logic (because we re-render dom)
@@ -893,7 +993,7 @@
     // Theme buttons
     document.getElementById('appleLightBtn').onclick = ()=>setTheme('light');
     document.getElementById('ringModeBtn').onclick = ()=>setTheme('ring');
-    // On reload, restore streak UI in the right place
+    // On reload, restore streak UI and quote
     setTimeout(()=>{ renderStreak(); renderQuote(); }, 80);
   </script>
 </body>
