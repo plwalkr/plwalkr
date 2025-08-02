@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>MacroLegend</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <link href="https://fonts.cdnfonts.com/css/ringbearer" rel="stylesheet">
   <style>
     :root {
@@ -13,166 +13,305 @@
       --light-text: #1a1a1a;
       --light-accent: #2b78e4;
       --light-bar: #d6eaff;
-      --light-shadow: 0 4px 32px #0002;
       --gold: #fbe62c;
-      --silver: #b8bbc9;
-      --deep-silver: #979ca9;
       --ring-shadow: 0 0 18px 6px #edb94144;
-      --ring-bar: #f8c944;
-      --ring-green: #7dc271;
-      --ring-blue: #5ba4fa;
-      --ring-orange: #f5a94d;
-      --ring-bg: #231c0a;
-      --ring-card: #382a00;
-      --ring-txt: #fbe62c;
-      --ring-inscription: #bd8c19;
+      --ring-card: #f5ecd6;
+      --ring-txt: #433416;
+      --ring-bar: #d3be91;
       --progress-radius: 13px;
+      --map-bg: url('https://upload.wikimedia.org/wikipedia/commons/6/62/Map_of_Middle_Earth_by_Tolkien.jpg');
+      --parchment: url('https://www.transparenttextures.com/patterns/old-mathematics.png');
+      --bleed: 18px;
     }
     body {
       font-family: 'Inter', sans-serif;
-      margin: 0; padding: 0; min-height: 100vh;
       background: var(--light-bg);
       color: var(--light-text);
-      display: flex; flex-direction: column; align-items: center;
-      transition: background 0.3s, color 0.3s;
+      margin: 0; padding: 0;
+      min-height: 100vh;
+      transition: background 0.35s, color 0.3s;
     }
     .container {
       background: var(--light-card);
-      box-shadow: var(--light-shadow);
+      box-shadow: 0 4px 32px #0002;
       border-radius: 22px;
-      max-width: 470px; width: 100vw;
-      margin: 2vw 0 16vw 0;
-      padding: 1.7em 1em 2.7em 1em;
-      transition: background 0.3s;
-      position: relative; min-width: 0;
+      max-width: 480px; width: 96vw;
+      margin: 40px auto 32px auto;
+      padding: 2.4em 2em 2.6em 2em;
+      min-width: 0;
+      position: relative;
+      display: flex; flex-direction: column;
+      gap: 2.2em;
     }
+    /* Theme switcher */
     .theme-toggle {
       position: absolute;
-      right: 32px; top: 22px;
-      display: flex; gap: 8px;
-      z-index: 10;
+      top: 22px; right: 26px;
+      display: flex; gap: 12px;
+      z-index: 4;
     }
-    @media (max-width: 650px) {
-      .theme-toggle {
-        position: static;
-        margin: 0 auto 0.8em auto;
-        justify-content: center;
-        display: flex;
-        width: 100%;
-        gap: 10px;
-      }
-      .container {
-        padding-top: 2.8em;
-      }
+    .theme-btn {
+      font-family: inherit;
+      background: #fbe62c;
+      color: #433416;
+      border: none;
+      padding: 7px 18px;
+      border-radius: 22px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      box-shadow: 0 3px 13px #0002;
+      cursor: pointer;
+      transition: background 0.19s, color 0.19s, box-shadow 0.2s;
+      outline: none;
+      opacity: 0.90;
+      letter-spacing: 0.3px;
     }
-    h1 {
-      font-family: 'Inter', 'Ringbearer', serif;
-      font-size: 2.2rem;
-      letter-spacing: 2px;
-      margin-bottom: 1em;
-      margin-top: 0.3em;
+    .theme-btn.active, .theme-btn:focus {
+      background: #fff7c8;
+      color: #bb9703;
+      box-shadow: 0 2px 10px #bca20633;
+      opacity: 1;
+    }
+    /* MacroLegend Title */
+    .main-title {
       text-align: center;
+      font-family: 'Inter', 'Ringbearer', serif;
+      font-size: 2.4rem;
+      margin: 0 0 12px 0;
       color: var(--light-accent);
-      transition: color 0.3s, text-shadow 0.3s;
-      user-select: none;
+      letter-spacing: 2px;
+      font-weight: 700;
       z-index: 2;
       position: relative;
     }
-    .ringmode h1 {
+    .ringmode .main-title {
       font-family: 'Ringbearer', 'Inter', serif;
-      color: var(--deep-silver);
-      text-shadow: 0 2px 18px #edb94155, 0 0 15px #5c4b0a33;
-      letter-spacing: 2px;
+      color: #b79d49;
+      text-shadow: 0 2px 13px #edb94133, 0 1px 0px #fff5, 0 0px 2px #43341699;
     }
-    /* Tab row */
+    /* Macro Calculator form */
+    .macro-input-row, .macro-input-row-2 {
+      display: flex; flex-wrap: wrap; gap: 1.2em;
+      justify-content: center;
+      margin-bottom: 1.1em;
+    }
+    .macro-input, .macro-input-2 {
+      flex: 1 1 42%;
+      min-width: 110px; max-width: 180px;
+      font-size: 1.15em;
+      padding: 13px 14px;
+      border-radius: 12px;
+      border: 1.4px solid #b6c6e1;
+      background: #f6faff;
+      color: #222;
+      box-shadow: 0 2px 6px #b6d4fa13;
+      outline: none;
+      transition: border 0.14s;
+      margin-bottom: 7px;
+    }
+    .macro-input:focus, .macro-input-2:focus { border: 1.5px solid #b79d49; }
+    /* Add meal row */
+    .add-meal-row {
+      display: flex; flex-wrap: wrap;
+      gap: 0.7em;
+      margin-bottom: 1.2em;
+      justify-content: center;
+      align-items: flex-end;
+    }
+    .meal-name-input, .meal-amt-input {
+      font-size: 1.05em;
+      border-radius: 10px;
+      padding: 12px 11px;
+      border: 1.2px solid #c0c9db;
+      background: #fffefa;
+      color: #252525;
+      box-shadow: 0 1px 2px #b79d4911;
+      transition: border 0.12s;
+      min-width: 100px;
+    }
+    .meal-name-input:focus, .meal-amt-input:focus { border: 1.2px solid #b79d49; }
+    .add-meal-btn, .scan-btn {
+      background: #2176ae;
+      color: #fff;
+      border: none; border-radius: 10px;
+      font-weight: 700;
+      padding: 11px 26px;
+      font-size: 1em;
+      cursor: pointer;
+      box-shadow: 0 2px 8px #0002;
+      transition: background 0.14s, color 0.14s;
+      margin-left: 4px;
+      display: flex; align-items: center; gap: 0.6em;
+    }
+    .add-meal-btn:hover, .scan-btn:hover { background: #b79d49; color: #fff;}
+    .scan-btn {
+      background: #fbe62c; color: #433416;
+      font-weight: 900; padding: 11px 12px;
+    }
+    /* Tab Row */
     .tab-row {
       display: flex; justify-content: center;
-      gap: 12px; margin: 0 0 1.8em 0;
+      gap: 1.3em; margin: 0 0 1.4em 0;
+      margin-top: 7px;
     }
     .tab-btn {
       background: #eceefe; color: #4275ba;
-      border: none; border-radius: 9px 9px 0 0;
-      padding: 10px 34px; font-weight: 700; font-size: 1.09em;
+      border: none; border-radius: 12px 12px 0 0;
+      padding: 11px 36px; font-weight: 700; font-size: 1.13em;
       cursor: pointer; box-shadow: 0 2px 7px #0001;
-      transition: background 0.17s, color 0.17s;
-      outline: none;
+      transition: background 0.16s, color 0.16s;
+      margin-bottom: -2px;
     }
     .tab-btn.active, .tab-btn:focus {
-      background: var(--light-accent);
+      background: #b79d49;
       color: #fff;
     }
-    .ringmode .tab-btn {
-      background: #18140b;
-      color: var(--deep-silver);
-      border: 1.2px solid #978548;
-    }
-    .ringmode .tab-btn.active { background: var(--gold); color: #382a00; }
-    /* Macro progress bars */
-    .macro-bars { margin-bottom: 1.2em; margin-top: 0.5em; display: flex; flex-direction: column; gap: 1em;}
-    .macro-bar-outer { background: var(--light-bar); border-radius: var(--progress-radius); overflow: hidden; position: relative; height: 30px; margin: 0 0.1em;}
-    .macro-bar-inner { height: 100%; display: flex; align-items: center; font-weight: 600; font-size: 1.05em; justify-content: flex-start; padding-left: 18px; border-radius: var(--progress-radius); transition: width 0.4s cubic-bezier(.35,1.65,.6,1.1); color: #fff; letter-spacing: 0.5px; text-shadow: 0 1px 8px #0004; white-space: nowrap; position: relative;}
-    .bar-cal { background: linear-gradient(90deg,#fbe62c,#f5c80f); color: #735900; }
-    .bar-p { background: linear-gradient(90deg,#51c16e,#379956); }
-    .bar-c { background: linear-gradient(90deg,#61aaff,#396ebb); }
-    .bar-f { background: linear-gradient(90deg,#f5a94d,#d1850b); }
-    .ringmode .macro-bar-outer { background: #2d2308 !important; }
-    .ringmode .bar-cal { background: linear-gradient(90deg,#aaa,#fbe62c,#aaa); color: #231c0a;}
-    .ringmode .bar-p { background: linear-gradient(90deg,#a4d6a2,#b8bbc9 90%); color:#231c0a;}
-    .ringmode .bar-c { background: linear-gradient(90deg,#d8deea,#b8bbc9 80%); color:#231c0a;}
-    .ringmode .bar-f { background: linear-gradient(90deg,#ead58d,#b8bbc9 80%); color:#231c0a;}
-    .macro-bar-label { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); color: #fff; font-size: 1em; font-weight: 700; text-shadow: 0 1px 4px #0006; width: 100%; text-align: center; pointer-events: none; letter-spacing: 0.5px; z-index: 2;}
-    /* Progression header */
+    .ringmode .tab-btn { background: #e4d3b5; color: #705d2e;}
+    .ringmode .tab-btn.active { background: #b79d49; color: #fff;}
+    /* Goal line */
     .goal-line {
-      font-size: 1.18em; color: #4c4c4c; background: #f6f6fa;
-      border-radius: 12px; margin: 0 auto 0.8em auto; text-align: center;
-      padding: 0.4em 1.1em; font-weight: 500; letter-spacing: 0.5px;
-      display: flex; justify-content: center; gap: 2.3em; flex-wrap: wrap;
+      font-size: 1.09em; color: #4c4c4c; background: #f6f6fa;
+      border-radius: 10px; margin: 0 auto 1.2em auto; text-align: center;
+      padding: 0.39em 1.4em; font-weight: 500; letter-spacing: 0.5px;
+      display: flex; justify-content: center; gap: 1.3em; flex-wrap: wrap;
       max-width: 99vw; white-space: nowrap;
     }
-    .goal-line span { font-weight: 700; letter-spacing: 0.2px; padding: 0 2px; }
+    .goal-line span { font-weight: 700; letter-spacing: 0.2px; padding: 0 3px; }
     .goal-macro-p { color: #49a858; }
     .goal-macro-c { color: #3677c6; }
     .goal-macro-f { color: #e8a200; }
     .goal-macro-cal { color: #d4b117; }
-    /* Meal log table */
-    .meal-log-table { width: 100%; margin-bottom: 0.9em; border-collapse: collapse; font-size: 1.05em; background: #fff; border-radius: 10px; box-shadow: 0 1px 8px #0001; overflow-x: auto; }
-    .meal-log-table th, .meal-log-table td { padding: 8px 6px; border: none; text-align: center; white-space: nowrap; font-size: 1em;}
-    .meal-log-table th { background: #f2f6fc; color: #96820d; font-weight: 700; }
-    .meal-log-table tbody tr:nth-child(even) { background: #f7faff;}
-    .ringmode .meal-log-table th { background: #1d1b13; color: #b8bbc9;}
-    .ringmode .meal-log-table { background: #271e05; }
-    .ringmode .meal-log-table td { color: #fbe62c;}
-    /* Streak ring area */
-    .streak-ring-wrap { margin: 1.3em auto 0.5em auto; width: 170px; height: 170px; display: flex; align-items: center; justify-content: center; position: relative; transition: filter 0.3s;}
-    .streak-ring-svg { width: 100%; height: 100%; display: block; filter: drop-shadow(var(--ring-shadow)); }
-    .streak-center-label { position: absolute; left: 50%; top: 51%; transform: translate(-50%,-50%); width: 100px; text-align: center; color: var(--deep-silver); font-family: 'Ringbearer', 'Inter', serif; font-size: 1.18em; line-height: 1.16; font-weight: 700; text-shadow: 0 0 11px #edb94155, 0 1px 2px #000c; pointer-events: none;}
-    .streak-week-phrase { position: absolute; left: 50%; top: 89%; transform: translate(-50%,0); font-family: 'Ringbearer','Inter',serif; color: var(--gold); font-size: 0.99em; text-align: center; width: 175px; filter: brightness(1.07) blur(0.1px); text-shadow: 0 0 10px #edb94188, 0 2px 8px #000a; pointer-events: none;}
-    /* Light mode streak bar for mobile/desktop */
-    .streak-bar-wrap { width: 100%; max-width: 390px; margin: 1.5em auto 0.8em auto; background: #d6eaff; border-radius: 16px; box-shadow: 0 1px 4px #0001; padding: 0.5em 0.7em; font-size: 1.08em; color: #2b78e4; font-weight: 700; letter-spacing: 1px; display: flex; align-items: center; gap: 9px; justify-content: center;}
-    .streak-bar-value { background: #2b78e4; color: #fff; border-radius: 12px; padding: 2px 12px; margin: 0 7px; font-size: 1em; font-weight: 700; box-shadow: 0 2px 6px #2b78e411;}
-    /* Export buttons */
-    .export-row { display: flex; gap: 0.8em; justify-content: flex-end; margin-bottom: 0.9em;}
-    .export-btn { background: #e9eef6; color: #2b78e4; font-size: 1.07em; padding: 7px 20px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; margin: 0; box-shadow: 0 1px 3px #0001; transition: background 0.13s, color 0.13s;}
-    .export-btn:hover, .export-btn:focus { background: #d6eaff; color: #0c51a4;}
-    /* Inputs and add meal */
-    .macro-input-row, .add-meal-row { display: flex; gap: 1em; flex-wrap: wrap; justify-content: center; margin-bottom: 1.2em;}
-    .macro-input, .meal-name-input, .meal-amt-input { flex: 1 1 39%; min-width: 95px; max-width: 150px; font-size: 1.11em; padding: 11px 7px; margin: 0 0 10px 0; border-radius: 8px; border: 1.2px solid #b6c6e1; background: #f6faff; color: #1a2a2a; box-shadow: 0 2px 5px #b6d4fa11; outline: none; transition: border 0.15s;}
-    .macro-input:focus, .meal-name-input:focus, .meal-amt-input:focus { border: 1.2px solid #2b78e4; }
-    .add-meal-btn, .scan-btn {
-      background: #2b78e4; color: #fff; border: none; border-radius: 8px; font-weight: 700;
-      padding: 10px 25px; font-size: 1.09em; cursor: pointer; margin-left: 4px; box-shadow: 0 2px 6px #0002;
-      transition: background 0.16s, color 0.16s;
-      display: flex; align-items: center; gap: 0.5em;
+    /* Progress bars */
+    .macro-bars { margin-bottom: 1.2em; margin-top: 0.6em; display: flex; flex-direction: column; gap: 0.79em;}
+    .macro-bar-outer { background: #ede2c5; border-radius: var(--progress-radius); overflow: hidden; position: relative; height: 30px;}
+    .macro-bar-inner { height: 100%; display: flex; align-items: center; font-weight: 600; font-size: 1.13em; justify-content: flex-start; padding-left: 22px; border-radius: var(--progress-radius); transition: width 0.4s cubic-bezier(.35,1.65,.6,1.1); color: #fff; letter-spacing: 0.5px; text-shadow: 0 1px 8px #0002; white-space: nowrap; position: relative;}
+    .bar-cal { background: linear-gradient(90deg,#fbe62c,#e3c147 89%); color: #8c7101; }
+    .bar-p { background: linear-gradient(90deg,#49a858,#7e6e3b 90%);}
+    .bar-c { background: linear-gradient(90deg,#6ea6de,#705d2e 90%);}
+    .bar-f { background: linear-gradient(90deg,#e8a200,#705d2e 90%);}
+    .macro-bar-label { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); color: #fff; font-size: 1.07em; font-weight: 700; text-shadow: 0 1px 4px #0004; width: 100%; text-align: center; pointer-events: none; letter-spacing: 0.5px; z-index: 2;}
+    /* Meals Table */
+    .meal-log-table {
+      width: 100%;
+      margin-bottom: 1.2em;
+      border-collapse: collapse;
+      font-size: 1.05em;
+      background: #fff9e9;
+      border-radius: 14px;
+      box-shadow: 0 2px 12px #b79d4912;
+      overflow-x: auto;
     }
-    .add-meal-btn:hover, .add-meal-btn:focus, .scan-btn:hover, .scan-btn:focus { background: #49a858; color: #fff;}
-    .scan-btn { background: #fbe62c; color: #382a00; font-weight: 800; padding: 10px 14px;}
-    .scan-btn svg {width:1.4em;height:1.4em;vertical-align:middle;}
+    .meal-log-table th, .meal-log-table td {
+      padding: 12px 9px;
+      border: none;
+      text-align: center;
+      white-space: nowrap;
+      font-size: 1.03em;
+    }
+    .meal-log-table th {
+      background: #e4d3b5;
+      color: #705d2e;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+    .meal-log-table tbody tr:nth-child(even) {
+      background: #f5ecd6;
+    }
+    /* Export buttons */
+    .export-row { display: flex; gap: 1.2em; justify-content: flex-end; margin-bottom: 1.2em;}
+    .export-btn {
+      background: #e9eef6;
+      color: #705d2e;
+      font-size: 1em;
+      padding: 9px 22px;
+      border-radius: 10px;
+      border: none;
+      font-weight: 800;
+      cursor: pointer;
+      margin: 0;
+      box-shadow: 0 2px 6px #0001;
+      transition: background 0.13s, color 0.13s;
+    }
+    .export-btn:hover, .export-btn:focus { background: #fbe62c; color: #8c7101;}
+    /* Streak ring */
+    .streak-ring-wrap { margin: 0 auto; margin-top: 1.3em; width: 140px; height: 140px; display: flex; align-items: center; justify-content: center; position: relative; transition: filter 0.3s;}
+    .streak-ring-svg { width: 100%; height: 100%; display: block; filter: drop-shadow(var(--ring-shadow)); }
+    .streak-center-label {
+      position: absolute; left: 50%; top: 51%; transform: translate(-50%,-50%);
+      width: 100px;
+      text-align: center;
+      color: #b79d49;
+      font-family: 'Ringbearer', 'Inter', serif;
+      font-size: 1.14em;
+      line-height: 1.18;
+      font-weight: 700;
+      text-shadow: 0 0 11px #edb941c5, 0 1px 2px #000b;
+      pointer-events: none;
+    }
+    .streak-week-phrase {
+      width: 280px;
+      text-align: center;
+      font-family: 'Ringbearer','Inter',serif;
+      color: #6b5e38;
+      font-size: 1.09em;
+      margin: 16px auto 0 auto;
+      filter: brightness(1.08);
+      text-shadow: 0 0 10px #edb94144, 0 2px 8px #0002;
+      pointer-events: none;
+    }
+    .ringmode .streak-week-phrase { color: #705d2e;}
+    /* Light mode streak */
+    .streak-bar-wrap {
+      width: 100%;
+      max-width: 390px;
+      margin: 1.8em auto 0.3em auto;
+      background: #ede2c5;
+      border-radius: 16px;
+      box-shadow: 0 1px 4px #b79d4910;
+      padding: 0.5em 0.7em;
+      font-size: 1.1em;
+      color: #705d2e;
+      font-weight: 700;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .streak-bar-value {
+      background: #b79d49;
+      color: #fff;
+      border-radius: 12px;
+      padding: 4px 18px;
+      margin: 0 8px;
+      font-size: 1em;
+      font-weight: 800;
+      box-shadow: 0 2px 6px #b79d4933;
+    }
+    /* Barcode overlay */
+    #barcodeVideo, #barcodeOverlay, #barcodeCancelBtn { display: none; }
+    #barcodeVideo.active, #barcodeOverlay.active, #barcodeCancelBtn.active { display: block; }
+    #barcodeVideo {
+      position: fixed; left:0; top:0; width: 100vw; height: 100vh; object-fit:cover; z-index: 9998; background:#000f;
+    }
+    #barcodeOverlay {
+      position:fixed;left:0;top:0;width:100vw;height:100vh;z-index:9999;pointer-events:none;
+    }
+    #barcodeOverlay::after {
+      content:''; display:block; position:absolute;left:0;top:0;width:100vw;height:100vh;
+      background:radial-gradient(ellipse at center,#fff0 60%,#000c 100%);
+      pointer-events:none;
+    }
+    #barcodeCancelBtn {
+      position:fixed;top:15px;right:24px;z-index:10000;background:#fbe62c;color:#382a00;border:none;border-radius:12px;padding:8px 18px;font-size:1.15em;font-weight:800;box-shadow:0 2px 12px #0009;cursor:pointer;
+    }
     /* Toast popup */
     .toast {
       position: fixed; left: 50%; bottom: 36px; transform: translateX(-50%);
-      background: #fffbe0; color: #2b78e4;
+      background: #fffbe0; color: #705d2e;
       padding: 11px 28px; border-radius: 22px;
-      box-shadow: 0 5px 22px #0006; font-size: 1.11em; font-weight: 700;
+      box-shadow: 0 5px 22px #b79d4933; font-size: 1.12em; font-weight: 700;
       opacity: 0.97; z-index: 999; pointer-events: none; animation: fadeToast 2.2s linear;
     }
     @keyframes fadeToast {
@@ -181,49 +320,48 @@
       85%{opacity:0.98;}
       100%{opacity:0;}
     }
-    /* Barcode overlay */
-    #barcodeVideo {
-      position: fixed; left:0; top:0; width: 100vw; height: 100vh; object-fit:cover; z-index: 9998; background:#000f;
-      display: none;
+    /* Responsive + bleed for mobile */
+    @media (max-width: 650px) {
+      .container { max-width: 98vw; padding: 1.1em var(--bleed) 2.1em var(--bleed);}
+      .theme-toggle { top: 10px; right: 6px;}
+      .main-title { font-size: 1.3rem; margin-bottom: 0.6em;}
+      .macro-input, .macro-input-2, .meal-name-input, .meal-amt-input { min-width: 85px; max-width: 99vw;}
+      .macro-bar-label, .macro-bar-inner { font-size: 0.93em;}
+      .goal-line { font-size: 0.91em; gap: 0.5em; padding: 0.2em 0.4em;}
+      .macro-bars { gap: 0.35em;}
+      .meal-log-table th, .meal-log-table td { padding: 8px 4px; font-size: 0.97em;}
+      .export-row { gap: 0.7em;}
     }
-    #barcodeOverlay {
-      position:fixed;left:0;top:0;width:100vw;height:100vh;z-index:9999;pointer-events:none;display:none;
-    }
-    #barcodeCancelBtn {
-      position:fixed;top:15px;right:24px;z-index:10000;background:#fbe62c;color:#382a00;border:none;border-radius:12px;padding:8px 18px;font-size:1.15em;font-weight:800;box-shadow:0 2px 12px #0009;cursor:pointer;
-      display:none;
-    }
-    /* Ringmode background */
+    /* RINGMODE: MAP PARCHMENT BACKGROUND */
     .ringmode body, .ringmode {
-      background: url('https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=900&q=80') center/cover #231c0a !important;
+      background:
+        linear-gradient(rgba(235,223,195,0.94), rgba(212,200,168,0.95)),
+        var(--parchment),
+        var(--map-bg) center center/cover no-repeat fixed !important;
       color: var(--ring-txt) !important;
-      transition: background 0.4s, color 0.3s;
+      transition: background 0.44s, color 0.34s;
     }
     .ringmode .container {
-      background: rgba(36,29,12,0.96) !important;
+      background: rgba(245, 236, 214, 0.97) !important;
       color: var(--ring-txt) !important;
-      box-shadow: 0 4px 32px #5c4b0a99;
+      box-shadow: 0 4px 32px #b79d4935;
+      border: 2.5px solid #c6b1776b;
     }
-    /* Safe bleed for mobile */
-    @media (max-width: 520px) {
-      .container { padding: 2.8em 4vw 2.4em 4vw; border-radius: 0; }
-      .macro-bars { gap: 0.7em;}
-      h1 { font-size: 1.18rem; }
-    }
-    @media (max-width: 450px) {
-      .container { padding: 2.5em 2vw 2em 2vw; }
-      .macro-bars { gap: 0.5em;}
-      .macro-bar-label { font-size: 0.92em;}
-    }
+    .ringmode .meal-log-table th { background: #e4d3b5 !important; color: #705d2e;}
+    .ringmode .macro-bar-outer { background: #e4d3b5 !important;}
+    .ringmode .macro-bar-label { color: #705d2e !important;}
+    .ringmode .goal-line { background: #e4d3b5 !important; color: #6b5e38 !important;}
+    .ringmode .export-btn { background: #fbe62c; color: #705d2e;}
+    .ringmode .export-btn:hover { background: #d3be91;}
   </style>
 </head>
 <body>
   <div class="container" id="macroLegendContainer">
-    <div class="theme-toggle" id="themeToggle">
+    <div class="theme-toggle">
       <button class="theme-btn active" id="appleLightBtn" onclick="setTheme('light')">Apple Light</button>
       <button class="theme-btn" id="ringModeBtn" onclick="setTheme('ring')">Ring Mode</button>
     </div>
-    <h1>MacroLegend</h1>
+    <h1 class="main-title">MacroLegend</h1>
     <div class="tab-row">
       <button class="tab-btn active" id="tabCalc" onclick="showTab('calc')">Calculator</button>
       <button class="tab-btn" id="tabProg" onclick="showTab('prog')">Progression</button>
@@ -232,15 +370,16 @@
     <audio id="streakSound" preload="auto">
       <source src="https://cdn.pixabay.com/audio/2022/07/26/audio_124b01f3be.mp3" type="audio/mp3">
     </audio>
-    <video id="barcodeVideo" autoplay playsinline></video>
+    <video id="barcodeVideo"></video>
     <div id="barcodeOverlay"></div>
     <button id="barcodeCancelBtn" onclick="stopBarcodeScan()">Cancel Scan</button>
   </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2@1.2.6/dist/quagga.min.js"></script>
   <script>
-    // ========== PHRASES ==========
+    // Quotes & state
     const streakPhrases = [
-      // 52 Tolkien quotes for Ring Mode
+      // 52 weeks of Tolkien wisdom...
       "Even the smallest person can change the course of the future.",
       "Not all those who wander are lost.",
       "The road goes ever on and on.",
@@ -292,7 +431,9 @@
       "You shall be the Fellowship of the Ring.",
       "I will not say: do not weep; for not all tears are an evil.",
       "The fire of your heart outshines the darkness.",
-      "May your path be green and the breeze on your back."
+      "May your path be green and the breeze on your back.",
+      "Streaks are for heroes. Today you are legend.",
+      "Let the courage of the Eldar guide you.",
     ];
     // ========== STATE ==========
     let macroGoals = {calories: 2000, protein: 150, carbs: 200, fat: 70};
@@ -304,6 +445,7 @@
       if (localStorage.getItem('mealLog')) mealLog = JSON.parse(localStorage.getItem('mealLog'));
       if (localStorage.getItem('streak')) streak = JSON.parse(localStorage.getItem('streak'));
     } catch (e) {}
+    let chart;
     // ========== THEME ==========
     function setTheme(theme) {
       const body = document.body;
@@ -360,11 +502,11 @@
         </select>
         <button class="add-meal-btn" style="min-width:99px" type="submit">Set Macros</button>
       </form>
-      <div style="color:#687; font-size:0.98em;text-align:center; margin-bottom:1.3em">
+      <div style="color:#967c29; font-size:1.01em;text-align:center; margin-bottom:1.7em">
         Use the calculator to estimate daily calorie/macros.  
-        <br><span style="color:#4275ba;font-weight:600;">Your settings transfer to Progression tab instantly.</span>
+        <br><span style="color:#b79d49;font-weight:600;">Your settings transfer to Progression tab instantly.</span>
       </div>
-      <div class="macro-input-row" style="gap:0.3em;">
+      <div class="macro-input-row" style="gap:1.2em;">
         <input class="macro-input" id="goalCalories" type="number" min="0" placeholder="Goal Calories">
         <input class="macro-input" id="goalProtein" type="number" min="0" placeholder="Goal Protein (g)">
         <input class="macro-input" id="goalCarbs" type="number" min="0" placeholder="Goal Carbs (g)">
@@ -411,7 +553,6 @@
     }
     // ========== PROGRESSION TAB ==========
     function renderProgressionTab() {
-      updateTotals();
       document.getElementById('tabArea').innerHTML = `
       <div class="goal-line" id="goalLine"></div>
       <div class="macro-bars" id="macroBars"></div>
@@ -423,7 +564,9 @@
         <input class="meal-amt-input" id="mealFat" type="number" min="0" placeholder="Fat (g)">
         <button class="add-meal-btn" type="submit">+ Add</button>
         <button type="button" class="scan-btn" onclick="scanBarcode()">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="5" height="5"/><rect x="16" y="3" width="5" height="5"/><rect x="3" y="16" width="5" height="5"/><rect x="16" y="16" width="5" height="5"/><path d="M9 5h6M19 9v6M5 9v6M9 19h6"/></svg>
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:1.2em;height:1.2em;">
+            <rect x="3" y="3" width="5" height="5"/><rect x="16" y="3" width="5" height="5"/><rect x="3" y="16" width="5" height="5"/><rect x="16" y="16" width="5" height="5"/><path d="M9 5h6M19 9v6M5 9v6M9 19h6"/>
+          </svg>
         </button>
       </form>
       <table class="meal-log-table" id="mealLogTable"></table>
@@ -503,7 +646,7 @@
           <td>${m.protein}</td>
           <td>${m.carbs}</td>
           <td>${m.fat}</td>
-          <td><button onclick="removeMeal(${i})" style="color:#e34747;font-weight:700;font-size:0.93em;border:none;background:none;cursor:pointer;">✕</button></td>
+          <td><button onclick="removeMeal(${i})" style="color:#e34747;font-weight:700;font-size:1.05em;border:none;background:none;cursor:pointer;">✕</button></td>
         </tr>`
       ).join('');
       document.getElementById('mealLogTable').innerHTML = `
@@ -575,14 +718,18 @@
               </radialGradient>
             </defs>
             <circle cx="70" cy="70" r="58" fill="url(#gold)" stroke="#d4b117" stroke-width="7"/>
+            <text x="70" y="70" text-anchor="middle" fill="#b79d49" font-family="Ringbearer, serif"
+              font-size="16" font-weight="bold" dy="10" letter-spacing="2">
+              ${streak.days}
+            </text>
           </svg>
           <div class="streak-center-label">
             Streak<br>
-            <span style="font-size:1.65em;letter-spacing:2px;">${streak.days}</span>
+            <span style="font-size:1.75em;letter-spacing:2px;">${streak.days}</span>
             <br>Best: <b>${streak.best}</b>
           </div>
-          <div class="streak-week-phrase">${phrase}</div>
         </div>
+        <div class="streak-week-phrase">${phrase}</div>
         `;
       } else {
         streakArea.innerHTML = `
@@ -591,7 +738,7 @@
             <span class="streak-bar-value">${streak.days}</span>
             | Best: <span class="streak-bar-value">${streak.best}</span>
           </div>
-          <div style="text-align:center;color:#567;font-size:1.07em;font-weight:400;margin:0.8em 0 1.1em 0;">"${phrase}"</div>
+          <div style="text-align:center;color:#b79d49;font-size:1.08em;font-weight:600;margin:0.9em 0 0.6em 0;">"${phrase}"</div>
         `;
       }
     }
@@ -644,9 +791,9 @@
     function scanBarcode() {
       if (scanning) return;
       scanning = true;
-      document.getElementById('barcodeVideo').style.display = 'block';
-      document.getElementById('barcodeOverlay').style.display = 'block';
-      document.getElementById('barcodeCancelBtn').style.display = 'block';
+      document.getElementById('barcodeVideo').classList.add('active');
+      document.getElementById('barcodeOverlay').classList.add('active');
+      document.getElementById('barcodeCancelBtn').classList.add('active');
       Quagga.init({
         inputStream: {
           name: "Live",
@@ -685,11 +832,64 @@
     }
     function stopBarcodeScan() {
       Quagga.stop();
-      document.getElementById('barcodeVideo').style.display = 'none';
-      document.getElementById('barcodeOverlay').style.display = 'none';
-      document.getElementById('barcodeCancelBtn').style.display = 'none';
+      document.getElementById('barcodeVideo').classList.remove('active');
+      document.getElementById('barcodeOverlay').classList.remove('active');
+      document.getElementById('barcodeCancelBtn').classList.remove('active');
       scanning = false;
       Quagga.offDetected(barcodeDetected);
+    }
+    // ========== AUTOCOMPLETE SMART FOOD (search OpenFoodFacts) ==========
+    let acInput, acList;
+    document.addEventListener('input', function(e){
+      if (e.target && e.target.id === 'mealName') {
+        let val = e.target.value.trim();
+        if (val.length < 3) { removeACList(); return; }
+        fetch(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(val)}&search_simple=1&action=process&json=1&page_size=7`)
+          .then(r=>r.json()).then(data=>{
+            removeACList();
+            if (data && data.products && data.products.length) {
+              acInput = e.target;
+              acList = document.createElement('div');
+              acList.style.position = "absolute";
+              acList.style.background = "#fff9e9";
+              acList.style.color = "#433416";
+              acList.style.border = "1.5px solid #b79d49";
+              acList.style.borderRadius = "9px";
+              acList.style.boxShadow = "0 3px 13px #b79d4911";
+              acList.style.zIndex = 99;
+              acList.style.top = (acInput.offsetTop + acInput.offsetHeight + 6) + "px";
+              acList.style.left = acInput.offsetLeft + "px";
+              acList.style.width = acInput.offsetWidth + "px";
+              acList.className = 'acListFood';
+              data.products.forEach(prod=>{
+                let el = document.createElement('div');
+                el.style.padding = "10px 12px";
+                el.style.cursor = "pointer";
+                el.style.borderBottom = "1px solid #ede2c5";
+                el.innerHTML = `<b>${prod.product_name || prod.brands || '(No name)'}</b>`;
+                el.onclick = function(){
+                  acInput.value = prod.product_name || prod.brands || '';
+                  removeACList();
+                  // Optional: autofill macros if found
+                  let n = prod.nutriments||{};
+                  document.getElementById('mealCalories').value = Math.round(n['energy-kcal_100g']||n['energy-kcal_serving']||0);
+                  document.getElementById('mealProtein').value = Math.round(n['proteins_100g']||n['proteins_serving']||0);
+                  document.getElementById('mealCarbs').value = Math.round(n['carbohydrates_100g']||n['carbohydrates_serving']||0);
+                  document.getElementById('mealFat').value = Math.round(n['fat_100g']||n['fat_serving']||0);
+                };
+                acList.appendChild(el);
+              });
+              acInput.parentNode.appendChild(acList);
+            }
+          });
+      }
+    });
+    document.addEventListener('click', function(e){
+      if (!e.target.className || e.target.className !== 'acListFood') removeACList();
+    });
+    function removeACList() {
+      let old = document.querySelector('.acListFood');
+      if (old) old.remove();
     }
     // ========== ALL RENDERS ==========
     function renderAll() {
@@ -699,7 +899,7 @@
     }
     // ========== INIT ==========
     renderTab('calc');
-    // Handle tab click logic (because we re-render dom)
+    // Setup tab click (in case of rerender)
     document.getElementById('tabCalc').onclick = ()=>showTab('calc');
     document.getElementById('tabProg').onclick = ()=>showTab('prog');
     // Theme buttons
