@@ -2,28 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>MacroLegend</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet"/>
   <link href="https://fonts.cdnfonts.com/css/ringbearer" rel="stylesheet">
   <style>
     :root {
       --light-bg: #f6f6fa;
       --light-card: #fff;
-      --light-text: #212122;
+      --light-text: #1a1a1a;
       --light-accent: #2b78e4;
-      --light-bar: #e4eeff;
-      --light-shadow: 0 4px 32px #0002;
+      --light-bar: #d6eaff;
       --gold: #fbe62c;
-      --ring-shadow: 0 0 18px 6px #edb94144;
-      --ring-bar: #f8c944;
-      --ring-bg: #ede6d5;
-      --ring-card: #fffde7;
-      --ring-txt: #55513a;
-      --ring-inscription: #c4a24a;
-      --progress-radius: 13px;
-      --silver: #b6b3a5;
-      --box-margin: 2.2em;
+      --silver: #b3b0aa;
+      --ring-bg: #f9f4e7;
+      --ring-texture: url('https://www.transparenttextures.com/patterns/old-mathematics.png');
+      --ring-shadow: 0 6px 36px #bdab78a5;
     }
     body {
       font-family: 'Inter', sans-serif;
@@ -31,207 +25,233 @@
       background: var(--light-bg);
       color: var(--light-text);
       display: flex; flex-direction: column; align-items: center;
-      transition: background 0.5s, color 0.3s;
+      transition: background 0.3s, color 0.3s;
     }
     .container {
       background: var(--light-card);
-      box-shadow: var(--light-shadow);
+      box-shadow: 0 4px 32px #0002;
       border-radius: 22px;
-      max-width: 500px;
-      width: 98vw;
-      margin: 3vw 0 16vw 0;
-      padding: 2em 1.2em 2.5em 1.2em;
-      transition: background 0.4s;
-      position: relative; min-width: 0;
-      z-index: 1;
+      max-width: 490px; width: 98vw;
+      margin: 2.2vw 0 14vw 0;
+      padding: 1.8em 1.3em 2.8em 1.3em;
+      position: relative;
+      min-width: 0;
+      transition: background 0.3s;
     }
-    /* Modern theme switch */
+    h1 {
+      font-family: 'Ringbearer', 'Inter', serif;
+      font-size: 2.2rem;
+      letter-spacing: 2px;
+      margin-bottom: 0.4em;
+      margin-top: 0.4em;
+      text-align: left;
+      color: var(--light-accent);
+      transition: color 0.3s, text-shadow 0.3s;
+      user-select: none;
+    }
     .theme-toggle {
-      position: fixed;
-      top: 1.2em;
-      right: 1.2em;
-      z-index: 1002;
-      display: flex;
-      gap: 0.7em;
-      background: rgba(255,255,255,0.75);
-      padding: 0.35em 1.3em 0.35em 1em;
-      border-radius: 19px;
-      box-shadow: 0 2px 10px #0002;
-      align-items: center;
+      position: absolute;
+      right: 22px; top: 19px;
+      display: flex; gap: 12px; z-index: 9;
     }
     .theme-btn {
-      background: none;
+      background: var(--light-bar);
       border: none;
       border-radius: 18px;
-      font-size: 1.13rem;
+      padding: 6px 20px;
+      font-size: 1.06rem;
       color: var(--light-accent);
-      font-weight: 800;
-      padding: 0.18em 1.1em;
+      font-weight: 700;
       cursor: pointer;
+      margin-left: 0px;
+      box-shadow: 0 2px 7px #0001;
       transition: background 0.2s, color 0.2s;
-      letter-spacing: 0.2px;
     }
     .theme-btn.active, .theme-btn:focus {
       background: var(--gold);
       color: #3b2e08;
       outline: none;
     }
-    /* Title */
-    h1 {
-      font-family: 'Ringbearer', 'Inter', serif;
-      font-size: 2.2rem;
-      letter-spacing: 2.3px;
-      margin-bottom: 1.05em;
-      margin-top: 1.4em;
-      text-align: center;
-      color: var(--silver);
-      text-shadow: 0 2px 14px #b4b4b499, 0 1px 8px #fff4;
-      user-select: none;
-    }
-    .ringmode h1 {
-      color: var(--gold);
-      text-shadow: 0 2px 15px #a5916e99, 0 1px 10px #beac6c;
-    }
-    /* Tabs */
     .tab-row {
       display: flex; justify-content: center;
-      gap: 10px; margin: 0 0 1.5em 0;
+      gap: 16px; margin: 0 0 1.7em 0;
     }
     .tab-btn {
-      background: #eceefe; color: #4a6fba;
-      border: none; border-radius: 10px 10px 0 0;
-      padding: 9px 32px; font-weight: 700; font-size: 1.07em;
-      cursor: pointer; box-shadow: 0 2px 8px #0001;
-      transition: background 0.18s, color 0.18s;
+      background: #eceefe; color: #4275ba;
+      border: none; border-radius: 12px 12px 0 0;
+      padding: 10px 33px; font-weight: 700; font-size: 1.08em;
+      cursor: pointer; box-shadow: 0 2px 7px #0001;
+      transition: background 0.17s, color 0.17s;
     }
     .tab-btn.active, .tab-btn:focus {
       background: var(--light-accent);
       color: #fff;
     }
-    .ringmode .tab-btn {
-      background: #f5ecd1;
-      color: #947f45;
-    }
-    .ringmode .tab-btn.active { background: var(--gold); color: #6e5821; }
-    /* Macro goal line */
     .goal-line {
-      font-size: 1.15em;
-      color: #47413e;
-      background: #f4f0e0;
-      border-radius: 13px;
-      margin: 0 auto var(--box-margin) auto;
-      text-align: center;
-      padding: 0.4em 1.3em;
-      font-weight: 600;
-      letter-spacing: 0.7px;
-      display: flex; justify-content: center; gap: 2.5em; flex-wrap: wrap;
-      max-width: 98vw; white-space: nowrap;
+      font-size: 1.11em; color: #4c4c4c; background: #f6f6fa;
+      border-radius: 9px; margin: 0 auto 1.3em auto; text-align: center;
+      padding: 0.38em 1.2em; font-weight: 500; letter-spacing: 0.7px;
+      display: flex; justify-content: center; gap: 1.9em; flex-wrap: wrap;
+      max-width: 99vw; white-space: nowrap;
     }
-    .goal-line span { font-weight: 800; letter-spacing: 0.2px; padding: 0 5px; }
+    .goal-line span { font-weight: 700; letter-spacing: 0.2px; padding: 0 2px; }
     .goal-macro-p { color: #49a858; }
     .goal-macro-c { color: #3677c6; }
     .goal-macro-f { color: #e8a200; }
     .goal-macro-cal { color: #d4b117; }
     /* Progress bars */
-    .macro-bars { margin-bottom: var(--box-margin); margin-top: var(--box-margin); display: flex; flex-direction: column; gap: 0.7em;}
-    .macro-bar-outer { background: var(--light-bar); border-radius: var(--progress-radius); overflow: hidden; position: relative; height: 31px; margin: 0 0.1em;}
-    .macro-bar-inner { height: 100%; display: flex; align-items: center; font-weight: 700; font-size: 1.09em; justify-content: flex-start; padding-left: 18px; border-radius: var(--progress-radius); transition: width 0.55s cubic-bezier(.35,1.65,.6,1.1); color: #fff; letter-spacing: 0.5px; text-shadow: 0 1px 10px #0004; white-space: nowrap; position: relative;}
-    .bar-cal { background: linear-gradient(90deg,#fbe62c,#e2bb0e); color: #735900; }
+    .macro-bars { margin-bottom: 1.2em; margin-top: 0.8em; display: flex; flex-direction: column; gap: 1em;}
+    .macro-bar-outer { background: var(--light-bar); border-radius: 17px; overflow: hidden; position: relative; height: 36px; margin: 0 0.1em;}
+    .macro-bar-inner { height: 100%; display: flex; align-items: center; font-weight: 600; font-size: 1.18em; justify-content: flex-start; padding-left: 17px; border-radius: 17px; transition: width 0.45s cubic-bezier(.35,1.65,.6,1.1); color: #fff; letter-spacing: 0.5px; text-shadow: 0 1px 8px #0004; white-space: nowrap; position: relative;}
+    .bar-cal { background: linear-gradient(90deg,#fbe62c,#f5c80f); color: #735900; }
     .bar-p { background: linear-gradient(90deg,#51c16e,#379956); }
     .bar-c { background: linear-gradient(90deg,#61aaff,#396ebb); }
     .bar-f { background: linear-gradient(90deg,#f5a94d,#d1850b); }
-    .macro-bar-label { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); color: #fff; font-size: 1em; font-weight: 800; text-shadow: 0 1px 7px #0006; width: 100%; text-align: center; pointer-events: none; letter-spacing: 0.6px; z-index: 2;}
+    .macro-bar-label { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); color: #fff; font-size: 1.09em; font-weight: 700; text-shadow: 0 1px 4px #0006; width: 100%; text-align: center; pointer-events: none; letter-spacing: 0.5px; z-index: 2;}
     /* Meal log table */
-    .meal-log-table { width: 100%; margin-bottom: 0.7em; border-collapse: collapse; font-size: 1.09em; background: #fff; border-radius: 15px; box-shadow: 0 2px 12px #0001; overflow-x: auto;}
-    .meal-log-table th, .meal-log-table td { padding: 10px 8px; border: none; text-align: center; white-space: nowrap;}
-    .meal-log-table th { background: #f9f4e2; color: #947f45; font-weight: 800;}
-    .meal-log-table tbody tr:nth-child(even) { background: #f6f1e6;}
+    .meal-log-table { width: 100%; margin-bottom: 0.9em; border-collapse: collapse; font-size: 1.13em; background: #fff; border-radius: 14px; box-shadow: 0 1px 8px #0001; overflow-x: auto;}
+    .meal-log-table th, .meal-log-table td { padding: 10px 10px; border: none; text-align: center; white-space: nowrap;}
+    .meal-log-table th { background: #f2f6fc; color: #5179c2; font-weight: 700;}
+    .meal-log-table tbody tr:nth-child(even) { background: #f7faff;}
     /* Export buttons */
-    .export-row { display: flex; gap: 1.3em; justify-content: flex-end; margin-bottom: 0.6em;}
-    .export-btn { background: #ece1be; color: #947f45; font-size: 1.03em; padding: 7px 21px; border-radius: 9px; border: none; font-weight: 800; cursor: pointer; margin: 0; box-shadow: 0 2px 7px #0001; transition: background 0.13s, color 0.13s;}
-    .export-btn:hover, .export-btn:focus { background: #fbe62c; color: #65530f;}
-    /* Streak ring area */
-    .streak-ring-wrap { margin: 0 auto; margin-top: 1.5em; width: 148px; height: 148px; display: flex; align-items: center; justify-content: center; position: relative; transition: filter 0.3s;}
-    .streak-center-label { position: absolute; left: 50%; top: 52%; transform: translate(-50%,-50%); width: 92px; text-align: center; color: #947f45; font-family: 'Ringbearer', 'Inter', serif; font-size: 1.22em; line-height: 1.14; font-weight: 800; text-shadow: 0 0 13px #edb941c5, 0 1px 2px #000c; pointer-events: none;}
-    .streak-week-phrase { margin-top: 18px; color: #947f45; font-family: 'Ringbearer','Inter',serif; font-size: 1.1em; text-align: center; width: 96%; filter: brightness(1.04) blur(0.1px); text-shadow: 0 0 9px #edb94199, 0 1px 7px #fff6; pointer-events: none;}
+    .export-row { display: flex; gap: 1.3em; justify-content: flex-end; margin-bottom: 0.9em;}
+    .export-btn { background: #e9eef6; color: #2b78e4; font-size: 1.06em; padding: 7px 22px; border-radius: 10px; border: none; font-weight: 700; cursor: pointer; margin: 0; box-shadow: 0 1px 3px #0001; transition: background 0.13s, color 0.13s;}
+    .export-btn:hover, .export-btn:focus { background: #d6eaff; color: #0c51a4;}
+    /* Streak bar */
+    .streak-bar-wrap { width: 100%; max-width: 410px; margin: 2.1em auto 1em auto; background: #d6eaff; border-radius: 16px; box-shadow: 0 1px 4px #0001; padding: 0.8em 0.7em; font-size: 1.14em; color: #2b78e4; font-weight: 700; letter-spacing: 1px; display: flex; align-items: center; gap: 12px; justify-content: center;}
+    .streak-bar-value { background: #2b78e4; color: #fff; border-radius: 12px; padding: 2.5px 13px; margin: 0 8px; font-size: 1em; font-weight: 700; box-shadow: 0 2px 6px #2b78e411;}
+    /* Quote */
+    .quote-box {
+      font-family: 'Ringbearer', 'Inter', serif;
+      font-size: 1.11em;
+      color: #a07d0e;
+      text-shadow: 0 1px 7px #fbe62c33, 0 2px 6px #33230c33;
+      margin: 0.7em 0 1.7em 0;
+      text-align: center;
+      min-height: 42px;
+      letter-spacing: 0.5px;
+      line-height: 1.4;
+    }
+    /* Inputs */
+    .add-meal-row, .macro-input-row {
+      display: flex; gap: 1.2em; flex-wrap: wrap; justify-content: center; margin-bottom: 1.5em; margin-top: 0.3em;
+    }
+    .meal-name-input, .meal-amt-input, .macro-input {
+      font-size: 1.09em; border-radius: 11px; padding: 11px 12px; border: 1.5px solid #c0c9db; outline: none; background: #f7fafc; color: #252525; box-shadow: 0 1px 2px #c7e3fa11; transition: border 0.16s; margin-bottom: 0;
+      min-width: 106px; max-width: 155px;
+    }
+    .meal-name-input:focus, .meal-amt-input:focus, .macro-input:focus { border: 1.5px solid #49a858; }
+    .add-meal-btn, .scan-btn {
+      background: #2b78e4; color: #fff; border: none; border-radius: 11px; font-weight: 700;
+      padding: 11px 22px; font-size: 1.09em; cursor: pointer; margin-left: 0px; box-shadow: 0 2px 6px #0002;
+      transition: background 0.16s, color 0.16s;
+      display: flex; align-items: center; gap: 0.7em;
+    }
+    .add-meal-btn:hover, .add-meal-btn:focus, .scan-btn:hover, .scan-btn:focus { background: #49a858; color: #fff;}
+    .scan-btn { background: #fbe62c; color: #382a00; font-weight: 800; padding: 11px 13px;}
+    .scan-btn svg {width:1.3em;height:1.3em;vertical-align:middle;}
     /* Toast popup */
     .toast {
-      position: fixed; left: 50%; bottom: 36px; transform: translateX(-50%);
-      background: #fffbe0; color: #947f45;
-      padding: 11px 28px; border-radius: 22px;
-      box-shadow: 0 5px 22px #0005; font-size: 1.1em; font-weight: 700;
+      position: fixed; left: 50%; bottom: 44px; transform: translateX(-50%);
+      background: #fffbe0; color: #2b78e4;
+      padding: 14px 34px; border-radius: 24px;
+      box-shadow: 0 5px 22px #0006; font-size: 1.08em; font-weight: 700;
       opacity: 0.97; z-index: 999; pointer-events: none; animation: fadeToast 2.2s linear;
     }
     @keyframes fadeToast {
-      0%{opacity:0;} 10%{opacity:1;} 85%{opacity:0.98;} 100%{opacity:0;}
+      0%{opacity:0;}
+      10%{opacity:1;}
+      85%{opacity:0.98;}
+      100%{opacity:0;}
     }
-    /* Inputs */
-    .macro-input-row { display: flex; gap: 0.8em; flex-wrap: wrap; justify-content: center; margin-bottom: 1.2em;}
-    .macro-input { flex: 1 1 44%; min-width: 97px; max-width: 132px; font-size: 1.08em; padding: 13px 9px; margin: 0 0 8px 0; border-radius: 12px; border: 1.3px solid #d2c8ae; background: #f6f2e6; color: #36392e; box-shadow: 0 2px 8px #d1c69c17; outline: none; transition: border 0.16s;}
-    .macro-input:focus { border: 1.3px solid #947f45; }
-    /* Add meal row */
-    .add-meal-row { display: flex; gap: 0.6em; flex-wrap: wrap; margin-bottom: 1.3em; justify-content: center; align-items: flex-end;}
-    .meal-name-input, .meal-amt-input { font-size: 1.04em; border-radius: 7px; padding: 9px 9px; border: 1.2px solid #d2c8ae; outline: none; background: #f6f2e6; color: #252525; box-shadow: 0 2px 7px #d1c69c11; transition: border 0.14s;}
-    .meal-name-input:focus, .meal-amt-input:focus { border: 1.3px solid #947f45; }
-    .add-meal-btn, .scan-btn {
-      background: #fbe62c; color: #947f45; border: none; border-radius: 8px; font-weight: 800;
-      padding: 11px 19px; font-size: 1.06em; cursor: pointer; margin-left: 4px; box-shadow: 0 2px 9px #947f4512;
-      transition: background 0.14s, color 0.14s;
-      display: flex; align-items: center; gap: 0.5em;
+    /* Barcode video overlay */
+    #barcodeVideo {
+      position: fixed; left:0; top:0; width: 100vw; height: 100vh; object-fit:cover; z-index: 9998; background:#000f;
+      display: none;
     }
-    .add-meal-btn:hover, .add-meal-btn:focus,
-    .scan-btn:hover, .scan-btn:focus { background: #947f45; color: #fff;}
-    .scan-btn { background: #fbe62c; color: #947f45; font-weight: 900; padding: 10px 13px;}
-    .scan-btn svg {width:1.4em;height:1.4em;vertical-align:middle;}
-    /* Responsive spacing / safe zones */
-    @media (max-width: 600px) {
-      .container { padding: 1.1em 3vw 2.1em 3vw; border-radius: 16px; }
-      h1 { font-size: 1.08rem; margin-top: 2.2em; }
-      .goal-line { font-size: 0.99em; gap: 0.8em; margin-bottom: 1.1em;}
-      .macro-bar-inner, .macro-bar-label { font-size: 0.93em;}
-      .streak-ring-wrap { width: 93vw; height: 93vw; max-width: 150px; max-height: 150px;}
-      .streak-center-label { width: 60vw; max-width: 110px; font-size: 1em;}
-      .streak-week-phrase { font-size: 0.95em; width: 89vw; max-width: 120px;}
-      .tab-row { gap: 3px; }
-      .theme-toggle { top: 0.6em; right: 1vw; }
-      .meal-log-table { font-size: 0.93em; }
+    #barcodeOverlay {
+      position:fixed;left:0;top:0;width:100vw;height:100vh;z-index:9999;pointer-events:none;display:none;
     }
-    /* Ring Mode Textured BG */
-    .ringmode {
-      background: url('https://www.transparenttextures.com/patterns/old-mathematics.png'), url('https://i.ibb.co/4t7jNHV/parchment-LOTR-map2.jpg') center center/cover repeat fixed !important;
-      color: var(--ring-txt) !important;
+    #barcodeOverlay::after {
+      content:''; display:block; position:absolute;left:0;top:0;width:100vw;height:100vh;
+      background:radial-gradient(ellipse at center,#fff0 60%,#000c 100%);
+      pointer-events:none;
+    }
+    #barcodeCancelBtn {
+      position:fixed;top:18px;right:31px;z-index:10000;background:#fbe62c;color:#382a00;border:none;border-radius:12px;padding:12px 23px;font-size:1.12em;font-weight:800;box-shadow:0 2px 12px #0009;cursor:pointer;
+      display:none;
+    }
+    @media (max-width: 650px) {
+      .container { padding: 1.2em 2vw 2.5em 2vw; border-radius: 0; }
+      h1 { font-size: 1.29rem; }
+      .goal-line { font-size: 0.97em; gap: 0.7em;}
+      .macro-bar-inner, .macro-bar-label { font-size: 1em;}
+      .streak-bar-wrap { font-size: 1.03em; }
+      .export-row { gap: 0.5em; }
+      .meal-log-table th, .meal-log-table td { padding: 7px 6px; }
+      .macro-bars { gap: 0.6em; }
+    }
+    @media (max-width: 460px) {
+      .container { padding: 0.4em 1vw 2em 1vw; border-radius: 0; }
+      h1 { font-size: 1.05rem; margin-top: 0.7em;}
+      .goal-line { font-size: 0.89em; gap: 0.4em;}
+      .macro-bar-inner, .macro-bar-label { font-size: 0.92em;}
+      .tab-row { gap: 6px; }
+      .add-meal-row, .macro-input-row { gap: 0.35em;}
+    }
+    /* RING MODE */
+    .ringmode body, .ringmode {
+      background: var(--ring-bg) !important;
+      color: #54491d !important;
+      transition: background 0.4s, color 0.3s;
     }
     .ringmode .container {
-      background: rgba(255, 253, 225, 0.94) !important;
-      color: #947f45 !important;
-      box-shadow: 0 4px 32px #947f4577;
-      border: 2.5px solid #e3ce9e;
-      backdrop-filter: blur(1.3px);
+      background: rgba(255,255,255,0.88) !important;
+      color: #44431d !important;
+      box-shadow: var(--ring-shadow);
+      background-image: var(--ring-texture);
+      background-repeat: repeat;
+      background-size: auto;
+      border: 2px solid #d1c495;
     }
+    .ringmode h1 {
+      color: #a07d0e;
+      text-shadow: 0 2px 14px #edb94199;
+      font-family: 'Ringbearer', 'Inter', serif;
+      letter-spacing: 2px;
+    }
+    .ringmode .tab-btn { background: #ebe3b9; color: #7d6b2d;}
+    .ringmode .tab-btn.active { background: #c2b282; color: #32280e; }
     .ringmode .goal-line, .ringmode .meal-log-table th, .ringmode .macro-bar-label {
-      background: #f8f1ce !important;
-      color: #947f45 !important;
+      background: #ede3c6 !important;
+      color: #a07d0e !important;
     }
-    .ringmode .macro-bar-outer { background: #f1d7a0 !important; }
-    .ringmode .bar-cal { background: linear-gradient(90deg,#fbe62c,#b89e3a) !important; color: #6e591c;}
-    .ringmode .bar-p { background: linear-gradient(90deg,#7dc271,#3b7f2d);}
-    .ringmode .bar-c { background: linear-gradient(90deg,#5ba4fa,#30426e);}
-    .ringmode .bar-f { background: linear-gradient(90deg,#f5a94d,#ad7a1d);}
-    .ringmode .macro-bar-label { color: #fff9db !important;}
-    .ringmode .meal-log-table th { color: #947f45;}
-    .ringmode .meal-log-table { background: #fffbe9; }
-    .ringmode .meal-log-table td { color: #947f45;}
-    .ringmode .export-btn { background: #efe3b6; color: #947f45;}
-    .ringmode .theme-btn { background: #fbe62c; color: #947f45;}
-    .ringmode .theme-btn.active { background: #fff; color: #a28907;}
+    .ringmode .macro-bar-outer { background: #dbcd98 !important; }
+    .ringmode .bar-cal { background: linear-gradient(90deg,#e0d9bb,#a07d0e) !important; color: #5d4b04;}
+    .ringmode .bar-p { background: linear-gradient(90deg,#bbb383,#837d3b);}
+    .ringmode .bar-c { background: linear-gradient(90deg,#d7d1b5,#585237);}
+    .ringmode .bar-f { background: linear-gradient(90deg,#ccb67a,#6d5e30);}
+    .ringmode .macro-bar-label { color: #6b5b22 !important;}
+    .ringmode .streak-bar-wrap { background: #ebe3b9 !important; color: #a07d0e !important;}
+    .ringmode .export-btn { background: #ebe3b9; color: #7d6b2d;}
+    .ringmode .theme-btn { background: #c2b282; color: #32280e;}
+    .ringmode .theme-btn.active { background: #fff; color: #a07d0e;}
+    .ringmode .meal-log-table th { color: #a07d0e;}
+    .ringmode .meal-log-table { background: #f6eed7; }
+    .ringmode .meal-log-table td { color: #7d6b2d;}
+    .ringmode .quote-box { color: #b59b36; text-shadow: 0 1px 8px #e0dca7, 0 2px 8px #b8a867;}
+    .ringmode .add-meal-btn { background: #a07d0e; color: #fff; }
+    .ringmode .add-meal-btn:hover, .ringmode .add-meal-btn:focus { background: #bba74a; color: #2a230b;}
+    .ringmode .scan-btn { background: #bba74a; color: #2a230b;}
+    .ringmode .scan-btn:hover, .ringmode .scan-btn:focus { background: #a07d0e; color: #fff;}
   </style>
 </head>
 <body>
-  <div class="theme-toggle">
-    <button class="theme-btn active" id="appleLightBtn" onclick="setTheme('light')">Apple Light</button>
-    <button class="theme-btn" id="ringModeBtn" onclick="setTheme('ring')">Ring Mode</button>
-  </div>
   <div class="container" id="macroLegendContainer">
+    <div class="theme-toggle">
+      <button class="theme-btn active" id="appleLightBtn" onclick="setTheme('light')">Light</button>
+      <button class="theme-btn" id="ringModeBtn" onclick="setTheme('ring')">Ring</button>
+    </div>
     <h1>MacroLegend</h1>
     <div class="tab-row">
       <button class="tab-btn active" id="tabCalc" onclick="showTab('calc')">Calculator</button>
@@ -247,7 +267,7 @@
   </div>
   <script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2@1.2.6/dist/quagga.min.js"></script>
   <script>
-    // --- Quotes ---
+    // ========== QUOTES ==========
     const lotrQuotes = [
       "Even the smallest person can change the course of the future.",
       "Not all those who wander are lost.",
@@ -302,62 +322,63 @@
       "The fire of your heart outshines the darkness.",
       "May your path be green and the breeze on your back.",
       "Streaks are for heroes. Today you are legend.",
-      "Let the courage of the Eldar guide you.",
+      "Let the courage of the Eldar guide you."
     ];
     const genericQuotes = [
-      "Success is the sum of small efforts, repeated.",
-      "You are what you do, not what you say you'll do.",
+      "You are stronger than you think.",
+      "One step at a time is progress.",
+      "The journey of a thousand miles begins with a single step.",
+      "Consistency beats motivation.",
       "Progress, not perfection.",
-      "A year from now you’ll wish you started today.",
-      "Don't count the days, make the days count.",
-      "Start where you are. Use what you have. Do what you can.",
-      "Little by little, one travels far.",
-      "Strength grows in the moments when you think you can't go on but you keep going.",
-      "The secret of getting ahead is getting started.",
-      "Fall seven times, stand up eight.",
-      "Push yourself, because no one else is going to do it for you.",
-      "Don't stop until you're proud.",
-      "Discipline is choosing between what you want now and what you want most.",
-      "A journey of a thousand miles begins with a single step.",
-      "The only bad workout is the one you didn’t do.",
-      "You miss 100% of the shots you don't take.",
-      "Action is the foundational key to all success.",
-      "Every accomplishment starts with the decision to try.",
-      "Keep going. Everything you need will come to you.",
-      "Do it for the ‘holy shit, you got hot’ comments.",
-      "You don’t have to be extreme, just consistent.",
-      "You didn’t come this far only to come this far.",
-      "Dream big. Start small. Act now.",
-      "Let’s get after it!",
-      "Sweat is fat crying.",
-      "A little progress each day adds up to big results.",
-      "Wake up. Kick ass. Repeat.",
-      "Nothing worth having comes easy.",
-      "Stop wishing. Start doing.",
-      "You are your only limit.",
-      "Great things never come from comfort zones.",
+      "Stay focused on your goals.",
+      "Today is another chance.",
       "You got this.",
-      "Progress is progress, no matter how small.",
+      "Hard work pays off.",
+      "Little by little, a little becomes a lot.",
+      "Every choice matters.",
+      "Keep moving forward.",
+      "Small wins count.",
+      "The only bad workout is the one you didn’t do.",
+      "Fuel your progress.",
+      "Results happen over time.",
+      "Patience builds progress.",
+      "Every day is a fresh start.",
+      "Commit to be fit.",
+      "Strong mind, strong body.",
+      "It’s never too late to start.",
+      "Your future self will thank you.",
+      "Discipline equals freedom.",
+      "Better than yesterday.",
+      "Finish strong.",
+      "Push through.",
+      "Motivation is what gets you started. Habit is what keeps you going.",
+      "You don’t have to go fast, you just have to go.",
+      "Sweat now, shine later.",
+      "Small changes add up.",
+      "Health is wealth.",
+      "The pain you feel today will be the strength you feel tomorrow.",
+      "Keep your head up.",
+      "The harder you work for something, the greater you’ll feel when you achieve it.",
+      "Don’t wish for it, work for it.",
+      "Don’t stop when you’re tired. Stop when you’re done.",
+      "Make it happen.",
+      "Fall down seven times, stand up eight.",
+      "Dream big, work hard.",
+      "You don’t find willpower, you create it.",
+      "What seems impossible today will one day become your warm-up.",
+      "Strong is what happens when you run out of weak.",
+      "Be the best version of you.",
+      "Your body can stand almost anything. It’s your mind that you have to convince.",
+      "It always seems impossible until it’s done.",
+      "The secret of getting ahead is getting started.",
+      "The difference between try and triumph is a little ‘umph’.",
+      "Every accomplishment starts with the decision to try.",
       "One workout at a time.",
-      "Never give up on a dream just because of the time it will take.",
-      "When you feel like quitting, think about why you started.",
-      "Excuses don’t burn calories.",
-      "Train like a beast, look like a beauty.",
-      "Keep going.",
-      "Trust the process.",
-      "It never gets easier, you just get stronger.",
-      "Fit is not a destination, it’s a way of life.",
-      "Go the extra mile, it’s never crowded.",
-      "Doubt kills more dreams than failure ever will.",
-      "Sweat, smile, repeat.",
-      "Make yourself proud.",
-      "Be stronger than your excuses.",
-      "Pain is temporary, pride is forever.",
-      "Rise and grind.",
-      "You can and you will.",
-      "Nothing changes if nothing changes.",
+      "Success is not for the chosen few, it’s for the few who choose.",
+      "Your only limit is you.",
+      "Keep going, you are getting there."
     ];
-    // --- State ---
+    // ========== STATE ==========
     let macroGoals = {calories: 2000, protein: 150, carbs: 200, fat: 70};
     let macroTotals = {calories: 0, protein: 0, carbs: 0, fat: 0};
     let mealLog = [];
@@ -367,7 +388,7 @@
       if (localStorage.getItem('mealLog')) mealLog = JSON.parse(localStorage.getItem('mealLog'));
       if (localStorage.getItem('streak')) streak = JSON.parse(localStorage.getItem('streak'));
     } catch (e) {}
-    // --- THEME ---
+    // ========== THEME ==========
     function setTheme(theme) {
       const body = document.body;
       const cont = document.getElementById('macroLegendContainer');
@@ -376,17 +397,18 @@
         cont.classList.add('ringmode');
         document.getElementById('appleLightBtn').classList.remove('active');
         document.getElementById('ringModeBtn').classList.add('active');
-        renderStreak();
+        document.body.style.background = "var(--ring-bg)";
       } else {
         body.classList.remove('ringmode');
         cont.classList.remove('ringmode');
         document.getElementById('appleLightBtn').classList.add('active');
         document.getElementById('ringModeBtn').classList.remove('active');
-        renderStreak();
+        document.body.style.background = "var(--light-bg)";
       }
+      renderStreak();
     }
     setTheme('light');
-    // --- TABS ---
+    // ========== TAB SYSTEM ==========
     function showTab(tab) {
       document.getElementById('tabCalc').classList.remove('active');
       document.getElementById('tabProg').classList.remove('active');
@@ -398,7 +420,7 @@
       if (tab === 'calc') renderCalculatorTab();
       else renderProgressionTab();
     }
-    // --- MACRO CALCULATOR TAB ---
+    // ========== MACRO CALCULATOR TAB ==========
     function renderCalculatorTab() {
       document.getElementById('tabArea').innerHTML = `
       <form onsubmit="setGoalsFromInputs(event)" class="macro-input-row">
@@ -421,18 +443,18 @@
           <option value="lose">Lose Weight</option>
           <option value="gain">Gain Weight</option>
         </select>
-        <button class="add-meal-btn" style="min-width:99px" type="submit">Set Macros</button>
+        <button class="add-meal-btn" style="min-width:120px" type="submit">Set Macros</button>
       </form>
-      <div style="color:#99824b; font-size:0.96em;text-align:center; margin-bottom:1.2em">
+      <div style="color:#687; font-size:1.07em;text-align:center; margin-bottom:1.4em">
         Use the calculator to estimate daily calorie/macros.  
-        <br><span style="color:#bda245;font-weight:700;">Your settings transfer to Progression tab instantly.</span>
+        <br><span style="color:#4275ba;font-weight:600;">Your settings transfer to Progression tab instantly.</span>
       </div>
-      <div class="macro-input-row" style="gap:0.4em;">
+      <div class="macro-input-row" style="gap:1.1em;">
         <input class="macro-input" id="goalCalories" type="number" min="0" placeholder="Goal Calories">
         <input class="macro-input" id="goalProtein" type="number" min="0" placeholder="Goal Protein (g)">
         <input class="macro-input" id="goalCarbs" type="number" min="0" placeholder="Goal Carbs (g)">
         <input class="macro-input" id="goalFat" type="number" min="0" placeholder="Goal Fat (g)">
-        <button class="add-meal-btn" style="min-width:97px" onclick="saveGoalInputs()" type="button">Update Goal</button>
+        <button class="add-meal-btn" style="min-width:118px" onclick="saveGoalInputs()" type="button">Update Goal</button>
       </div>
       `;
       document.getElementById('goalCalories').value = macroGoals.calories;
@@ -440,6 +462,7 @@
       document.getElementById('goalCarbs').value = macroGoals.carbs;
       document.getElementById('goalFat').value = macroGoals.fat;
     }
+    // CALCULATOR ACTIONS
     function setGoalsFromInputs(e) {
       e.preventDefault();
       let w = Number(document.getElementById('inputWeight').value);
@@ -471,20 +494,20 @@
       saveData(); renderAll();
       showToast("Macros saved!");
     }
-    // --- PROGRESSION TAB ---
+    // ========== PROGRESSION TAB ==========
     function renderProgressionTab() {
       document.getElementById('tabArea').innerHTML = `
       <div class="goal-line" id="goalLine"></div>
       <div class="macro-bars" id="macroBars"></div>
       <form onsubmit="addMeal(event)" class="add-meal-row">
-        <input class="meal-name-input" id="mealName" placeholder="Food or Meal" autocomplete="off" required list="foodAutocomplete">
+        <input class="meal-name-input" id="mealName" placeholder="Meal name/food" autocomplete="off" list="foodAutocomplete" oninput="smartFoodAutocomplete(event)" onchange="autoFillFoodMacros(event)" required>
         <datalist id="foodAutocomplete"></datalist>
         <input class="meal-amt-input" id="mealCalories" type="number" min="0" placeholder="Calories" required>
         <input class="meal-amt-input" id="mealProtein" type="number" min="0" placeholder="Protein (g)">
         <input class="meal-amt-input" id="mealCarbs" type="number" min="0" placeholder="Carbs (g)">
         <input class="meal-amt-input" id="mealFat" type="number" min="0" placeholder="Fat (g)">
         <button class="add-meal-btn" type="submit">+ Add</button>
-        <button type="button" class="scan-btn" onclick="scanBarcode()" title="Scan barcode for food">
+        <button type="button" class="scan-btn" onclick="scanBarcode()">
           <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="5" height="5"/><rect x="16" y="3" width="5" height="5"/><rect x="3" y="16" width="5" height="5"/><rect x="16" y="16" width="5" height="5"/><path d="M9 5h6M19 9v6M5 9v6M9 19h6"/></svg>
         </button>
       </form>
@@ -495,17 +518,14 @@
         <button class="export-btn" onclick="window.print()">Print / PDF</button>
       </div>
       <div id="streakArea"></div>
+      <div class="quote-box" id="quoteBox"></div>
       `;
       renderGoalLine();
       renderMacroBars();
       renderMealLog();
       renderStreak();
-      // Hook up food autocomplete!
-      const mealInput = document.getElementById('mealName');
-      mealInput.addEventListener('input', smartFoodAutocomplete);
-      mealInput.addEventListener('change', autoFillFoodMacros);
     }
-    // --- MACRO PROGRESS ---
+    // ========== MACRO PROGRESS ========== 
     function renderGoalLine() {
       const {calories, protein, carbs, fat} = macroGoals;
       document.getElementById('goalLine').innerHTML =
@@ -541,7 +561,7 @@
         </div>
       `;
     }
-    // --- MEAL LOG ---
+    // ========== MEAL LOG ========== 
     function addMeal(e) {
       e.preventDefault();
       const name = document.getElementById('mealName').value.trim();
@@ -592,7 +612,7 @@
       renderAll();
       showToast("Meal removed.");
     }
-    // --- MACRO TOTALS ---
+    // ========== MACRO TOTALS ==========
     function updateTotals() {
       macroTotals = {calories:0,protein:0,carbs:0,fat:0};
       mealLog.forEach(m=>{
@@ -602,41 +622,88 @@
         macroTotals.fat += Number(m.fat)||0;
       });
     }
-    // --- SMART FOOD AUTOCOMPLETE ---
-    let lastFoodAutocompleteVal = "";
-    function smartFoodAutocomplete(e) {
-      const input = e.target.value.trim();
-      if (!input || input === lastFoodAutocompleteVal) return;
-      lastFoodAutocompleteVal = input;
-      const datalist = document.getElementById('foodAutocomplete');
-      datalist.innerHTML = '<option>Loading...</option>';
-      fetch(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(input)}&search_simple=1&action=process&json=1&page_size=12`)
-        .then(r=>r.json())
-        .then(data=>{
-          if (!data || !data.products) { datalist.innerHTML = ""; return; }
-          datalist.innerHTML = "";
-          data.products.forEach(p=>{
-            if (!p.product_name) return;
-            datalist.innerHTML += `<option value="${p.product_name.replace(/"/g,"'")}"></option>`;
-          });
-        })
-        .catch(()=>{ datalist.innerHTML = ""; });
+    // ========== STREAK ==========
+    function checkStreak() {
+      const today = new Date();
+      const todayStr = today.toISOString().slice(0,10);
+      if (streak.lastDate !== todayStr) {
+        const yesterday = new Date(today);
+        yesterday.setDate(yesterday.getDate()-1);
+        const ystr = yesterday.toISOString().slice(0,10);
+        if (streak.lastDate === ystr) {
+          streak.days += 1;
+          if (streak.days > streak.best) {
+            streak.best = streak.days;
+            playStreakSound();
+          }
+        } else {
+          streak.days = 1;
+        }
+        streak.lastDate = todayStr;
+        streak.weekPhrase = ((streak.days-1) % lotrQuotes.length);
+        saveData();
+        renderStreak();
+      }
     }
-    function autoFillFoodMacros(e) {
-      const food = e.target.value.trim();
-      if (!food) return;
-      fetch(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(food)}&search_simple=1&action=process&json=1&page_size=1`)
-        .then(r=>r.json())
-        .then(data=>{
-          if (!data.products || !data.products[0] || !data.products[0].nutriments) return;
-          const n = data.products[0].nutriments;
-          document.getElementById('mealCalories').value = Math.round(n['energy-kcal_serving']||n['energy-kcal_100g']||0);
-          document.getElementById('mealProtein').value = Math.round(n['proteins_serving']||n['proteins_100g']||0);
-          document.getElementById('mealCarbs').value = Math.round(n['carbohydrates_serving']||n['carbohydrates_100g']||0);
-          document.getElementById('mealFat').value = Math.round(n['fat_serving']||n['fat_100g']||0);
-        });
+    function renderStreak() {
+      const streakArea = document.getElementById('streakArea');
+      const isRing = document.body.classList.contains('ringmode');
+      let quoteArr = isRing ? lotrQuotes : genericQuotes;
+      let phrase = quoteArr[streak.weekPhrase % quoteArr.length];
+      streakArea.innerHTML = `
+        <div class="streak-bar-wrap">
+          Streak
+          <span class="streak-bar-value">${streak.days}</span>
+          | Best: <span class="streak-bar-value">${streak.best}</span>
+        </div>
+      `;
+      document.getElementById('quoteBox').textContent = `"${phrase}"`;
     }
-    // --- BARCODE SCANNER ---
+    function playStreakSound() {
+      if (document.body.classList.contains('ringmode')) {
+        try {
+          document.getElementById('streakSound').currentTime = 0;
+          document.getElementById('streakSound').play();
+        } catch (e) {}
+      }
+    }
+    // ========== DATA STORAGE ==========
+    function saveData() {
+      localStorage.setItem('macroGoals', JSON.stringify(macroGoals));
+      localStorage.setItem('mealLog', JSON.stringify(mealLog));
+      localStorage.setItem('streak', JSON.stringify(streak));
+    }
+    // ========== EXPORT ==========
+    function exportCSV() {
+      let csv = "Meal,Calories,Protein,Carbs,Fat\n";
+      mealLog.forEach(m=>{
+        csv+=`${m.name},${m.calories},${m.protein},${m.carbs},${m.fat}\n`;
+      });
+      download(csv, "macrolegend.csv");
+    }
+    function exportTXT() {
+      let txt = "MacroLegend Log\n==================\n";
+      mealLog.forEach(m=>{
+        txt+=`${m.name.padEnd(16)} | Cal: ${m.calories} P: ${m.protein} C: ${m.carbs} F: ${m.fat}\n`;
+      });
+      download(txt, "macrolegend.txt");
+    }
+    function download(content, filename) {
+      const a = document.createElement('a');
+      const file = new Blob([content], {type: 'text/plain'});
+      a.href = URL.createObjectURL(file);
+      a.download = filename;
+      a.click();
+      setTimeout(()=>URL.revokeObjectURL(a.href), 800);
+    }
+    // ========== TOAST POPUP ==========
+    function showToast(msg) {
+      const el = document.createElement('div');
+      el.className = 'toast'; el.textContent = msg;
+      document.body.appendChild(el);
+      setTimeout(()=>el.remove(), 2100);
+    }
+    // ========== BARCODE SCANNER ==========
     let scanning = false;
     function scanBarcode() {
       if (scanning) return;
@@ -688,110 +755,56 @@
       scanning = false;
       Quagga.offDetected(barcodeDetected);
     }
-    // --- STREAK ---
-    function checkStreak() {
-      const today = new Date();
-      const todayStr = today.toISOString().slice(0,10);
-      if (streak.lastDate !== todayStr) {
-        const yesterday = new Date(today);
-        yesterday.setDate(yesterday.getDate()-1);
-        const ystr = yesterday.toISOString().slice(0,10);
-        if (streak.lastDate === ystr) {
-          streak.days += 1;
-          if (streak.days > streak.best) {
-            streak.best = streak.days;
-            playStreakSound();
-          }
-        } else {
-          streak.days = 1;
-        }
-        streak.lastDate = todayStr;
-        streak.weekPhrase = ((streak.days-1) % 52);
-        saveData();
-        renderStreak();
-      }
+    // ========== SMART FOOD AUTOCOMPLETE ==========
+    let foodSearchTimeout = null;
+    function smartFoodAutocomplete(e) {
+      clearTimeout(foodSearchTimeout);
+      const q = e.target.value.trim();
+      if (!q || q.length < 2) return;
+      foodSearchTimeout = setTimeout(()=>{
+        fetch(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(q)}&search_simple=1&action=process&json=1&page_size=8`)
+        .then(r=>r.json()).then(data=>{
+          const datalist = document.getElementById('foodAutocomplete');
+          datalist.innerHTML = "";
+          (data.products||[]).forEach(prod=>{
+            let label = prod.product_name || prod.brands || '';
+            if (!label) return;
+            datalist.innerHTML += `<option value="${label}"></option>`;
+          });
+        });
+      }, 350);
     }
-    function renderStreak() {
-      const streakArea = document.getElementById('streakArea');
-      const isRing = document.body.classList.contains('ringmode');
-      const phrase = (isRing ? lotrQuotes : genericQuotes)[streak.weekPhrase % 52];
-      streakArea.innerHTML = `
-        <div class="streak-ring-wrap">
-          <svg class="streak-ring-svg" width="148" height="148" viewBox="0 0 148 148">
-            <defs>
-              <radialGradient id="gold" cx="74" cy="74" r="74" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#fff9c9"/>
-                <stop offset="65%" stop-color="#edb941"/>
-                <stop offset="100%" stop-color="#a28209"/>
-              </radialGradient>
-            </defs>
-            <circle cx="74" cy="74" r="62" fill="url(#gold)" stroke="#d4b117" stroke-width="8"/>
-          </svg>
-          <div class="streak-center-label">
-            Streak<br>
-            <span style="font-size:1.85em;letter-spacing:2px;">${streak.days}</span>
-            <br>Best: <b>${streak.best}</b>
-          </div>
-        </div>
-        <div class="streak-week-phrase">${phrase}</div>
-      `;
-    }
-    function playStreakSound() {
-      if (document.body.classList.contains('ringmode')) {
-        try {
-          document.getElementById('streakSound').currentTime = 0;
-          document.getElementById('streakSound').play();
-        } catch (e) {}
-      }
-    }
-    // --- DATA STORAGE ---
-    function saveData() {
-      localStorage.setItem('macroGoals', JSON.stringify(macroGoals));
-      localStorage.setItem('mealLog', JSON.stringify(mealLog));
-      localStorage.setItem('streak', JSON.stringify(streak));
-    }
-    // --- EXPORT ---
-    function exportCSV() {
-      let csv = "Meal,Calories,Protein,Carbs,Fat\n";
-      mealLog.forEach(m=>{
-        csv+=`${m.name},${m.calories},${m.protein},${m.carbs},${m.fat}\n`;
+    function autoFillFoodMacros(e) {
+      const name = e.target.value.trim();
+      if (!name) return;
+      fetch(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(name)}&search_simple=1&action=process&json=1&page_size=1`)
+      .then(r=>r.json()).then(data=>{
+        if (!data.products || !data.products.length) return;
+        const prod = data.products[0];
+        if (!prod.nutriments) return;
+        let n = prod.nutriments;
+        document.getElementById('mealCalories').value = Math.round(n['energy-kcal_serving']||n['energy-kcal_100g']||0);
+        document.getElementById('mealProtein').value = Math.round(n['proteins_serving']||n['proteins_100g']||0);
+        document.getElementById('mealCarbs').value = Math.round(n['carbohydrates_serving']||n['carbohydrates_100g']||0);
+        document.getElementById('mealFat').value = Math.round(n['fat_serving']||n['fat_100g']||0);
       });
-      download(csv, "macrolegend.csv");
     }
-    function exportTXT() {
-      let txt = "MacroLegend Log\n==================\n";
-      mealLog.forEach(m=>{
-        txt+=`${m.name.padEnd(16)} | Cal: ${m.calories} P: ${m.protein} C: ${m.carbs} F: ${m.fat}\n`;
-      });
-      download(txt, "macrolegend.txt");
-    }
-    function download(content, filename) {
-      const a = document.createElement('a');
-      const file = new Blob([content], {type: 'text/plain'});
-      a.href = URL.createObjectURL(file);
-      a.download = filename;
-      a.click();
-      setTimeout(()=>URL.revokeObjectURL(a.href), 800);
-    }
-    // --- TOAST ---
-    function showToast(msg) {
-      const el = document.createElement('div');
-      el.className = 'toast'; el.textContent = msg;
-      document.body.appendChild(el);
-      setTimeout(()=>el.remove(), 2100);
-    }
-    // --- ALL RENDERS / INIT ---
+    // ========== ALL RENDERS ==========
     function renderAll() {
       updateTotals();
       if (document.getElementById('tabCalc').classList.contains('active')) renderCalculatorTab();
       else renderProgressionTab();
     }
+    // ========== INIT ==========
     renderTab('calc');
+    // Handle tab click logic (because we re-render dom)
     document.getElementById('tabCalc').onclick = ()=>showTab('calc');
     document.getElementById('tabProg').onclick = ()=>showTab('prog');
+    // Theme buttons
     document.getElementById('appleLightBtn').onclick = ()=>setTheme('light');
     document.getElementById('ringModeBtn').onclick = ()=>setTheme('ring');
-    setTimeout(()=>{ renderStreak(); }, 80);
+    // On reload, restore streak UI in the right place
+    setTimeout(()=>{ renderStreak(); }, 100);
   </script>
 </body>
 </html>
