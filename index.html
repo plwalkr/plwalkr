@@ -8,12 +8,19 @@
   <link href="https://fonts.cdnfonts.com/css/ringbearer" rel="stylesheet">
   <style>
     :root {
-      --light-bg: #f6f6fa;
-      --light-card: #fff;
-      --light-text: #1a1a1a;
-      --light-accent: #2b78e4;
-      --light-bar: #d6eaff;
-      --light-shadow: 0 4px 32px #0002;
+      /* SILVER (Light) THEME */
+      --light-bg: #f6f7f9;        /* pale gray */
+      --light-card: #e5e8ee;      /* silver card */
+      --light-text: #272b32;      /* iron gray */
+      --light-accent: #949ca9;    /* deep silver accent */
+      --light-bar: #bfcad9;       /* lighter silver bar */
+      --light-shadow: 0 4px 32px #94a2b919;
+      --button-hover: #b8cdf6;    /* moonlight blue */
+      --tab-bg: #f1f2f6;
+      --tab-active-bg: #949ca9;
+      --tab-active-text: #fff;
+      --ring-silver: #c3c9d5;
+      /* RING MODE COLORS */
       --gold: #fbe62c;
       --ring-shadow: 0 0 18px 6px #edb94144;
       --ring-bar: #f8c944;
@@ -24,8 +31,6 @@
       --ring-card: #382a00;
       --ring-txt: #fbe62c;
       --ring-inscription: #bd8c19;
-      --chart-bar: #2b78e4;
-      --chart-bg: #e5ecfa;
       --progress-radius: 13px;
     }
     body {
@@ -68,7 +73,7 @@
       display: flex; gap: 8px;
     }
     .theme-btn {
-      background: var(--light-bar);
+      background: var(--tab-bg);
       border: none;
       border-radius: 16px;
       padding: 4px 12px;
@@ -81,8 +86,8 @@
       transition: background 0.2s, color 0.2s;
     }
     .theme-btn.active, .theme-btn:focus {
-      background: var(--gold);
-      color: #3b2e08;
+      background: var(--tab-active-bg);
+      color: var(--tab-active-text);
       outline: none;
     }
     /* Tab row */
@@ -91,15 +96,16 @@
       gap: 9px; margin: 0 0 1.4em 0;
     }
     .tab-btn {
-      background: #eceefe; color: #4275ba;
+      background: var(--tab-bg); 
+      color: var(--light-accent);
       border: none; border-radius: 9px 9px 0 0;
       padding: 7px 24px; font-weight: 700; font-size: 1.01em;
       cursor: pointer; box-shadow: 0 2px 7px #0001;
       transition: background 0.17s, color 0.17s;
     }
     .tab-btn.active, .tab-btn:focus {
-      background: var(--light-accent);
-      color: #fff;
+      background: var(--tab-active-bg);
+      color: var(--tab-active-text);
     }
     .ringmode .tab-btn {
       background: #2e2208;
@@ -108,69 +114,69 @@
     .ringmode .tab-btn.active { background: #fbe62c; color: #382a00; }
     /* Macro goal line */
     .goal-line {
-      font-size: 1.07em; color: #4c4c4c; background: #f6f6fa;
+      font-size: 1.07em; color: #43464e; background: #e5e8ee;
       border-radius: 9px; margin: 0 auto 0.8em auto; text-align: center;
       padding: 0.25em 0.9em; font-weight: 500; letter-spacing: 0.5px;
       display: flex; justify-content: center; gap: 1.2em; flex-wrap: wrap;
       max-width: 99vw; white-space: nowrap;
     }
     .goal-line span { font-weight: 700; letter-spacing: 0.2px; padding: 0 2px; }
-    .goal-macro-p { color: #49a858; }
-    .goal-macro-c { color: #3677c6; }
-    .goal-macro-f { color: #e8a200; }
-    .goal-macro-cal { color: #d4b117; }
+    .goal-macro-p { color: #687e7c; }
+    .goal-macro-c { color: #5179c2; }
+    .goal-macro-f { color: #b29456; }
+    .goal-macro-cal { color: #8f95a3; }
     /* Progress bars */
     .macro-bars { margin-bottom: 0.7em; margin-top: 0.5em; display: flex; flex-direction: column; gap: 0.45em;}
     .macro-bar-outer { background: var(--light-bar); border-radius: var(--progress-radius); overflow: hidden; position: relative; height: 28px; margin: 0 0.1em;}
     .macro-bar-inner { height: 100%; display: flex; align-items: center; font-weight: 600; font-size: 1em; justify-content: flex-start; padding-left: 11px; border-radius: var(--progress-radius); transition: width 0.45s cubic-bezier(.35,1.65,.6,1.1); color: #fff; letter-spacing: 0.5px; text-shadow: 0 1px 8px #0004; white-space: nowrap; position: relative;}
-    .bar-cal { background: linear-gradient(90deg,#fbe62c,#f5c80f); color: #735900; }
-    .bar-p { background: linear-gradient(90deg,#51c16e,#379956); }
-    .bar-c { background: linear-gradient(90deg,#61aaff,#396ebb); }
-    .bar-f { background: linear-gradient(90deg,#f5a94d,#d1850b); }
-    .macro-bar-label { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); color: #fff; font-size: 1em; font-weight: 700; text-shadow: 0 1px 4px #0006; width: 100%; text-align: center; pointer-events: none; letter-spacing: 0.5px; z-index: 2;}
+    .bar-cal, .bar-p, .bar-c, .bar-f {
+      background: linear-gradient(90deg, #949ca9 0%, #bfcad9 100%);
+      color: #272b32;
+    }
+    .macro-bar-label { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); color: #272b32; font-size: 1em; font-weight: 700; text-shadow: 0 1px 4px #c3c9d599; width: 100%; text-align: center; pointer-events: none; letter-spacing: 0.5px; z-index: 2;}
     /* Chart area */
-    #macroChart { width: 100% !important; max-width: 98vw; height: 170px; background: #e8f2ff; border-radius: 11px; margin: 0.8em 0 1.6em 0; box-shadow: 0 2px 8px #0002;}
+    #macroChart { width: 100% !important; max-width: 98vw; height: 170px; background: #f1f2f6; border-radius: 11px; margin: 0.8em 0 1.6em 0; box-shadow: 0 2px 8px #949ca933;}
     /* Meal log table */
     .meal-log-table { width: 100%; margin-bottom: 0.6em; border-collapse: collapse; font-size: 1.04em; background: #fff; border-radius: 10px; box-shadow: 0 1px 8px #0001; overflow-x: auto;}
     .meal-log-table th, .meal-log-table td { padding: 5px 6px; border: none; text-align: center; white-space: nowrap; font-size: 0.99em;}
-    .meal-log-table th { background: #f2f6fc; color: #5179c2; font-weight: 700;}
+    .meal-log-table th { background: #e5e8ee; color: #949ca9; font-weight: 700;}
     .meal-log-table tbody tr:nth-child(even) { background: #f7faff;}
     /* Export buttons */
     .export-row { display: flex; gap: 0.8em; justify-content: flex-end; margin-bottom: 0.5em;}
-    .export-btn { background: #e9eef6; color: #2b78e4; font-size: 0.99em; padding: 4px 17px; border-radius: 7px; border: none; font-weight: 700; cursor: pointer; margin: 0; box-shadow: 0 1px 3px #0001; transition: background 0.13s, color 0.13s;}
-    .export-btn:hover, .export-btn:focus { background: #d6eaff; color: #0c51a4;}
+    .export-btn { background: var(--tab-bg); color: var(--light-accent); font-size: 0.99em; padding: 4px 17px; border-radius: 7px; border: none; font-weight: 700; cursor: pointer; margin: 0; box-shadow: 0 1px 3px #949ca91a; transition: background 0.13s, color 0.13s;}
+    .export-btn:hover, .export-btn:focus { background: #dbe3f0; color: #43464e;}
     /* Streak ring area */
     .streak-ring-wrap { margin: 0 auto; margin-top: 2.5em; width: 140px; height: 140px; display: flex; align-items: center; justify-content: center; position: relative; transition: filter 0.3s;}
     .streak-ring-svg { width: 100%; height: 100%; display: block; filter: drop-shadow(var(--ring-shadow)); }
-    .streak-center-label { position: absolute; left: 50%; top: 51%; transform: translate(-50%,-50%); width: 90px; text-align: center; color: var(--ring-txt); font-family: 'Ringbearer', 'Inter', serif; font-size: 1.12em; line-height: 1.14; font-weight: 700; text-shadow: 0 0 11px #edb941c5, 0 1px 2px #000c; pointer-events: none;}
-    .streak-week-phrase { position: absolute; left: 50%; top: 77%; transform: translate(-50%,0); font-family: 'Ringbearer','Inter',serif; color: var(--gold); font-size: 0.99em; text-align: center; width: 135px; filter: brightness(1.05) blur(0.1px); text-shadow: 0 0 10px #edb94188, 0 2px 8px #000a; pointer-events: none;}
+    .streak-center-label { position: absolute; left: 50%; top: 51%; transform: translate(-50%,-50%); width: 90px; text-align: center; color: var(--light-accent); font-family: 'Ringbearer', 'Inter', serif; font-size: 1.12em; line-height: 1.14; font-weight: 700; text-shadow: 0 0 11px #c3c9d5cc, 0 1px 2px #000c; pointer-events: none;}
+    .streak-week-phrase { position: absolute; left: 50%; top: 89%; transform: translate(-50%,0); font-family: 'Ringbearer','Inter',serif; color: var(--light-accent); font-size: 0.97em; text-align: center; width: 135px; filter: brightness(1.05) blur(0.1px); text-shadow: 0 0 10px #c3c9d577, 0 2px 8px #000a; pointer-events: none;}
     /* Minimal streak bar for light mode */
-    .streak-bar-wrap { width: 100%; max-width: 390px; margin: 1.8em auto 0.3em auto; background: #d6eaff; border-radius: 16px; box-shadow: 0 1px 4px #0001; padding: 0.5em 0.7em; font-size: 1.08em; color: #2b78e4; font-weight: 700; letter-spacing: 1px; display: flex; align-items: center; gap: 9px; justify-content: center;}
-    .streak-bar-value { background: #2b78e4; color: #fff; border-radius: 12px; padding: 1.5px 10px; margin: 0 7px; font-size: 1em; font-weight: 700; box-shadow: 0 2px 6px #2b78e411;}
+    .streak-bar-wrap { width: 100%; max-width: 390px; margin: 1.8em auto 0.3em auto; background: #bfcad9; border-radius: 16px; box-shadow: 0 1px 4px #949ca933; padding: 0.5em 0.7em; font-size: 1.08em; color: #43464e; font-weight: 700; letter-spacing: 1px; display: flex; align-items: center; gap: 9px; justify-content: center;}
+    .streak-bar-value { background: #949ca9; color: #fff; border-radius: 12px; padding: 1.5px 10px; margin: 0 7px; font-size: 1em; font-weight: 700; box-shadow: 0 2px 6px #949ca91a;}
     /* Input areas */
     .macro-input-row { display: flex; gap: 0.6em; flex-wrap: wrap; justify-content: center; margin-bottom: 0.4em;}
-    .macro-input { flex: 1 1 41%; min-width: 95px; max-width: 130px; font-size: 1.07em; padding: 7px 6px; margin: 0 0 6px 0; border-radius: 8px; border: 1.2px solid #b6c6e1; background: #f6faff; color: #1a2a2a; box-shadow: 0 2px 5px #b6d4fa11; outline: none; transition: border 0.15s;}
-    .macro-input:focus { border: 1.2px solid #2b78e4; }
+    .macro-input { flex: 1 1 41%; min-width: 95px; max-width: 130px; font-size: 1.07em; padding: 7px 6px; margin: 0 0 6px 0; border-radius: 8px; border: 1.2px solid #bfcad9; background: #f1f2f6; color: #272b32; box-shadow: 0 2px 5px #c3c9d511; outline: none; transition: border 0.15s;}
+    .macro-input:focus { border: 1.2px solid #949ca9; }
     /* Add meal row */
     .add-meal-row { display: flex; gap: 0.5em; flex-wrap: wrap; margin-bottom: 0.6em; justify-content: center; align-items: flex-end;}
-    .meal-name-input, .meal-amt-input { font-size: 1.04em; border-radius: 7px; padding: 7px 7px; border: 1.2px solid #c0c9db; outline: none; background: #f7fafc; color: #252525; box-shadow: 0 1px 2px #c7e3fa11; transition: border 0.16s;}
-    .meal-name-input:focus, .meal-amt-input:focus { border: 1.2px solid #49a858; }
+    .meal-name-input, .meal-amt-input { font-size: 1.04em; border-radius: 7px; padding: 7px 7px; border: 1.2px solid #c3c9d5; outline: none; background: #f7fafc; color: #252525; box-shadow: 0 1px 2px #c3c9d511; transition: border 0.16s;}
+    .meal-name-input:focus, .meal-amt-input:focus { border: 1.2px solid #949ca9; }
     .add-meal-btn, .scan-btn {
-      background: #2b78e4; color: #fff; border: none; border-radius: 8px; font-weight: 700;
-      padding: 7px 18px; font-size: 1em; cursor: pointer; margin-left: 4px; box-shadow: 0 2px 6px #0002;
+      background: #949ca9; color: #fff; border: none; border-radius: 8px; font-weight: 700;
+      padding: 7px 18px; font-size: 1em; cursor: pointer; margin-left: 4px; box-shadow: 0 2px 6px #949ca91a;
       transition: background 0.16s, color 0.16s;
       display: flex; align-items: center; gap: 0.5em;
     }
     .add-meal-btn:hover, .add-meal-btn:focus,
-    .scan-btn:hover, .scan-btn:focus { background: #49a858; color: #fff;}
-    .scan-btn { background: #fbe62c; color: #382a00; font-weight: 800; padding: 7px 9px;}
+    .scan-btn:hover, .scan-btn:focus { background: #bfcad9; color: #272b32;}
+    .scan-btn { background: #c3c9d5; color: #272b32; font-weight: 800; padding: 7px 9px;}
     .scan-btn svg {width:1.4em;height:1.4em;vertical-align:middle;}
     /* Toast popup */
     .toast {
       position: fixed; left: 50%; bottom: 36px; transform: translateX(-50%);
-      background: #fffbe0; color: #2b78e4;
+      background: #e5e8ee; color: #272b32;
       padding: 11px 28px; border-radius: 22px;
-      box-shadow: 0 5px 22px #0006; font-size: 1.08em; font-weight: 700;
+      box-shadow: 0 5px 22px #949ca955; font-size: 1.08em; font-weight: 700;
       opacity: 0.97; z-index: 999; pointer-events: none; animation: fadeToast 2.2s linear;
     }
     @keyframes fadeToast {
@@ -189,11 +195,11 @@
     }
     #barcodeOverlay::after {
       content:''; display:block; position:absolute;left:0;top:0;width:100vw;height:100vh;
-      background:radial-gradient(ellipse at center,#fff0 60%,#000c 100%);
+      background:radial-gradient(ellipse at center,#fff0 60%,#949ca9aa 100%);
       pointer-events:none;
     }
     #barcodeCancelBtn {
-      position:fixed;top:15px;right:24px;z-index:10000;background:#fbe62c;color:#382a00;border:none;border-radius:12px;padding:8px 18px;font-size:1.15em;font-weight:800;box-shadow:0 2px 12px #0009;cursor:pointer;
+      position:fixed;top:15px;right:24px;z-index:10000;background:#bfcad9;color:#272b32;border:none;border-radius:12px;padding:8px 18px;font-size:1.15em;font-weight:800;box-shadow:0 2px 12px #949ca955;cursor:pointer;
       display:none;
     }
     @media (max-width: 500px) {
@@ -206,7 +212,7 @@
       .streak-center-label { width: 61vw; max-width: 112px; font-size: 0.98em;}
       .streak-week-phrase { font-size: 0.92em; width: 90vw; max-width: 145px;}
     }
-    /* Ring Mode! */
+    /* RING MODE (unchanged, still gold/dark) */
     .ringmode body, .ringmode {
       background: var(--ring-bg) !important;
       color: var(--ring-txt) !important;
@@ -238,18 +244,20 @@
     .ringmode .meal-log-table th { color: #edb941;}
     .ringmode .meal-log-table { background: #382a00; }
     .ringmode .meal-log-table td { color: #fbe62c;}
+    .ringmode .streak-center-label { color: #fbe62c; }
+    .ringmode .streak-week-phrase { color: #edb941; text-shadow: 0 0 10px #edb94188, 0 2px 8px #000a; }
   </style>
 </head>
 <body>
   <div class="container" id="macroLegendContainer">
     <div class="theme-toggle">
-      <button class="theme-btn active" id="appleLightBtn" onclick="setTheme('light')">Apple Light</button>
+      <button class="theme-btn active" id="appleLightBtn" onclick="setTheme('light')">Silver Light</button>
       <button class="theme-btn" id="ringModeBtn" onclick="setTheme('ring')">Ring Mode</button>
     </div>
     <h1>MacroLegend</h1>
     <div class="tab-row">
-      <button class="tab-btn active" id="tabCalc" onclick="showTab('calc')">Macro Calculator</button>
-      <button class="tab-btn" id="tabProg" onclick="showTab('prog')">Macro Progression</button>
+      <button class="tab-btn active" id="tabCalc" onclick="showTab('calc')">Calculator</button>
+      <button class="tab-btn" id="tabProg" onclick="showTab('prog')">Progression</button>
     </div>
     <div id="tabArea">
       <!-- Tabs will be filled by JS -->
@@ -264,8 +272,8 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2@1.2.6/dist/quagga.min.js"></script>
   <script>
-    // ========== QUOTE PHRASES ==========
-    const lotrPhrases = [
+    // ========== QUOTES ==========
+    const lotrQuotes = [
       "Even the smallest person can change the course of the future.",
       "Not all those who wander are lost.",
       "The road goes ever on and on.",
@@ -319,60 +327,61 @@
       "The fire of your heart outshines the darkness.",
       "May your path be green and the breeze on your back.",
       "Streaks are for heroes. Today you are legend.",
-      "Let the courage of the Eldar guide you.",
+      "Let the courage of the Eldar guide you."
     ];
-    const genericPhrases = [
-      "Stay hungry. Stay foolish.",
-      "Every day is a new beginning.",
-      "Small steps every day.",
-      "The secret of getting ahead is getting started.",
-      "You are stronger than you think.",
-      "Don’t wish for it, work for it.",
-      "Discipline beats motivation.",
-      "Keep going, you’re getting there.",
-      "Do something today your future self will thank you for.",
-      "Winners are not people who never fail, but people who never quit.",
-      "Great things never came from comfort zones.",
-      "The journey is the reward.",
-      "Success is the sum of small efforts, repeated.",
-      "A little progress each day adds up to big results.",
-      "Consistency is more important than perfection.",
-      "The best time to start was yesterday. The next best is now.",
-      "Dream big. Start small. Act now.",
-      "Today’s struggles are tomorrow’s strengths.",
+    const genericQuotes = [
+      "Strength grows in the moments when you think you can’t go on but you keep going anyway.",
+      "Every legend was once a beginner.",
+      "One step at a time is progress.",
       "Progress, not perfection.",
-      "You’ve got this.",
-      "You only fail when you stop trying.",
-      "Don’t let yesterday take up too much of today.",
-      "Believe in yourself and all that you are.",
-      "Push yourself, no one else is going to do it for you.",
-      "Results happen over time, not overnight.",
-      "Motivation gets you going, habit keeps you growing.",
-      "One day or day one. You decide.",
-      "Don’t be afraid to be a beginner.",
-      "Action is the foundational key to all success.",
-      "It always seems impossible until it’s done.",
-      "You’re not alone in the struggle.",
-      "Make your own luck.",
-      "What you do today can improve all your tomorrows.",
-      "Success doesn’t come from what you do occasionally.",
-      "Impossible is just an opinion.",
-      "The harder you work, the luckier you get.",
+      "Great things are done by a series of small things brought together.",
+      "Small daily improvements are the key to staggering long-term results.",
+      "Discipline is choosing between what you want now and what you want most.",
+      "Your body can stand almost anything. It’s your mind you have to convince.",
+      "Fall down seven times, stand up eight.",
+      "Motivation is what gets you started. Habit is what keeps you going.",
+      "Today’s struggles are tomorrow’s strengths.",
+      "The pain you feel today will be the strength you feel tomorrow.",
+      "Don’t count the days. Make the days count.",
       "You don’t have to be extreme, just consistent.",
-      "Strive for progress, not perfection.",
-      "Energy and persistence conquer all things.",
-      "Start where you are. Use what you have. Do what you can.",
-      "Don’t let what you can’t do interfere with what you can do.",
-      "Keep your face always toward the sunshine.",
-      "Quality is not an act, it is a habit.",
-      "Success is a journey, not a destination.",
-      "Do the work. The results will follow.",
-      "It’s never too late to be what you might have been.",
       "You are your only limit.",
-      "Stay positive, work hard, make it happen.",
-      "No pressure, no diamonds.",
+      "Push yourself, because no one else is going to do it for you.",
+      "Sweat is magic. Cover yourself in it daily.",
+      "Remember why you started.",
+      "Willpower is like a muscle: the more you train it, the stronger it gets.",
+      "Victory is always possible for the person who refuses to stop fighting.",
+      "The hard days are what make you stronger.",
+      "Be legendary, not average.",
+      "The secret to your future is hidden in your daily routine.",
+      "Someday you will thank yourself for not giving up.",
+      "Rise and become the legend you are meant to be.",
+      "Legends are made, not born.",
+      "Every day is a chance to get better.",
+      "Champions keep playing until they get it right.",
+      "Consistency is more important than perfection.",
+      "Don't watch the clock; do what it does. Keep going.",
+      "What seems impossible today will one day become your warm-up.",
+      "Nothing will work unless you do.",
+      "You are stronger than you think.",
+      "Start where you are. Use what you have. Do what you can.",
+      "Success is the sum of small efforts repeated day in and day out.",
+      "Let your hustle be louder than your excuses.",
+      "The only bad workout is the one you didn’t do.",
+      "Your only competition is you.",
       "Progress is progress, no matter how small.",
-      "You didn’t come this far to only come this far."
+      "You don’t have to go fast. You just have to go.",
+      "Stay patient and trust your journey.",
+      "Action is the foundational key to all success.",
+      "If you want it, work for it.",
+      "Dream big. Work hard. Stay focused.",
+      "The journey of a thousand miles begins with a single step.",
+      "Don't stop when you're tired. Stop when you're done.",
+      "Energy and persistence conquer all things.",
+      "Set your goals high, and don't stop till you get there.",
+      "Your future self will thank you for what you do today.",
+      "Become the legend you would look up to.",
+      "Be your own hero.",
+      "What you do today can improve all your tomorrows."
     ];
 
     // ========== STATE ==========
@@ -521,7 +530,7 @@
         <button class="export-btn" onclick="window.print()">Print / PDF</button>
       </div>
       <div id="streakArea"></div>
-      <div id="quoteArea" style="margin-top:1.4em;text-align:center;font-family:'Ringbearer','Inter',serif;font-size:1.02em;"></div>
+      <div id="quoteArea" style="margin-top:2.2em; text-align:center; font-family:'Ringbearer','Inter',serif;font-size:1.11em;font-weight:600; color:#949ca9; text-shadow:0 1px 8px #c3c9d550;"></div>
       `;
       renderGoalLine();
       renderMacroBars();
@@ -531,7 +540,7 @@
       renderQuote();
     }
 
-    // ========== MACRO PROGRESS ========== 
+    // ========== MACRO PROGRESS ==========
     function renderGoalLine() {
       const {calories, protein, carbs, fat} = macroGoals;
       document.getElementById('goalLine').innerHTML =
@@ -644,10 +653,10 @@
               label: 'Current',
               data: [macroTotals.calories, macroTotals.protein, macroTotals.carbs, macroTotals.fat],
               backgroundColor: [
-                'rgba(251,230,44,0.82)',  // Calories: gold
-                'rgba(81,193,110,0.85)',  // Protein: green
-                'rgba(97,170,255,0.85)',  // Carbs: blue
-                'rgba(245,169,77,0.85)'   // Fat: orange
+                'rgba(148,156,169,0.87)',  // Silver
+                'rgba(125,194,113,0.85)',  // Protein: green
+                'rgba(91,164,250,0.82)',   // Carbs: blue
+                'rgba(245,169,77,0.85)'    // Fat: orange
               ],
               borderRadius: 10,
               maxBarThickness: 40,
@@ -656,10 +665,10 @@
               label: 'Goal',
               data: [macroGoals.calories, macroGoals.protein, macroGoals.carbs, macroGoals.fat],
               backgroundColor: [
-                'rgba(251,230,44,0.19)',
-                'rgba(81,193,110,0.18)',
-                'rgba(97,170,255,0.18)',
-                'rgba(245,169,77,0.17)'
+                'rgba(148,156,169,0.22)',
+                'rgba(125,194,113,0.18)',
+                'rgba(91,164,250,0.17)',
+                'rgba(245,169,77,0.15)'
               ],
               borderRadius: 10,
               borderWidth: 0,
@@ -677,7 +686,7 @@
             y: {
               beginAtZero: true,
               ticks: {color: '#888', font: {weight:700}},
-              grid: {color:'#e5ecfa'},
+              grid: {color:'#c3c9d533'},
             }
           }
         }
@@ -733,6 +742,7 @@
             <span style="font-size:1.65em;letter-spacing:2px;">${streak.days}</span>
             <br>Best: <b>${streak.best}</b>
           </div>
+          <div class="streak-week-phrase">${lotrQuotes[streak.weekPhrase % 52]}</div>
         </div>
         `;
       } else {
@@ -745,6 +755,19 @@
         `;
       }
     }
+
+    // ===== QUOTE AREA (below ring streak) =====
+    function renderQuote() {
+      const isRing = document.body.classList.contains('ringmode');
+      const quoteArea = document.getElementById('quoteArea');
+      if (!quoteArea) return;
+      if (isRing) {
+        quoteArea.innerHTML = "";
+      } else {
+        quoteArea.innerHTML = `<span>"${genericQuotes[streak.weekPhrase % genericQuotes.length]}"</span>`;
+      }
+    }
+
     function toElvishInscription(num) {
       const roman = ["","I","II","III","IV","V","VI","VII","VIII","IX","X",
         "XI","XII","XIII","XIV","XV","XVI","XVII","XVIII","XIX","XX",
@@ -761,15 +784,6 @@
           document.getElementById('streakSound').play();
         } catch (e) {}
       }
-    }
-
-    // ========== QUOTE RENDER ==========
-    function renderQuote() {
-      const isRing = document.body.classList.contains('ringmode');
-      let phraseIdx = (streak.weekPhrase || 0) % 52;
-      let phrase = isRing ? lotrPhrases[phraseIdx] : genericPhrases[phraseIdx % genericPhrases.length];
-      document.getElementById('quoteArea').innerHTML =
-        `<span style="color:${isRing ? '#fbe62c' : '#227'};font-weight:600; font-size:1.08em">${phrase}</span>`;
     }
 
     // ========== DATA STORAGE ==========
@@ -881,7 +895,6 @@
     document.getElementById('ringModeBtn').onclick = ()=>setTheme('ring');
     // On reload, restore streak UI in the right place
     setTimeout(()=>{ renderStreak(); renderQuote(); }, 80);
-
   </script>
 </body>
 </html>
