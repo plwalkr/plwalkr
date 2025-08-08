@@ -88,7 +88,10 @@
     .macro-input { font-size: 1.05em; padding: 12px 12px; border-radius: 11px; border: 1.2px solid #b6c6e1; background: #f6faff; color: #1a2a2a; box-shadow: 0 2px 5px #b6d4fa11; outline: none; transition: border .15s; }
     .macro-input:focus { border: 1.2px solid var(--light-accent); }
 
-    .add-meal-row { display: grid; grid-template-columns: 1fr repeat(4, minmax(110px, 1fr)) auto; gap: 10px; align-items: end; margin-bottom: 14px; }
+    .add-meal-row { display: grid; grid-template-columns: 1.2fr repeat(4, minmax(110px, 1fr)) auto; gap: 12px; align-items: end; margin-bottom: 16px; }
+.add-meal-row .meal-name-wrap { grid-column: 1 / span 1; }
+.add-meal-row .add-meal-btn, .add-meal-row .scan-btn { justify-self: stretch; }
+
     .meal-name-wrap { position: relative; }
     .meal-name-input, .meal-amt-input { font-size: 1.03em; border-radius: 10px; padding: 12px 12px; border: 1.2px solid #c0c9db; outline: none; background: #f7fafc; color: #252525; box-shadow: 0 1px 2px #c7e3fa11; transition: border .16s; }
     .meal-name-input:focus, .meal-amt-input:focus { border: 1.2px solid #49a858; }
@@ -147,8 +150,26 @@
     .ringmode .tab-btn.active { background: #fbe62c; color: #382a00; }
 
     /* Responsive */
-    @media (max-width: 600px) {
-      .container { margin: 3vw; border-radius: 16px; padding: 82px 14px 24px 14px; }
+    @media (max-width: 900px) {
+  .container { margin: 3vw; border-radius: 16px; padding: 82px 14px 24px 14px; }
+  header.topbar { padding: 10px 12px; }
+  .theme-btn { padding: 6px 10px; font-size: .9rem; }
+  .tab-row { gap: 6px; }
+  /* Progression inputs: give name full row, wrap numbers nicely */
+  .add-meal-row { grid-template-columns: 1fr 1fr 1fr; }
+  .add-meal-row .meal-name-wrap { grid-column: 1 / -1; }
+  .add-meal-row .add-meal-btn, .add-meal-row .scan-btn { grid-column: span 1; }
+}
+@media (max-width: 620px) {
+  .add-meal-row { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 520px) {
+  .add-meal-row { grid-template-columns: 1fr; }
+  .add-meal-row .add-meal-btn, .add-meal-row .scan-btn { grid-column: 1 / -1; width: 100%; }
+  .meal-amt-input { width: 100%; }
+  .streak-bar-wrap { gap: 8px; }
+  .streak-bar-value { margin: 0 6px; }
+}
       header.topbar { padding: 10px 12px; }
       .theme-btn { padding: 6px 10px; font-size: .9rem; }
       .tab-row { gap: 6px; }
@@ -339,64 +360,108 @@
     // Calculator Tab
     function renderCalculatorTab() {
       document.getElementById('tabArea').innerHTML = `
-      <form onsubmit="setGoalsFromInputs(event)" class="macro-input-row">
-        <input class="macro-input" id="inputWeight" type="number" min="70" placeholder="Weight (lbs)">
-        <input class="macro-input" id="inputHeight" type="number" min="48" placeholder="Height (in)">
-        <input class="macro-input" id="inputAge" type="number" min="8" max="99" placeholder="Age">
-        <select class="macro-input" id="inputGender">
-          <option value="male">Male</option>
-          <option value="female">Female</option>
+      <form onsubmit=\"setGoalsFromInputs(event)\" class=\"macro-input-row\" id=\"calcForm\">
+        <select class=\"macro-input\" id=\"inputFormula\" title=\"Equation\">
+          <option value=\"msj\" selected>Mifflin-St Jeor (modern)</option>
+          <option value=\"hb\">Harris-Benedict (legacy)</option>
+          <option value=\"katch\">Katch-McArdle (needs body fat %) </option>
         </select>
-        <select class="macro-input" id="inputActivity">
-          <option value="1.2">Sedentary (desk job, little exercise)</option>
-          <option value="1.375">Light (1–3 workouts/week)</option>
-          <option value="1.55">Moderate (3–5 workouts/week)</option>
-          <option value="1.725">Active (6–7 workouts/week)</option>
-          <option value="1.9">Very Active (physical job)</option>
+        <input class=\"macro-input\" id=\"inputWeight\" type=\"number\" min=\"70\" placeholder=\"Weight (lbs)\">
+        <input class=\"macro-input\" id=\"inputHeight\" type=\"number\" min=\"48\" placeholder=\"Height (in)\">
+        <input class=\"macro-input\" id=\"inputAge\" type=\"number\" min=\"8\" max=\"99\" placeholder=\"Age\">
+        <select class=\"macro-input\" id=\"inputGender\">
+          <option value=\"male\">Male</option>
+          <option value=\"female\">Female</option>
         </select>
-        <select class="macro-input" id="inputGoal">
-          <option value="maintain">Maintain</option>
-          <option value="lose">Lose Weight</option>
-          <option value="gain">Gain Weight</option>
+        <input class=\"macro-input\" id=\"inputBodyFat\" type=\"number\" min=\"3\" max=\"60\" placeholder=\"Body fat % (Katch only)\" style=\"display:none;\">
+        <select class=\"macro-input\" id=\"inputActivity\">
+          <option value=\"1.2\">Sedentary (desk job, little exercise)</option>
+          <option value=\"1.375\">Light (1–3 workouts/week)</option>
+          <option value=\"1.55\">Moderate (3–5 workouts/week)</option>
+          <option value=\"1.725\">Active (6–7 workouts/week)</option>
+          <option value=\"1.9\">Very Active (physical job)</option>
         </select>
-        <button class="add-meal-btn" style="min-width:110px" type="submit">Set Macros</button>
+        <select class=\"macro-input\" id=\"inputGoal\">
+          <option value=\"maintain\" selected>Maintain</option>
+          <option value=\"lose\">Lose Weight</option>
+          <option value=\"gain\">Gain Weight</option>
+        </select>
+        <div class=\"macro-input\" style=\"padding:10px 12px;\">
+          <label for=\"goalPercent\" style=\"display:block;font-weight:700;margin-bottom:6px;\">Calorie adj. % (<span id=\"goalPercentLabel\">0%</span>)</label>
+          <input id=\"goalPercent\" type=\"range\" min=\"-25\" max=\"20\" step=\"1\" value=\"0\" style=\"width:100%;\">
+        </div>
+        <div class=\"macro-input\" style=\"padding:10px 12px;\">
+          <label for=\"proteinPerLb\" style=\"display:block;font-weight:700;margin-bottom:6px;\">Protein g/lb (<span id=\"proteinPerLbLabel\">0.8</span>)</label>
+          <input id=\"proteinPerLb\" type=\"range\" min=\"0.7\" max=\"1.1\" step=\"0.05\" value=\"0.8\" style=\"width:100%;\">
+        </div>
+        <button class=\"add-meal-btn\" style=\"min-width:120px\" type=\"submit\">Set Macros</button>
       </form>
-      <div style="color:#687; font-size:.98em;text-align:center; margin-bottom:14px">
-        Use the calculator to estimate your daily calorie/macros.<br>
-        <span style="color:#4275ba;font-weight:600;">Settings transfer to the Progression tab instantly.</span>
+      <div style=\"color:#687; font-size:.98em;text-align:center; margin-bottom:14px\">
+        Choose your formula; adjust deficit/surplus %. Settings sync to Progression instantly.
       </div>
-      <div class="macro-input-row">
-        <input class="macro-input" id="goalCalories" type="number" min="0" placeholder="Goal Calories">
-        <input class="macro-input" id="goalProtein" type="number" min="0" placeholder="Goal Protein (g)">
-        <input class="macro-input" id="goalCarbs" type="number" min="0" placeholder="Goal Carbs (g)">
-        <input class="macro-input" id="goalFat" type="number" min="0" placeholder="Goal Fat (g)">
-        <button class="add-meal-btn" style="min-width:120px" onclick="saveGoalInputs()" type="button">Update Goal</button>
+      <div class=\"macro-input-row\">
+        <input class=\"macro-input\" id=\"goalCalories\" type=\"number\" min=\"0\" placeholder=\"Goal Calories\">
+        <input class=\"macro-input\" id=\"goalProtein\" type=\"number\" min=\"0\" placeholder=\"Goal Protein (g)\">
+        <input class=\"macro-input\" id=\"goalCarbs\" type=\"number\" min=\"0\" placeholder=\"Goal Carbs (g)\">
+        <input class=\"macro-input\" id=\"goalFat\" type=\"number\" min=\"0\" placeholder=\"Goal Fat (g)\">
+        <button class=\"add-meal-btn\" style=\"min-width:120px\" onclick=\"saveGoalInputs()\" type=\"button\">Update Goal</button>
       </div>`;
       document.getElementById('goalCalories').value = macroGoals.calories;
       document.getElementById('goalProtein').value = macroGoals.protein;
       document.getElementById('goalCarbs').value = macroGoals.carbs;
       document.getElementById('goalFat').value = macroGoals.fat;
+
+      const formulaSel = document.getElementById('inputFormula');
+      const bfEl = document.getElementById('inputBodyFat');
+      formulaSel.addEventListener('change', ()=>{ bfEl.style.display = (formulaSel.value==='katch') ? 'block' : 'none'; });
+
+      const goalSel = document.getElementById('inputGoal');
+      const gp = document.getElementById('goalPercent');
+      const gpL = document.getElementById('goalPercentLabel');
+      const ppl = document.getElementById('proteinPerLb');
+      const pplL = document.getElementById('proteinPerLbLabel');
+      function updateGpLabel(){ gpL.textContent = (gp.value>0?'+':'') + gp.value + '%'; }
+      gp.addEventListener('input', updateGpLabel); updateGpLabel();
+      function updatePpl(){ pplL.textContent = Number(ppl.value).toFixed(2); }
+      ppl.addEventListener('input', updatePpl); updatePpl();
+      goalSel.addEventListener('change', ()=>{ if(goalSel.value==='lose') gp.value = -15; else if(goalSel.value==='gain') gp.value = 10; else gp.value = 0; updateGpLabel(); });
     }
     function setGoalsFromInputs(e) {
       e.preventDefault();
-      let w = Number(document.getElementById('inputWeight').value);
-      let h = Number(document.getElementById('inputHeight').value);
-      let a = Number(document.getElementById('inputAge').value);
-      let g = document.getElementById('inputGender').value;
-      let act = Number(document.getElementById('inputActivity').value);
-      let goal = document.getElementById('inputGoal').value;
-      if (!w || !h || !a) return showToast("Fill in all fields!");
-      let bmr = (g==="male")
-        ? 66 + (6.23 * w) + (12.7 * h) - (6.8 * a)
-        : 655 + (4.35 * w) + (4.7 * h) - (4.7 * a);
+      const wLb = Number(document.getElementById('inputWeight').value);
+      const hIn = Number(document.getElementById('inputHeight').value);
+      const age = Number(document.getElementById('inputAge').value);
+      const gender = document.getElementById('inputGender').value;
+      const act = Number(document.getElementById('inputActivity').value);
+      const goal = document.getElementById('inputGoal').value;
+      const formula = document.getElementById('inputFormula').value;
+      const bf = Number(document.getElementById('inputBodyFat').value);
+      const adjPct = Number(document.getElementById('goalPercent').value) / 100;
+      const proteinPerLb = Number(document.getElementById('proteinPerLb').value || 0.8);
+      if (!wLb || !hIn || !age) return showToast('Fill in all fields!');
+      const lb2kg = x=>x*0.45359237; const in2cm = x=>x*2.54;
+      let bmr;
+      if (formula==='msj') {
+        const kg = lb2kg(wLb), cm = in2cm(hIn);
+        bmr = (gender==='male') ? (10*kg + 6.25*cm - 5*age + 5) : (10*kg + 6.25*cm - 5*age - 161);
+      } else if (formula==='katch') {
+        if (!bf || bf<=0 || bf>=70) { showToast('Enter body fat % for Katch'); return; }
+        const kg = lb2kg(wLb); const lbm = kg * (1 - bf/100); bmr = 370 + (21.6 * lbm);
+      } else {
+        bmr = (gender==='male')
+          ? 66 + (6.23 * wLb) + (12.7 * hIn) - (6.8 * age)
+          : 655 + (4.35 * wLb) + (4.7 * hIn) - (4.7 * age);
+      }
       let tdee = bmr * act;
-      let cal = tdee;
-      if (goal === "lose") cal -= 500; if (goal === "gain") cal += 300;
-      macroGoals.calories = Math.round(cal);
-      macroGoals.protein = Math.round(w*0.8);
-      macroGoals.carbs = Math.round((cal*0.45)/4);
-      macroGoals.fat = Math.round((cal*0.25)/9);
-      saveData(); renderAll(); showToast("Goals updated!");
+      tdee = tdee * (1 + adjPct);
+      const cal = Math.round(tdee);
+      const protein = Math.round(wLb * proteinPerLb);
+      const fatCal = Math.round(cal * 0.25);
+      const fat = Math.round(fatCal / 9);
+      const carbCal = Math.max(0, cal - (protein*4 + fat*9));
+      const carbs = Math.round(carbCal / 4);
+      macroGoals.calories = cal; macroGoals.protein = protein; macroGoals.carbs = carbs; macroGoals.fat = fat;
+      saveData(); renderAll(); showToast('Goals updated ('+formula.toUpperCase()+')');
     }
     function saveGoalInputs() {
       macroGoals.calories = Number(document.getElementById('goalCalories').value)||0;
