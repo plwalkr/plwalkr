@@ -44,10 +44,10 @@
   .container{ width:100%; max-width:720px; border-radius:var(--radius-xl);
     background: var(--card); box-shadow:var(--shadow-2); position:relative; min-width:0;
     padding:96px 22px 28px; border:1px solid rgba(130,170,255,.08); backdrop-filter: blur(6px) saturate(120%);
+   border:1px solid rgba(130,170,255,.08); backdrop-filter: blur(6px) saturate(120%);
   }
 
-  header.topbar{ position:absolute; inset:0 0 auto 0; display:flex; align-items:center; justify-content:space-between; padding:14px 18px; gap:12px;
-    background:linear-gradient(180deg, color-mix(in oklab, var(--card) 85%, transparent), rgba(0,0,0,0)); border-top-left-radius:var(--radius-xl); border-top-right-radius:var(--radius-xl); }
+  header.topbar{ position:absolute; inset:0 0 auto 0; display:flex; align-items:center; justify-content:space-between; padding:14px 18px; gap:12px; flex-wrap:wrap; row-gap:10px; background:linear-gradient(180deg, color-mix(in oklab, var(--card) 85%, transparent), rgba(0,0,0,0)); border-top-left-radius:var(--radius-xl); border-top-right-radius:var(--radius-xl); z-index:2; }
   h1{ font-family:"Ringbearer", Inter, serif; letter-spacing:.06em; margin:0; user-select:none; font-size:1.9rem; color:var(--warn); text-shadow:0 4px 18px color-mix(in oklab, var(--warn) 30%, transparent); }
   .theme-toggle{display:flex; gap:8px; flex-wrap:wrap}
   .theme-btn{ appearance:none; border:1px solid rgba(130,170,255,.16); background:linear-gradient(180deg, #142037, #101825);
@@ -188,6 +188,11 @@ body.applelight .scan-btn:hover, body.applelight .scan-btn:focus-visible{ box-sh
 
   /* Safe-area and small screens */
   @supports(padding:max(0px)){ body{ padding-bottom: max(32px, env(safe-area-inset-bottom)); padding-top: max(16px, env(safe-area-inset-top)); }}
+  
+  /* Mobile hero buttons even bigger */
+  @media (max-width:480px){
+    .add-meal-btn,.scan-btn{ width:clamp(300px, 92%, 560px) !important; padding:20px 28px !important; font-size:1.18rem !important; }
+  }}
     
   /* === Overrides: centering + rounded + futuristic CTAs === */
   .container{max-width:820px}
@@ -296,6 +301,7 @@ body.applelight .scan-btn:hover, body.applelight .scan-btn:focus-visible{ box-sh
         body.classList.add('applelight'); body.classList.remove('ringmode'); cont.classList.remove('ringmode');
         document.getElementById('appleLightBtn')?.classList.add('active'); document.getElementById('ringModeBtn')?.classList.remove('active');
       }
+      adjustTopPadding();
       renderAll();
     }
 
@@ -380,6 +386,21 @@ body.applelight .scan-btn:hover, body.applelight .scan-btn:focus-visible{ box-sh
     // ===== Barcode (Quagga + OpenFoodFacts) — mobile hardening =====
     function scanBarcode(){ if(scanning) return; if(!('mediaDevices' in navigator)) { showToast('Camera not supported'); return; }
       if(!window.isSecureContext){ showToast('Camera needs HTTPS (or open in new tab)'); }
+      const video=document.getElementById('barcodeVideo');
+      const constraints={ video: { facingMode:{ideal:'environment'}, width:{ideal:1280}, height:{ideal:720}, aspectRatio:{ideal:1.777} }, audio:false };
+      (async()=>{
+        try{
+          const stream = await navigator.mediaDevices.getUserMedia(constraints);
+          video.srcObject = stream; video.style.display='block'; document.getElementById('barcodeOverlay').style.display='block'; document.getElementById('barcodeCancelBtn').style.display='block';
+          scanning=true;
+          Quagga.init({ inputStream:{ name:'Live', type:'LiveStream', target:video, constraints: constraints.video }, locator:{ patchSize:'medium', halfSample:true }, numOfWorkers: navigator.hardwareConcurrency||2, decoder:{ readers:['ean_13_reader','upc_reader','upc_e_reader','ean_reader'] } }, function(err){ if(err){ console.error(err); showToast('Camera error: '+(err.name||err.message||'unknown')); stopBarcodeScan(); return;} Quagga.start(); });
+          Quagga.offDetected && Quagga.offDetected(barcodeDetected); Quagga.onDetected(barcodeDetected);
+          document.addEventListener('visibilitychange', visStop, {once:true});
+          function visStop(){ if(document.hidden) stopBarcodeScan(); }
+        }catch(e){ console.error(e); showToast('Camera blocked: '+(e.name||'Error')); }
+      })();
+    }
+      if(!window.isSecureContext){ showToast('Camera needs HTTPS (or open in new tab)'); }
       scanning=true; const video=document.getElementById('barcodeVideo'); video.style.display='block'; document.getElementById('barcodeOverlay').style.display='block'; document.getElementById('barcodeCancelBtn').style.display='block';
       const constraints={ facingMode:{ideal:'environment'}, width:{ideal:1280}, height:{ideal:720}, aspectRatio:{ideal:1.777}, focusMode:'continuous' };
       Quagga.init({ inputStream:{ name:'Live', type:'LiveStream', target:video, constraints }, locator:{ patchSize:'medium', halfSample:true }, numOfWorkers: navigator.hardwareConcurrency||2, decoder:{ readers:['ean_13_reader','upc_reader','upc_e_reader','ean_reader'] } }, function(err){ if(err){ console.error(err); showToast('Camera error'); stopBarcodeScan(); return;} Quagga.start(); });
@@ -410,8 +431,9 @@ body.applelight .scan-btn:hover, body.applelight .scan-btn:focus-visible{ box-sh
       const before=JSON.stringify(macroTotals); mealLog.push({name:'Test Meal', calories:100, protein:10, carbs:5, fat:3, date:Date.now()}); saveData(); updateTotals(); ok('totals-updated', JSON.stringify(macroTotals)!==before); mealLog.pop(); saveData(); updateTotals(); renderAll();
       const passed=results.every(r=>r.pass); console.log('Self-tests:', results); showToast(passed? 'Self-test passed' : 'Self-test: some checks failed'); }
 
-    function init(){ setTheme('light'); renderTab('calc'); document.getElementById('tabCalc').onclick=()=>showTab('calc'); document.getElementById('tabProg').onclick=()=>showTab('prog'); setTimeout(()=>{ renderStreak(); renderQuote(); },80); setTimeout(runSelfTests, 200); }
+    function init(){ setTheme('light'); renderTab('calc'); document.getElementById('tabCalc').onclick=()=>{showTab('calc'); adjustTopPadding();}; document.getElementById('tabProg').onclick=()=>{showTab('prog'); adjustTopPadding();}; setTimeout(()=>{ renderStreak(); renderQuote(); adjustTopPadding(); },80); setTimeout(runSelfTests, 200); window.addEventListener('resize', adjustTopPadding); },80); setTimeout(runSelfTests, 200); }
     window.addEventListener('DOMContentLoaded', init);
+    function adjustTopPadding(){ const cont=document.getElementById('macroLegendContainer'); const header=cont?.querySelector('header.topbar'); if(!cont||!header) return; const h=header.getBoundingClientRect().height; cont.style.paddingTop = (h + 16) + 'px'; }
   </script>
 </body>
 </html>
