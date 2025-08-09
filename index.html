@@ -8,59 +8,44 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
   <link href="https://fonts.cdnfonts.com/css/ringbearer" rel="stylesheet">
   <style>
-  /* ===== Visual + Mobile fixes. Functionality unchanged. ===== */
+  /* ===== Cleaned: fixed braces, removed duplicates, kept your look/feel ===== */
   :root{
-    /* Dark baseline (used when NOT in applelight). */
-    --surface: #0f141c; --card: #101825; --text:#e9edf5; --muted:#a8b3c7;
+    --surface:#0f141c; --card:#101825; --text:#e9edf5; --muted:#a8b3c7;
     --accent:#4da3ff; --accent-2:#75e0a3; --warn:#f5c04d; --danger:#ff6b6b;
     --bar-bg:#172133; --shadow-1:0 8px 24px rgba(0,0,0,.25); --shadow-2:0 12px 36px rgba(0,0,0,.35);
     --radius-xl:28px; --radius-lg:18px; --radius-md:16px; --ring:0 0 0 2px rgba(77,163,255,.45), 0 8px 20px rgba(77,163,255,.15);
     --progress-radius:16px;
-    /* Map legacy vars used in JS */
-    --light-bg: var(--surface); --light-card: var(--card); --light-text: var(--text); --light-accent: var(--accent); --light-bar: var(--bar-bg); --light-shadow: var(--shadow-1);
-    /* Ring theme tokens */
-    --gold: var(--warn); --ring-shadow: 0 0 22px 6px rgba(237,185,65,.25); --ring-bg:#0f0c05; --ring-card:#1a160d; --ring-txt:#f6e6b6; --ring-inscription:#bd8c19; --progress-radius:12px;
+    /* map legacy vars used by JS */
+    --light-bg:var(--surface); --light-card:var(--card); --light-text:var(--text); --light-accent:var(--accent); --light-bar:var(--bar-bg); --light-shadow:var(--shadow-1);
+    /* ring theme */
+    --gold:var(--warn); --ring-shadow:0 0 22px 6px rgba(237,185,65,.25); --ring-bg:#0f0c05; --ring-card:#1a160d; --ring-txt:#f6e6b6; --ring-inscription:#bd8c19;
   }
-  /* Apple Light palette (requested): applied when body.applelight is present */
   body.applelight{
     --surface:#f6f7fb; --card:#ffffff; --text:#162036; --muted:#5a6784;
     --accent:#2b78e4; --accent-2:#3fb073; --warn:#e3b322; --bar-bg:#e9eef7;
-    --light-bg: var(--surface); --light-card: var(--card); --light-text: var(--text); --light-accent: var(--accent); --light-bar: var(--bar-bg);
-    --shadow-1: 0 8px 24px rgba(22,32,54,.08); --shadow-2: 0 12px 36px rgba(22,32,54,.12);
+    --light-bg:var(--surface); --light-card:var(--card); --light-text:var(--text); --light-accent:var(--accent); --light-bar:var(--bar-bg);
+    --shadow-1:0 8px 24px rgba(22,32,54,.08); --shadow-2:0 12px 36px rgba(22,32,54,.12);
   }
 
   *{box-sizing:border-box}
   html,body{height:100%}
-  body{
-    margin:0; padding:32px 16px; display:grid; place-items:center center; background:
-      radial-gradient(1200px 800px at 50% -10%, #122036 0%, #0b0e14 60%, #090b10 100%);
-    color:var(--text);
-    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
-    -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
-  }
-  /* Lighter backdrop for applelight */
-  body.applelight{ background: radial-gradient(1200px 800px at 50% -10%, #ffffff 0%, #f0f4ff 50%, #e8eefc 100%); }
+  body{margin:0; padding:32px 16px; display:grid; place-items:center; background:radial-gradient(1200px 800px at 50% -10%, #122036 0%, #0b0e14 60%, #090b10 100%); color:var(--text); font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,"Apple Color Emoji","Segoe UI Emoji"; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility}
+  body.applelight{background:radial-gradient(1200px 800px at 50% -10%, #ffffff 0%, #f0f4ff 50%, #e8eefc 100%)}
 
-  .container{ width:100%; max-width:720px; border-radius:var(--radius-xl);
-    background: var(--card); box-shadow:var(--shadow-2); position:relative; min-width:0;
-    padding:96px 22px 28px; border:1px solid rgba(130,170,255,.08); backdrop-filter: blur(6px) saturate(120%);
-   border:1px solid rgba(130,170,255,.08); backdrop-filter: blur(6px) saturate(120%);
-  }
+  .container{width:100%; max-width:820px; border-radius:var(--radius-xl); background:var(--card); box-shadow:var(--shadow-2); position:relative; min-width:0; padding:96px 22px 28px; border:1px solid rgba(130,170,255,.08); backdrop-filter: blur(6px) saturate(120%)}
 
-  header.topbar{ position:absolute; inset:0 0 auto 0; display:flex; align-items:center; justify-content:space-between; padding:14px 18px; gap:12px; flex-wrap:wrap; row-gap:10px; background:linear-gradient(180deg, color-mix(in oklab, var(--card) 85%, transparent), rgba(0,0,0,0)); border-top-left-radius:var(--radius-xl); border-top-right-radius:var(--radius-xl); z-index:2; }
-  h1{ font-family:"Ringbearer", Inter, serif; letter-spacing:.06em; margin:0; user-select:none; font-size:1.9rem; color:var(--warn); text-shadow:0 4px 18px color-mix(in oklab, var(--warn) 30%, transparent); }
+  header.topbar{position:absolute; inset:0 0 auto 0; display:flex; align-items:center; justify-content:space-between; padding:14px 18px; gap:12px; flex-wrap:wrap; row-gap:10px; background:linear-gradient(180deg, color-mix(in oklab, var(--card) 85%, transparent), rgba(0,0,0,0)); border-top-left-radius:var(--radius-xl); border-top-right-radius:var(--radius-xl); z-index:2}
+  h1{font-family:"Ringbearer",Inter,serif; letter-spacing:.06em; margin:0; user-select:none; font-size:1.9rem; color:var(--warn); text-shadow:0 4px 18px color-mix(in oklab, var(--warn) 30%, transparent)}
   .theme-toggle{display:flex; gap:8px; flex-wrap:wrap}
-  .theme-btn{ appearance:none; border:1px solid rgba(130,170,255,.16); background:linear-gradient(180deg, #142037, #101825);
-    color:var(--muted); font-weight:700; padding:8px 14px; border-radius:999px; cursor:pointer; transition: transform .08s ease, box-shadow .2s ease, color .2s ease, background .2s ease; box-shadow:0 6px 16px rgba(0,0,0,.25); }
+  .theme-btn{appearance:none; border:1px solid rgba(130,170,255,.16); background:linear-gradient(180deg,#142037,#101825); color:var(--muted); font-weight:700; padding:8px 14px; border-radius:999px; cursor:pointer; transition:transform .08s, box-shadow .2s, color .2s, background .2s; box-shadow:0 6px 16px rgba(0,0,0,.25)}
   .theme-btn:hover{transform:translateY(-1px); color:var(--text)}
-  .theme-btn.active{color: color-mix(in oklab, var(--card) 92%, #000); background:var(--warn); border-color:transparent; box-shadow:0 8px 26px color-mix(in oklab, var(--warn) 45%, transparent)}
+  .theme-btn.active{color:color-mix(in oklab, var(--card) 92%, #000); background:var(--warn); border-color:transparent; box-shadow:0 8px 26px color-mix(in oklab, var(--warn) 45%, transparent)}
 
   .tab-row{display:flex; justify-content:center; gap:8px; margin:18px 0 20px}
-  .tab-btn{ border:1px solid rgba(130,170,255,.16); background: color-mix(in oklab, var(--card) 90%, #000 0%); color:var(--muted);
-    border-radius:12px 12px 0 0; padding:10px 18px; font-weight:800; font-size:1.02rem; cursor:pointer; box-shadow:0 6px 14px rgba(0,0,0,.18); }
+  .tab-btn{border:1px solid rgba(130,170,255,.16); background:color-mix(in oklab, var(--card) 90%, #000 0%); color:var(--muted); border-radius:12px 12px 0 0; padding:10px 18px; font-weight:800; font-size:1.02rem; cursor:pointer; box-shadow:0 6px 14px rgba(0,0,0,.18)}
   .tab-btn.active,.tab-btn:focus{outline:none; background:linear-gradient(180deg, color-mix(in oklab, var(--card) 85%, #000 0%), var(--card)); color:var(--text); border-color:rgba(130,170,255,.3); box-shadow:var(--ring)}
 
-  .goal-line{display:flex; justify-content:center; gap:12px; flex-wrap:wrap; align-items:center; background: color-mix(in oklab, var(--card) 90%, #000 0%); color:var(--muted); border-radius:14px; padding:10px 14px; font-size:1.02rem; letter-spacing:.3px; border:1px solid rgba(130,170,255,.1)}
+  .goal-line{display:flex; justify-content:center; gap:12px; flex-wrap:wrap; align-items:center; background:color-mix(in oklab, var(--card) 90%, #000 0%); color:var(--muted); border-radius:18px; padding:10px 14px; font-size:1.02rem; letter-spacing:.3px; border:1px solid rgba(130,170,255,.1)}
   .goal-line b{color:var(--text)} .goal-macro-p{color:var(--accent-2)} .goal-macro-c{color:var(--accent)} .goal-macro-f{color:#f2a24d} .goal-macro-cal{color:var(--warn)}
 
   .macro-bars{display:flex; flex-direction:column; gap:10px; margin:10px 0 12px}
@@ -73,105 +58,49 @@
   .macro-bar-label{position:absolute; inset:0; display:grid; place-items:center; color:#0b0e14; font-weight:900}
 
   .macro-input-row{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin-bottom:18px}
-/* Calculator form gets a stronger grid so nothing falls off */
-#calcForm{display:grid; grid-template-columns: repeat(12, 1fr); gap:12px; align-items:end}
-#calcForm > .macro-input, #calcForm > div.macro-input, #calcForm > button{grid-column:1 / -1}
-@media (min-width:700px){
-  #calcForm #inputFormula{grid-column:1 / span 4}
-  #calcForm #inputWeight{grid-column:5 / span 2}
-  #calcForm #inputHeight{grid-column:7 / span 2}
-  #calcForm #inputAge{grid-column:9 / span 2}
-  #calcForm #inputGender{grid-column:11 / span 2}
-  #calcForm #inputBodyFat{grid-column:1 / span 3}
-  #calcForm #inputActivity{grid-column:4 / span 4}
-  #calcForm #inputGoal{grid-column:8 / span 2}
-  #calcForm > div.macro-input:nth-of-type(2){grid-column:10 / span 3} /* calorie adj slider */
-  #calcForm > div.macro-input:nth-of-type(3){grid-column:1 / span 6}  /* protein per lb */
-  #calcForm button[type="submit"]{grid-column:7 / span 6}
-}
-@media (max-width:420px){
-  #calcForm{grid-template-columns:1fr}
-}
-  .macro-input{font-size:1rem; padding:12px 12px; border-radius:var(--radius-md); border:1px solid rgba(130,170,255,.18); background: color-mix(in oklab, var(--card) 92%, #000 0%); color:var(--text); box-shadow:inset 0 0 0 1px rgba(130,170,255,.04), 0 3px 10px rgba(0,0,0,.07); outline:none; transition:border .15s, box-shadow .15s, transform .06s ease}
+  .macro-input{font-size:1rem; padding:12px; border-radius:16px; border:1px solid rgba(130,170,255,.18); background:color-mix(in oklab, var(--card) 92%, #000 0%); color:var(--text); box-shadow:inset 0 0 0 1px rgba(130,170,255,.04), 0 3px 10px rgba(0,0,0,.07); outline:none; transition:border .15s, box-shadow .15s, transform .06s}
   .macro-input:focus{border-color:rgba(117,224,163,.6); box-shadow:var(--ring)}
 
-  /* PROGRESSION row: fix inputs falling off on phones */
-  .add-meal-row{display:grid; grid-template-columns: repeat(12, 1fr); grid-auto-flow: row dense; gap:12px; align-items:end; margin-bottom:16px}
-  .meal-name-wrap{grid-column: 1 / -1; position:relative; min-width:0}
-  .meal-name-input,.meal-amt-input{width:100%; min-width:0; font-size:1rem; border-radius:var(--radius-md); padding:12px; border:1px solid rgba(130,170,255,.18); background: color-mix(in oklab, var(--card) 92%, #000 0%); color:var(--text)}
-  /* Place the four macro fields on two rows on narrow screens */
-  #mealCalories{grid-column: 1 / span 6}
-  #mealProtein{grid-column: 7 / span 6}
-  #mealCarbs{grid-column: 1 / span 6}
-  #mealFat{grid-column: 7 / span 6}
-  .add-meal-btn{grid-column: 1 / span 6}
-  .scan-btn{grid-column: 7 / span 6}
+  /* PROGRESSION row */
+  .add-meal-row{display:grid; grid-template-columns:repeat(12,1fr); grid-auto-flow:row dense; gap:12px; align-items:end; margin-bottom:16px}
+  .meal-name-wrap{grid-column:1 / -1; position:relative; min-width:0}
+  .meal-name-input,.meal-amt-input{width:100%; min-width:0; font-size:1rem; border-radius:16px; padding:12px; border:1px solid rgba(130,170,255,.18); background:color-mix(in oklab, var(--card) 92%, #000 0%); color:var(--text)}
+  #mealCalories{grid-column:1 / span 6} #mealProtein{grid-column:7 / span 6} #mealCarbs{grid-column:1 / span 6} #mealFat{grid-column:7 / span 6}
+  .add-meal-btn{grid-column:1 / -1} .scan-btn{grid-column:1 / -1}
+  @media(min-width:700px){
+    .meal-name-wrap{grid-column:1 / span 6}
+    #mealCalories{grid-column:7 / span 2} #mealProtein{grid-column:9 / span 2} #mealCarbs{grid-column:11 / span 2} #mealFat{grid-column:13 / span 0}
+  }
+  @media(max-width:420px){ #mealCalories,#mealProtein,#mealCarbs,#mealFat,.add-meal-btn,.scan-btn{grid-column:1 / -1} }
 
-  @media (min-width:700px){
-    .meal-name-wrap{grid-column: 1 / span 5}
-  /* Extra small devices: keep everything full-width and centered */
-  @media (max-width:420px){
-    #mealCalories,#mealProtein,#mealCarbs,#mealFat,.add-meal-btn,.scan-btn{grid-column:1 / -1}
-  }
-    #mealCalories{grid-column: 6 / span 2}
-    #mealProtein{grid-column: 8 / span 2}
-    #mealCarbs{grid-column: 10 / span 2}
-    #mealFat{grid-column: 12 / span 1}
-    .add-meal-btn{grid-column: 12 / span 1}
-    .scan-btn{grid-column: 11 / span 1}
-  }
-  /* Extra small devices: keep everything full-width and centered */
-  @media (max-width:420px){
-    #mealCalories,#mealProtein,#mealCarbs,#mealFat,.add-meal-btn,.scan-btn{border:1px solid rgba(130,170,255,.18); border-radius:999px; font-weight:900; font-size:1.05rem; cursor:pointer; padding:16px 22px; display:inline-flex; align-items:center; justify-content:center; gap:.55em; background:linear-gradient(180deg,#1a2a44,#14243a); color:var(--text); box-shadow:0 12px 26px rgba(0,0,0,.18); transition:transform .12s cubic-bezier(.2,.9,.2,1), box-shadow .2s ease, filter .2s ease; width:100%; justify-self:center;}
-.add-meal-btn:hover,.scan-btn:hover,.add-meal-btn:focus-visible,.scan-btn:focus-visible{transform:translateY(-1px) scale(1.01); filter:brightness(1.05); box-shadow:0 0 0 3px rgba(77,163,255,.25), 0 14px 28px rgba(0,0,0,.22)}
-.add-meal-btn:active,.scan-btn:active{animation:pressPop .18s ease-out}
-@keyframes pressPop{0%{transform:translateY(0) scale(1)}50%{transform:translateY(1px) scale(.985)}100%{transform:translateY(0) scale(1)}}
-.scan-btn{background:linear-gradient(180deg,#3c2a08,#302006); color:var(--warn); border-color:rgba(245,192,77,.25)}
-/* Apple Light button treatments */
-body.applelight .add-meal-btn{ background:linear-gradient(180deg,#ffffff,#f3f8ff); color:#17305a; border-color:rgba(43,120,228,.35); box-shadow:0 8px 20px rgba(22,32,54,.10) }
-body.applelight .add-meal-btn:hover, body.applelight .add-meal-btn:focus-visible{ box-shadow:0 0 0 3px rgba(43,120,228,.28), 0 12px 26px rgba(22,32,54,.18) }
-body.applelight .scan-btn{ background:linear-gradient(180deg,#fff7d1,#ffe895); color:#3b2e08; border-color:rgba(227,179,34,.45); box-shadow:0 8px 20px rgba(22,32,54,.10) }
-body.applelight .scan-btn:hover, body.applelight .scan-btn:focus-visible{ box-shadow:0 0 0 3px rgba(227,179,34,.32), 0 12px 26px rgba(22,32,54,.18) }
-  }
-    #mealCalories{grid-column: 6 / span 2}
-    #mealProtein{grid-column: 8 / span 2}
-    #mealCarbs{grid-column: 10 / span 2}
-    #mealFat{grid-column: 12 / span 1}
-    .add-meal-btn{grid-column: 12 / span 1}
-    .scan-btn{grid-column: 11 / span 1}
-  }
-
-  .add-meal-btn,.scan-btn{border:1px solid rgba(130,170,255,.18); border-radius:var(--radius-md); font-weight:900; font-size:.98rem; cursor:pointer; padding:12px 16px; display:inline-flex; align-items:center; justify-content:center; gap:.45em; background:linear-gradient(180deg,#1a2a44,#14243a); color:var(--text); box-shadow:0 10px 22px rgba(0,0,0,.18); transition:transform .08s ease, box-shadow .2s ease, filter .2s ease}
-.add-meal-btn:hover,.scan-btn:hover,.add-meal-btn:focus-visible,.scan-btn:focus-visible{transform:translateY(-1px); filter:brightness(1.05); box-shadow:0 0 0 3px rgba(77,163,255,.25), 0 12px 26px rgba(0,0,0,.2)}
-.scan-btn{background:linear-gradient(180deg,#3c2a08,#302006); color:var(--warn); border-color:rgba(245,192,77,.25)}
-/* Apple Light button treatments */
-body.applelight .add-meal-btn{ background:linear-gradient(180deg,#ffffff,#f3f8ff); color:#17305a; border-color:rgba(43,120,228,.35); box-shadow:0 6px 16px rgba(22,32,54,.08) }
-body.applelight .add-meal-btn:hover, body.applelight .add-meal-btn:focus-visible{ box-shadow:0 0 0 3px rgba(43,120,228,.28), 0 10px 24px rgba(22,32,54,.16) }
-body.applelight .scan-btn{ background:linear-gradient(180deg,#fff7d1,#ffe895); color:#3b2e08; border-color:rgba(227,179,34,.45); box-shadow:0 6px 16px rgba(22,32,54,.08) }
-body.applelight .scan-btn:hover, body.applelight .scan-btn:focus-visible{ box-shadow:0 0 0 3px rgba(227,179,34,.32), 0 10px 24px rgba(22,32,54,.16) }
-  .add-meal-btn:hover,.scan-btn:hover{transform:translateY(-1px); filter:brightness(1.05)}
+  /* Big centered hero buttons */
+  .add-meal-btn,.scan-btn{border:1px solid rgba(130,170,255,.18); border-radius:28px; font-weight:900; font-size:1.12rem; cursor:pointer; padding:18px 28px; display:inline-flex; align-items:center; justify-content:center; gap:.55em; background:linear-gradient(180deg,#1a2a44,#14243a); color:var(--text); box-shadow:0 12px 26px rgba(0,0,0,.18); transition:transform .12s cubic-bezier(.2,.9,.2,1), box-shadow .2s, filter .2s; width:clamp(280px,70%,560px); justify-self:center}
+  .add-meal-btn:hover,.scan-btn:hover,.add-meal-btn:focus-visible,.scan-btn:focus-visible{transform:translateY(-1px) scale(1.01); filter:brightness(1.05); box-shadow:0 0 0 3px rgba(77,163,255,.25), 0 14px 28px rgba(0,0,0,.22)}
+  .add-meal-btn:active,.scan-btn:active{transform:translateY(1px) scale(.992)}
   .scan-btn{background:linear-gradient(180deg,#3c2a08,#302006); color:var(--warn); border-color:rgba(245,192,77,.25)}
+  @media(max-width:480px){ .add-meal-btn,.scan-btn{width:clamp(300px,92%,560px); padding:20px 28px; font-size:1.18rem} }
+  body.applelight .add-meal-btn{background:linear-gradient(180deg,#ffffff,#f6f9ff); color:#142542; border:1px solid rgba(43,120,228,.35); box-shadow:0 10px 22px rgba(22,32,54,.12)}
+  body.applelight .scan-btn{background:linear-gradient(180deg,#fff7d1,#ffe895); color:#3b2e08; border:1px solid rgba(227,179,34,.45); box-shadow:0 10px 22px rgba(22,32,54,.12)}
 
-  .meal-log-table{width:100%; border-collapse:separate; border-spacing:0; font-size:.98rem; background: color-mix(in oklab, var(--card) 95%, #000 0%); border-radius:var(--radius-lg); box-shadow:0 6px 18px rgba(0,0,0,.12); overflow:hidden; border:1px solid rgba(130,170,255,.14)}
+  .meal-log-table{width:100%; border-collapse:separate; border-spacing:0; font-size:.98rem; background:color-mix(in oklab, var(--card) 95%, #000 0%); border-radius:18px; box-shadow:0 6px 18px rgba(0,0,0,.12); overflow:hidden; border:1px solid rgba(130,170,255,.14)}
   .meal-log-table th,.meal-log-table td{padding:12px 10px; text-align:center; white-space:nowrap}
-  .meal-log-table th{background: color-mix(in oklab, var(--card) 88%, #000 0%); color:var(--muted); font-weight:800; letter-spacing:.3px}
-  .meal-log-table tbody tr{transition:background .15s ease}
-  .meal-log-table tbody tr:nth-child(even){background: color-mix(in oklab, var(--card) 92%, #000 0%)}
-  .meal-log-table tbody tr:hover{background: color-mix(in oklab, var(--card) 86%, #000 0%)}
+  .meal-log-table th{background:color-mix(in oklab, var(--card) 88%, #000 0%); color:var(--muted); font-weight:800; letter-spacing:.3px}
+  .meal-log-table tbody tr:nth-child(even){background:color-mix(in oklab, var(--card) 92%, #000 0%)}
+  .meal-log-table tbody tr:hover{background:color-mix(in oklab, var(--card) 86%, #000 0%)}
 
-  .export-row{display:flex; gap:.6em; justify-content:flex-end; margin:10px 0 2px}
-  .export-btn{background: color-mix(in oklab, var(--card) 94%, #000 0%); color:var(--muted); font-size:.95rem; padding:9px 14px; border-radius:999px; border:1px solid rgba(130,170,255,.18); font-weight:800; cursor:pointer}
+  .export-row{display:flex; gap:.6em; justify-content:center; margin:10px 0 2px}
+  .export-btn{background:color-mix(in oklab, var(--card) 94%, #000 0%); color:var(--muted); font-size:.95rem; padding:9px 14px; border-radius:999px; border:1px solid rgba(130,170,255,.18); font-weight:800; cursor:pointer}
   .export-btn:hover{color:var(--text); box-shadow:var(--ring)}
 
   .streak-ring-wrap{margin:10px auto 0; width:200px; height:200px; filter:drop-shadow(var(--ring-shadow))}
   .streak-caption{text-align:center; margin-top:6px; font-weight:700; color:var(--muted)}
-  .streak-bar-wrap{width:100%; margin:16px auto 6px; background: color-mix(in oklab, var(--card) 92%, #000 0%); border-radius:16px; box-shadow:0 1px 4px rgba(0,0,0,.12); padding:10px 14px; font-size:1.05rem; color:var(--text); font-weight:800; letter-spacing:.5px; display:flex; align-items:center; gap:12px; justify-content:center; border:1px solid rgba(130,170,255,.12)}
+  .streak-bar-wrap{width:100%; margin:16px auto 6px; background:color-mix(in oklab, var(--card) 92%, #000 0%); border-radius:16px; box-shadow:0 1px 4px rgba(0,0,0,.12); padding:10px 14px; font-size:1.05rem; color:var(--text); font-weight:800; letter-spacing:.5px; display:flex; align-items:center; gap:12px; justify-content:center; border:1px solid rgba(130,170,255,.12)}
   .streak-bar-value{background:var(--accent); color:#08101d; border-radius:14px; padding:4px 12px}
 
-  .quote-box{margin:18px auto 6px; background: color-mix(in oklab, var(--card) 92%, #000 0%); border-radius:14px; box-shadow:0 1px 10px rgba(0,0,0,.12); color:var(--muted); font-family:"Ringbearer", Inter, serif; font-size:1.02rem; text-align:center; padding:12px 14px; letter-spacing:.4px; max-width:520px; border:1px solid rgba(130,170,255,.12)}
+  .quote-box{margin:18px auto 6px; background:color-mix(in oklab, var(--card) 92%, #000 0%); border-radius:18px; box-shadow:0 1px 10px rgba(0,0,0,.12); color:var(--muted); font-family:"Ringbearer",Inter,serif; font-size:1.02rem; text-align:center; padding:12px 14px; letter-spacing:.4px; max-width:520px; border:1px solid rgba(130,170,255,.12)}
   .ringmode .quote-box{background:#1b160b; color:var(--ring-txt); border-color:rgba(237,185,65,.25)}
 
-  .toast{position:fixed; left:50%; bottom:36px; transform:translateX(-50%); background: color-mix(in oklab, var(--card) 95%, #000 0%); color:var(--text); padding:11px 18px; border-radius:999px; border:1px solid rgba(130,170,255,.2); box-shadow:0 10px 20px rgba(0,0,0,.2); font-size:.98rem; font-weight:800; opacity:.97; z-index:999; pointer-events:none; animation:fadeToast 2.2s linear}
+  .toast{position:fixed; left:50%; bottom:36px; transform:translateX(-50%); background:color-mix(in oklab, var(--card) 95%, #000 0%); color:var(--text); padding:11px 18px; border-radius:999px; border:1px solid rgba(130,170,255,.2); box-shadow:0 10px 20px rgba(0,0,0,.2); font-size:.98rem; font-weight:800; opacity:.97; z-index:999; pointer-events:none; animation:fadeToast 2.2s linear}
   @keyframes fadeToast{0%{opacity:0; transform:translateX(-50%) translateY(6px)} 10%{opacity:1} 85%{opacity:.98} 100%{opacity:0}}
 
   .autocomplete-list{position:absolute; background:#fffef6; border:1.5px solid #eed177; border-radius:11px; z-index:101; max-height:250px; overflow-y:auto; width:100%; left:0; top:calc(100% + 6px); box-shadow:0 6px 24px #0002; padding:4px 0}
@@ -179,77 +108,15 @@ body.applelight .scan-btn:hover, body.applelight .scan-btn:focus-visible{ box-sh
   .autocomplete-item:last-child{border-bottom:none}
   .autocomplete-item:hover,.autocomplete-item.active{background:#edb94144; color:#2e2208; font-weight:700}
 
-  /* Hyper-LOTR Ring mode: parchment + glow + vignette */
-  .ringmode, .ringmode body{ background: radial-gradient(1000px 700px at 50% -10%, #2d220f 0%, #171107 60%, #0f0b05 100%) !important; color:var(--ring-txt)!important; }
-  .ringmode .container{ background: radial-gradient(600px 400px at 50% 0%, #2a210f 0%, #1a160d 60%, #151107 100%), url('https://www.transparenttextures.com/patterns/aged-paper.png'); background-blend-mode: overlay; border:1px solid #7e6422; box-shadow: 0 12px 50px rgba(237,185,65,.15), inset 0 0 80px rgba(237,185,65,.05); }
-  .ringmode h1{ text-shadow: 0 0 14px rgba(245,192,77,.55), 0 0 2px #000; }
-  .ringmode .tab-btn{ background:#f5e8c6; color:#6f5520 }
-  .ringmode .tab-btn.active{ background:#fbe62c; color:#382a00; box-shadow: 0 0 20px rgba(251,230,44,.35) }
+  /* Ring Mode visuals */
+  .ringmode, .ringmode body{background:radial-gradient(1000px 700px at 50% -10%, #2d220f 0%, #171107 60%, #0f0b05 100%) !important; color:var(--ring-txt)!important}
+  .ringmode .container{background:radial-gradient(600px 400px at 50% 0%, #2a210f 0%, #1a160d 60%, #151107 100%), url('https://www.transparenttextures.com/patterns/aged-paper.png'); background-blend-mode:overlay; border:1px solid #7e6422; box-shadow:0 12px 50px rgba(237,185,65,.15), inset 0 0 80px rgba(237,185,65,.05)}
+  .ringmode h1{text-shadow:0 0 14px rgba(245,192,77,.55), 0 0 2px #000}
+  .ringmode .tab-btn{background:#f5e8c6; color:#6f5520}
+  .ringmode .tab-btn.active{background:#fbe62c; color:#382a00; box-shadow:0 0 20px rgba(251,230,44,.35)}
 
-  /* Safe-area and small screens */
-  @supports(padding:max(0px)){ body{ padding-bottom: max(32px, env(safe-area-inset-bottom)); padding-top: max(16px, env(safe-area-inset-top)); }}
-  
-  /* Mobile hero buttons even bigger */
-  @media (max-width:480px){
-    .add-meal-btn,.scan-btn{ width:clamp(300px, 92%, 560px) !important; padding:20px 28px !important; font-size:1.18rem !important; }
-  }}
-    
-  /* === Overrides: centering + rounded + futuristic CTAs === */
-  .container{max-width:820px}
-  .tab-row,.export-row{justify-content:center !important}
-  .macro-input,.meal-name-input,.meal-amt-input{border-radius:16px !important}
-  .goal-line,.meal-log-table,.quote-box{border-radius:18px !important}
-  .macro-bar-outer,.macro-bar-inner{border-radius:16px !important}
-
-  /* Progression grid — rock solid + centered */
-  .add-meal-row{grid-template-columns:repeat(12,1fr) !important; align-items:stretch !important}
-  .meal-name-wrap{grid-column:1 / -1 !important}
-  #mealCalories,#mealProtein,#mealCarbs,#mealFat{grid-column: span 6 / auto !important}
-  @media(min-width:700px){
-    #mealCalories,#mealProtein,#mealCarbs,#mealFat{grid-column: span 3 / auto !important}
-  }
-
-  /* Calculator grid — prevent spill, keep centered */
-  #calcForm{grid-template-columns:repeat(12,1fr) !important}
-  #calcForm > *{grid-column:1 / -1}
-  @media(min-width:700px){
-    #calcForm #inputFormula{grid-column:1 / span 4}
-    #calcForm #inputWeight{grid-column:5 / span 2}
-    #calcForm #inputHeight{grid-column:7 / span 2}
-    #calcForm #inputAge{grid-column:9 / span 2}
-    #calcForm #inputGender{grid-column:11 / span 2}
-    #calcForm #inputBodyFat{grid-column:1 / span 3}
-    #calcForm #inputActivity{grid-column:4 / span 4}
-    #calcForm #inputGoal{grid-column:8 / span 2}
-    #calcForm > div.macro-input:nth-of-type(2){grid-column:10 / span 3}
-    #calcForm > div.macro-input:nth-of-type(3){grid-column:1 / span 6}
-    #calcForm button[type="submit"]{grid-column:7 / span 6}
-  }
-
-  /* Big centered hero buttons (Add / Scan) */
-  .add-meal-btn,.scan-btn{
-    grid-column:1 / -1 !important;
-    justify-self:center !important;
-    width:clamp(280px, 70%, 560px) !important;
-    padding:18px 28px !important;
-    border-radius:28px !important;
-    font-size:1.12rem !important;
-    letter-spacing:.2px;
-  }
-  /* Futuristic glow press */
-  .add-meal-btn,.scan-btn{ position:relative; overflow:hidden }
-  .add-meal-btn::after,.scan-btn::after{ content:""; position:absolute; inset:-2px; border-radius:inherit; pointer-events:none; background: radial-gradient(120px 60px at var(--mx,50%) var(--my,50%), rgba(255,255,255,.25), transparent 60%); opacity:.0; transition:opacity .2s ease }
-  .add-meal-btn:hover::after,.scan-btn:hover::after{ opacity:.6 }
-  .add-meal-btn:active,.scan-btn:active{ transform:translateY(1px) scale(.992) !important }
-  document.addEventListener && document.addEventListener('pointermove', e=>{ if(!(e.target instanceof Element)) return; const b=e.target.getBoundingClientRect?.(); if(!b) return; e.target.style.setProperty('--mx', ((e.clientX-b.left)/b.width*100)+'%'); e.target.style.setProperty('--my', ((e.clientY-b.top)/b.height*100)+'%'); }, {passive:true});
-
-  /* Apple Light: brighter CTAs */
-  body.applelight .add-meal-btn{ background:linear-gradient(180deg,#ffffff,#f6f9ff) !important; color:#142542 !important; border:1px solid rgba(43,120,228,.35) !important; box-shadow:0 10px 22px rgba(22,32,54,.12) !important }
-  body.applelight .scan-btn{ background:linear-gradient(180deg,#fff7d1,#ffe895) !important; color:#3b2e08 !important; border:1px solid rgba(227,179,34,.45) !important; box-shadow:0 10px 22px rgba(22,32,54,.12) !important }
-
-  /* Ring mode keeps the deep gold, but larger shape applies */
-
-</style>
+  @supports(padding:max(0px)){ body{ padding-bottom:max(32px, env(safe-area-inset-bottom)); padding-top:max(16px, env(safe-area-inset-top)); }}
+  </style>
 </head>
 <body class="applelight">
   <div class="container ring-scope" id="macroLegendContainer">
@@ -277,7 +144,7 @@ body.applelight .scan-btn:hover, body.applelight .scan-btn:focus-visible{ box-sh
 
   <script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2@1.2.6/dist/quagga.min.js"></script>
   <script>
-    // Quotes (unchanged)
+    // Quotes
     const lotrQuotes=["Even the smallest person can change the course of the future.","Not all those who wander are lost.","The road goes ever on and on.","Deeds will not be less valiant because they are unpraised.","Faithless is he that says farewell when the road darkens.","All we have to decide is what to do with the time that is given us.","There’s some good in this world, and it’s worth fighting for.","I am glad you are here with me. Here at the end of all things.","The world is indeed full of peril, and in it there are many dark places.","A wizard is never late, nor is he early, he arrives precisely when he means to.","You shall not pass!","Courage is found in unlikely places.","The shadow is only a passing thing.","Hope remains while the Company is true.","The board is set, the pieces are moving.","One does not simply walk into Mordor.","I would rather share one lifetime with you than face all the ages of this world alone.","May it be a light to you in dark places, when all other lights go out.","It's a dangerous business, going out your door.","The wise speak only of what they know.","Many that live deserve death. And some that die deserve life.","Even darkness must pass. A new day will come.","The strength of the ring-bearer is in his heart.","There’s always hope.","For Frodo.","The journey doesn’t end here.","I am no man!","The Ring has awoken.","Speak, friend, and enter.","There and back again.","Let him not vow to walk in the dark, who has not seen the nightfall.","Renewed shall be blade that was broken.","I will take the Ring, though I do not know the way.","A day may come when the courage of men fails… but it is not this day.","My friends, you bow to no one.","White shores, and beyond, a far green country under a swift sunrise.","You have my sword.","The Shire must truly be a great place.","If by my life or death I can protect you, I will.","End? No, the journey doesn't end here.","Where there's life, there's hope.","It’s the job that’s never started as takes longest to finish.","But in the end, it’s only a passing thing, this shadow.","I can't carry it for you, but I can carry you!","The hands of a king are the hands of a healer.","Shadowfax, show us the meaning of haste.","There is no curse in Elvish, Entish, or the tongues of Men for this treachery.","Mithrandir, why did you leave us?","You shall be the Fellowship of the Ring.","I will not say: do not weep; for not all tears are an evil.","The fire of your heart outshines the darkness.","May your path be green and the breeze on your back.","Streaks are for heroes. Today you are legend.","Let the courage of the Eldar guide you."];
     const genericQuotes=["Believe you can and you're halfway there.","Success is not final; failure is not fatal.","Little by little, a little becomes a lot.","Stay hungry. Stay foolish.","Every moment is a fresh beginning.","Start where you are. Use what you have. Do what you can.","Great things never came from comfort zones.","If opportunity doesn't knock, build a door.","Quality is not an act, it is a habit.","The secret of getting ahead is getting started.","Hustle in silence and let your success make the noise.","Dream big and dare to fail.","Progress, not perfection.","You don’t have to be great to start, but you have to start to be great.","Focus on the step in front of you, not the whole staircase.","Don’t let yesterday take up too much of today.","Small steps every day.","The only limit to our realization of tomorrow is our doubts of today.","Turn your wounds into wisdom.","Don’t watch the clock; do what it does. Keep going.","No pressure, no diamonds.","Embrace the glorious mess that you are.","Fall seven times, stand up eight.","Wherever you go, go with all your heart.","Start each day with a grateful heart.","Big journeys begin with small steps.","Never give up on something you really want.","Let your dreams be bigger than your fears.","Push yourself, because no one else is going to do it for you.","Make today amazing.","Nothing will work unless you do.","If it matters to you, you’ll find a way.","Stay patient and trust your journey.","Progress is progress, no matter how small.","You are your only limit.","Create the life you can’t wait to wake up to.","Do something today your future self will thank you for.","No rain, no flowers.","Take the risk or lose the chance.","Just keep swimming.","Make it happen.","Doubt kills more dreams than failure ever will.","Start now, not tomorrow.","Somewhere, something incredible is waiting to be known.","Be somebody nobody thought you could be.","Grow through what you go through.","If you get tired, learn to rest, not to quit.","You got this.","The best time for new beginnings is now.","Life is tough, but so are you."];
 
@@ -309,9 +176,9 @@ body.applelight .scan-btn:hover, body.applelight .scan-btn:focus-visible{ box-sh
       if(tab==='calc') document.getElementById('tabCalc')?.classList.add('active'); else document.getElementById('tabProg')?.classList.add('active'); renderTab(tab); }
     function renderTab(tab){ if(tab==='calc') renderCalculatorTab(); else renderProgressionTab(); }
 
-    // Calculator Tab (unchanged calc logic)
+    // Calculator Tab
     function renderCalculatorTab(){ const area=document.getElementById('tabArea'); if(!area) return; area.innerHTML=`
-      <form onsubmit=\"setGoalsFromInputs(event)\" class=\"macro-input-row\" id=\"calcForm\">\n        <select class=\"macro-input\" id=\"inputFormula\" title=\"Equation\">\n          <option value=\"msj\" selected>Mifflin-St Jeor (modern)</option>\n          <option value=\"hb\">Harris-Benedict (legacy)</option>\n          <option value=\"katch\">Katch-McArdle (needs body fat %) </option>\n        </select>\n        <input class=\"macro-input\" id=\"inputWeight\" type=\"number\" min=\"70\" placeholder=\"Weight (lbs)\">\n        <input class=\"macro-input\" id=\"inputHeight\" type=\"number\" min=\"48\" placeholder=\"Height (in)\">\n        <input class=\"macro-input\" id=\"inputAge\" type=\"number\" min=\"8\" max=\"99\" placeholder=\"Age\">\n        <select class=\"macro-input\" id=\"inputGender\">\n          <option value=\"male\">Male</option>\n          <option value=\"female\">Female</option>\n        </select>\n        <input class=\"macro-input\" id=\"inputBodyFat\" type=\"number\" min=\"3\" max=\"60\" placeholder=\"Body fat % (Katch only)\" style=\"display:none;\">\n        <select class=\"macro-input\" id=\"inputActivity\">\n          <option value=\"1.2\">Sedentary (desk job, little exercise)</option>\n          <option value=\"1.375\">Light (1–3 workouts/week)</option>\n          <option value=\"1.55\">Moderate (3–5 workouts/week)</option>\n          <option value=\"1.725\">Active (6–7 workouts/week)</option>\n          <option value=\"1.9\">Very Active (physical job)</option>\n        </select>\n        <select class=\"macro-input\" id=\"inputGoal\">\n          <option value=\"maintain\" selected>Maintain</option>\n          <option value=\"lose\">Lose Weight</option>\n          <option value=\"gain\">Gain Weight</option>\n        </select>\n        <div class=\"macro-input\" style=\"padding:10px 12px;\">\n          <label for=\"goalPercent\" style=\"display:block;font-weight:700;margin-bottom:6px;\">Calorie adj. % (<span id=\"goalPercentLabel\">0%</span>)</label>\n          <input id=\"goalPercent\" type=\"range\" min=\"-25\" max=\"20\" step=\"1\" value=\"0\" style=\"width:100%;\">\n        </div>\n        <div class=\"macro-input\" style=\"padding:10px 12px;\">\n          <label for=\"proteinPerLb\" style=\"display:block;font-weight:700;margin-bottom:6px;\">Protein g/lb (<span id=\"proteinPerLbLabel\">0.8</span>)</label>\n          <input id=\"proteinPerLb\" type=\"range\" min=\"0.7\" max=\"1.1\" step=\"0.05\" value=\"0.8\" style=\"width:100%;\">\n        </div>\n        <button class=\"add-meal-btn\" style=\"min-width:120px\" type=\"submit\">Set Macros</button>\n      </form>\n      <div style=\"color:var(--muted); font-size:.98em;text-align:center; margin-bottom:14px\">\n        Choose your formula; adjust deficit/surplus %. Settings sync to Progression instantly.\n      </div>\n      <div class=\"macro-input-row\">\n        <input class=\"macro-input\" id=\"goalCalories\" type=\"number\" min=\"0\" placeholder=\"Goal Calories\">\n        <input class=\"macro-input\" id=\"goalProtein\" type=\"number\" min=\"0\" placeholder=\"Goal Protein (g)\">\n        <input class=\"macro-input\" id=\"goalCarbs\" type=\"number\" min=\"0\" placeholder=\"Goal Carbs (g)\">\n        <input class=\"macro-input\" id=\"goalFat\" type=\"number\" min=\"0\" placeholder=\"Goal Fat (g)\">\n        <button class=\"add-meal-btn\" style=\"min-width:120px\" onclick=\"saveGoalInputs()\" type=\"button\">Update Goal</button>\n      </div>`;
+      <form onsubmit=\"setGoalsFromInputs(event)\" class=\"macro-input-row\" id=\"calcForm\">\n        <select class=\"macro-input\" id=\"inputFormula\" title=\"Equation\">\n          <option value=\"msj\" selected>Mifflin-St Jeor (modern)</option>\n          <option value=\"hb\">Harris-Benedict (legacy)</option>\n          <option value=\"katch\">Katch-McArdle (needs body fat %) </option>\n        </select>\n        <input class=\"macro-input\" id=\"inputWeight\" type=\"number\" min=\"70\" placeholder=\"Weight (lbs)\">\n        <input class=\"macro-input\" id=\"inputHeight\" type=\"number\" min=\"48\" placeholder=\"Height (in)\">\n        <input class=\"macro-input\" id=\"inputAge\" type=\"number\" min=\"8\" max=\"99\" placeholder=\"Age\">\n        <select class=\"macro-input\" id=\"inputGender\">\n          <option value=\"male\">Male</option>\n          <option value=\"female\">Female</option>\n        </select>\n        <input class=\"macro-input\" id=\"inputBodyFat\" type=\"number\" min=\"3\" max=\"60\" placeholder=\"Body fat % (Katch only)\" style=\"display:none;\">\n        <select class=\"macro-input\" id=\"inputActivity\">\n          <option value=\"1.2\">Sedentary (desk job, little exercise)</option>\n          <option value=\"1.375\">Light (1–3 workouts/week)</option>\n          <option value=\"1.55\">Moderate (3–5 workouts/week)</option>\n          <option value=\"1.725\">Active (6–7 workouts/week)</option>\n          <option value=\"1.9\">Very Active (physical job)</option>\n        </select>\n        <select class=\"macro-input\" id=\"inputGoal\">\n          <option value=\"maintain\" selected>Maintain</option>\n          <option value=\"lose\">Lose Weight</option>\n          <option value=\"gain\">Gain Weight</option>\n        </select>\n        <div class=\"macro-input\" style=\"padding:10px 12px;\">\n          <label for=\"goalPercent\" style=\"display:block;font-weight:700;margin-bottom:6px;\">Calorie adj. % (<span id=\"goalPercentLabel\">0%</span>)</label>\n          <input id=\"goalPercent\" type=\"range\" min=\"-25\" max=\"20\" step=\"1\" value=\"0\" style=\"width:100%;\">\n        </div>\n        <div class=\"macro-input\" style=\"padding:10px 12px;\">\n          <label for=\"proteinPerLb\" style=\"display:block;font-weight:700;margin-bottom:6px;\">Protein g/lb (<span id=\"proteinPerLbLabel\">0.8</span>)</label>\n          <input id=\"proteinPerLb\" type=\"range\" min=\"0.7\" max=\"1.1\" step=\"0.05\" value=\"0.8\" style=\"width:100%;\">\n        </div>\n        <button class=\"add-meal-btn\" style=\"min-width:120px\" type=\"submit\">Set Macros</button>\n      </form>\n      <div style=\"color:var(--muted); font-size:.98em;text-align:center; margin-bottom:14px\">Choose your formula; adjust deficit/surplus %. Settings sync to Progression instantly.</div>\n      <div class=\"macro-input-row\">\n        <input class=\"macro-input\" id=\"goalCalories\" type=\"number\" min=\"0\" placeholder=\"Goal Calories\">\n        <input class=\"macro-input\" id=\"goalProtein\" type=\"number\" min=\"0\" placeholder=\"Goal Protein (g)\">\n        <input class=\"macro-input\" id=\"goalCarbs\" type=\"number\" min=\"0\" placeholder=\"Goal Carbs (g)\">\n        <input class=\"macro-input\" id=\"goalFat\" type=\"number\" min=\"0\" placeholder=\"Goal Fat (g)\">\n        <button class=\"add-meal-btn\" style=\"min-width:120px\" onclick=\"saveGoalInputs()\" type=\"button\">Update Goal</button>\n      </div>`;
       document.getElementById('goalCalories').value=macroGoals.calories; document.getElementById('goalProtein').value=macroGoals.protein; document.getElementById('goalCarbs').value=macroGoals.carbs; document.getElementById('goalFat').value=macroGoals.fat;
       const formulaSel=document.getElementById('inputFormula'); const bfEl=document.getElementById('inputBodyFat'); formulaSel.addEventListener('change',()=>{ bfEl.style.display=(formulaSel.value==='katch')?'block':'none'; });
       const goalSel=document.getElementById('inputGoal'); const gp=document.getElementById('goalPercent'); const gpL=document.getElementById('goalPercentLabel'); const ppl=document.getElementById('proteinPerLb'); const pplL=document.getElementById('proteinPerLbLabel');
@@ -362,9 +229,7 @@ body.applelight .scan-btn:hover, body.applelight .scan-btn:focus-visible{ box-sh
               </defs>
               <circle cx="100" cy="100" r="80" fill="url(#goldCore)" stroke="#d4b117" stroke-width="10" filter="url(#ringGlow)"/>
               <circle cx="100" cy="100" r="60" fill="transparent" stroke="#7a692f66" stroke-width="8"/>
-              <!-- Sheen -->
               <ellipse cx="115" cy="80" rx="55" ry="18" fill="url(#sheen)" opacity="0.6" transform="rotate(-20 100 100)"/>
-              <!-- Subtle Tengwar-like inscription (decorative only) -->
               <text font-size="9" fill="#ffef95" opacity="0.85" font-family="Ringbearer,serif">
                 <textPath href="#inscriptPath" startOffset="3%">ash nazg durbatulûk • ash nazg gimbatul • ash nazg thrakatulûk • agh burzum-ishi krimpatul</textPath>
               </text>
@@ -376,40 +241,36 @@ body.applelight .scan-btn:hover, body.applelight .scan-btn:focus-visible{ box-sh
     function playStreakSound(){ if(document.body.classList.contains('ringmode')){ try{ const a=document.getElementById('streakSound'); a.currentTime=0; a.play(); }catch(e){} } }
 
     function saveData(){ localStorage.setItem('macroGoals', JSON.stringify(macroGoals)); localStorage.setItem('mealLog', JSON.stringify(mealLog)); localStorage.setItem('streak', JSON.stringify(streak)); }
-
     function exportCSV(){ let csv='Meal,Calories,Protein,Carbs,Fat\n'; mealLog.forEach(m=>{ csv+=`${m.name},${m.calories},${m.protein},${m.carbs},${m.fat}\n`; }); download(csv,'macrolegend.csv'); }
     function exportTXT(){ let txt='MacroLegend Log\n==================\n'; mealLog.forEach(m=>{ txt+=`${m.name.padEnd(16)} | Cal: ${m.calories} P: ${m.protein} C: ${m.carbs} F: ${m.fat}\n`; }); download(txt,'macrolegend.txt'); }
     function download(content,filename){ const a=document.createElement('a'); const file=new Blob([content],{type:'text/plain'}); a.href=URL.createObjectURL(file); a.download=filename; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),800); }
-
     function showToast(msg){ const el=document.createElement('div'); el.className='toast'; el.textContent=msg; document.body.appendChild(el); setTimeout(()=>el.remove(),2100); }
 
-    // ===== Barcode (Quagga + OpenFoodFacts) — mobile hardening =====
-    function scanBarcode(){ if(scanning) return; if(!('mediaDevices' in navigator)) { showToast('Camera not supported'); return; }
+    // Camera + Quagga (clean)
+    async function scanBarcode(){
+      if(scanning) return;
+      if(!('mediaDevices' in navigator)) { showToast('Camera not supported'); return; }
       if(!window.isSecureContext){ showToast('Camera needs HTTPS (or open in new tab)'); }
       const video=document.getElementById('barcodeVideo');
-      const constraints={ video: { facingMode:{ideal:'environment'}, width:{ideal:1280}, height:{ideal:720}, aspectRatio:{ideal:1.777} }, audio:false };
-      (async()=>{
-        try{
-          const stream = await navigator.mediaDevices.getUserMedia(constraints);
-          video.srcObject = stream; video.style.display='block'; document.getElementById('barcodeOverlay').style.display='block'; document.getElementById('barcodeCancelBtn').style.display='block';
-          scanning=true;
-          Quagga.init({ inputStream:{ name:'Live', type:'LiveStream', target:video, constraints: constraints.video }, locator:{ patchSize:'medium', halfSample:true }, numOfWorkers: navigator.hardwareConcurrency||2, decoder:{ readers:['ean_13_reader','upc_reader','upc_e_reader','ean_reader'] } }, function(err){ if(err){ console.error(err); showToast('Camera error: '+(err.name||err.message||'unknown')); stopBarcodeScan(); return;} Quagga.start(); });
-          Quagga.offDetected && Quagga.offDetected(barcodeDetected); Quagga.onDetected(barcodeDetected);
-          document.addEventListener('visibilitychange', visStop, {once:true});
-          function visStop(){ if(document.hidden) stopBarcodeScan(); }
-        }catch(e){ console.error(e); showToast('Camera blocked: '+(e.name||'Error')); }
-      })();
+      const constraints={ video:{ facingMode:{ideal:'environment'}, width:{ideal:1280}, height:{ideal:720}, aspectRatio:{ideal:1.777} }, audio:false };
+      try{
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        video.srcObject = stream; video.style.display='block';
+        document.getElementById('barcodeOverlay').style.display='block';
+        document.getElementById('barcodeCancelBtn').style.display='block';
+        scanning=true;
+        Quagga.init({ inputStream:{ name:'Live', type:'LiveStream', target:video, constraints:constraints.video }, locator:{ patchSize:'medium', halfSample:true }, numOfWorkers:navigator.hardwareConcurrency||2, decoder:{ readers:['ean_13_reader','upc_reader','upc_e_reader','ean_reader'] } }, function(err){
+          if(err){ console.error(err); showToast('Camera error: '+(err.name||err.message||'unknown')); stopBarcodeScan(); return; }
+          Quagga.start();
+        });
+        Quagga.offDetected && Quagga.offDetected(barcodeDetected);
+        Quagga.onDetected(barcodeDetected);
+        document.addEventListener('visibilitychange', ()=>{ if(document.hidden) stopBarcodeScan(); }, {once:true});
+      }catch(e){ console.error(e); showToast('Camera blocked: '+(e.name||'Error')); }
     }
-      if(!window.isSecureContext){ showToast('Camera needs HTTPS (or open in new tab)'); }
-      scanning=true; const video=document.getElementById('barcodeVideo'); video.style.display='block'; document.getElementById('barcodeOverlay').style.display='block'; document.getElementById('barcodeCancelBtn').style.display='block';
-      const constraints={ facingMode:{ideal:'environment'}, width:{ideal:1280}, height:{ideal:720}, aspectRatio:{ideal:1.777}, focusMode:'continuous' };
-      Quagga.init({ inputStream:{ name:'Live', type:'LiveStream', target:video, constraints }, locator:{ patchSize:'medium', halfSample:true }, numOfWorkers: navigator.hardwareConcurrency||2, decoder:{ readers:['ean_13_reader','upc_reader','upc_e_reader','ean_reader'] } }, function(err){ if(err){ console.error(err); showToast('Camera error'); stopBarcodeScan(); return;} Quagga.start(); });
-      Quagga.offDetected && Quagga.offDetected(barcodeDetected); Quagga.onDetected(barcodeDetected);
-      document.addEventListener('visibilitychange', visStop, {once:true});
-      function visStop(){ if(document.hidden) stopBarcodeScan(); }
-    }
+
     function barcodeDetected(data){ if(!data || !data.codeResult || !data.codeResult.code) return; stopBarcodeScan(); let code=data.codeResult.code; showToast('Scanned: '+code); fetch(`https://world.openfoodfacts.org/api/v0/product/${code}.json`).then(r=>r.json()).then(info=>{ if(info.status===1 && info.product && info.product.nutriments){ let n=info.product.nutriments; let name=info.product.product_name || info.product.brands || 'Barcode Food'; let cals=Math.round(n['energy-kcal_serving']||n['energy-kcal_100g']||0); let p=Math.round(n['proteins_serving']||n['proteins_100g']||0); let car=Math.round(n['carbohydrates_serving']||n['carbohydrates_100g']||0); let fat=Math.round(n['fat_serving']||n['fat_100g']||0); if(!cals) cals=Math.round((n['energy_100g']||0)/4.184); mealLog.push({name,calories:cals,protein:p,carbs:car,fat:fat,date:Date.now()}); saveData(); renderAll(); showToast('Added '+name); } else { showToast('No food info found'); } }).catch(()=>showToast('Scan failed!')); }
-    function stopBarcodeScan(){ try{Quagga.stop();}catch{} const v=document.getElementById('barcodeVideo'); v.style.display='none'; v.srcObject && v.srcObject.getTracks().forEach(t=>t.stop()); document.getElementById('barcodeOverlay').style.display='none'; document.getElementById('barcodeCancelBtn').style.display='none'; scanning=false; try{Quagga.offDetected(barcodeDetected);}catch{} }
+    function stopBarcodeScan(){ try{Quagga.stop();}catch{} const v=document.getElementById('barcodeVideo'); v.style.display='none'; if(v.srcObject){ v.srcObject.getTracks().forEach(t=>t.stop()); v.srcObject=null; } document.getElementById('barcodeOverlay').style.display='none'; document.getElementById('barcodeCancelBtn').style.display='none'; scanning=false; try{Quagga.offDetected(barcodeDetected);}catch{} }
 
     function attachAutocompleteEvents(){ const input=document.getElementById('mealName'); const list=document.getElementById('autocompleteList'); if(!input) return; let idx=-1; input.oninput=function(){ const q=this.value.trim(); if(!q){ list.style.display='none'; return;} clearTimeout(autocompleteTimeout); autocompleteTimeout=setTimeout(()=>{ fetch('https://world.openfoodfacts.org/cgi/search.pl?search_terms='+encodeURIComponent(q)+'&search_simple=1&action=process&json=1&page_size=10').then(r=>r.json()).then(data=>{ autocompleteResults=data.products||[]; if(!autocompleteResults.length){ list.style.display='none'; return;} list.innerHTML=autocompleteResults.map((it,i)=>{ let name=(it.product_name||it.brands||'Food'); return `<div class="autocomplete-item" data-idx="${i}">${name}</div>`; }).join(''); list.style.display='block'; idx=-1; }); },170); };
       input.onkeydown=function(e){ if(!autocompleteResults.length) return; if(e.key==='ArrowDown'){ idx=Math.min(idx+1, autocompleteResults.length-1); sel(); } if(e.key==='ArrowUp'){ idx=Math.max(idx-1, 0); sel(); } if(e.key==='Enter' && idx>=0){ pick(idx); e.preventDefault(); } };
@@ -420,20 +281,12 @@ body.applelight .scan-btn:hover, body.applelight .scan-btn:focus-visible{ box-sh
 
     function renderAll(){ updateTotals(); const isCalc=document.getElementById('tabCalc')?.classList.contains('active'); if(isCalc) renderCalculatorTab(); else renderProgressionTab(); }
 
-    // ===== Self-tests (extended) =====
-    function runSelfTests(){ const results=[]; const ok=(name,cond)=>results.push({name, pass:!!cond});
-      ok('has-tabArea', !!document.getElementById('tabArea'));
-      showTab('prog'); ok('goalLine-exists', !!document.getElementById('goalLine')); ok('macroBars-exists', !!document.getElementById('macroBars'));
-      ok('progression-inputs-exist', ['mealCalories','mealProtein','mealCarbs','mealFat','mealName'].every(id=>document.getElementById(id)));
-      // Layout smoke: ensure inputs have width set (prevents "falling off").
-      const w = parseFloat(getComputedStyle(document.getElementById('mealCalories')).width); ok('inputs-have-width', w>40);
-      // Totals update
-      const before=JSON.stringify(macroTotals); mealLog.push({name:'Test Meal', calories:100, protein:10, carbs:5, fat:3, date:Date.now()}); saveData(); updateTotals(); ok('totals-updated', JSON.stringify(macroTotals)!==before); mealLog.pop(); saveData(); updateTotals(); renderAll();
-      const passed=results.every(r=>r.pass); console.log('Self-tests:', results); showToast(passed? 'Self-test passed' : 'Self-test: some checks failed'); }
+    // Self-test
+    function runSelfTests(){ const results=[]; const ok=(n,c)=>results.push({n,pass:!!c}); ok('has-tabArea', !!document.getElementById('tabArea')); showTab('prog'); ok('goalLine-exists', !!document.getElementById('goalLine')); ok('macroBars-exists', !!document.getElementById('macroBars')); const w=parseFloat(getComputedStyle(document.getElementById('mealCalories')).width); ok('inputs-have-width', w>40); const before=JSON.stringify(macroTotals); mealLog.push({name:'Test',calories:100,protein:10,carbs:5,fat:3,date:Date.now()}); saveData(); updateTotals(); ok('totals-updated', JSON.stringify(macroTotals)!==before); mealLog.pop(); saveData(); updateTotals(); renderAll(); const passed=results.every(r=>r.pass); console.log('Self-tests:', results); showToast(passed? 'Self-test passed' : 'Self-test: some checks failed'); }
 
-    function init(){ setTheme('light'); renderTab('calc'); document.getElementById('tabCalc').onclick=()=>{showTab('calc'); adjustTopPadding();}; document.getElementById('tabProg').onclick=()=>{showTab('prog'); adjustTopPadding();}; setTimeout(()=>{ renderStreak(); renderQuote(); adjustTopPadding(); },80); setTimeout(runSelfTests, 200); window.addEventListener('resize', adjustTopPadding); },80); setTimeout(runSelfTests, 200); }
+    function init(){ setTheme('light'); renderTab('calc'); document.getElementById('tabCalc').onclick=()=>{showTab('calc'); adjustTopPadding();}; document.getElementById('tabProg').onclick=()=>{showTab('prog'); adjustTopPadding();}; setTimeout(()=>{ renderStreak(); renderQuote(); adjustTopPadding(); },80); setTimeout(runSelfTests, 200); window.addEventListener('resize', adjustTopPadding); }
     window.addEventListener('DOMContentLoaded', init);
-    function adjustTopPadding(){ const cont=document.getElementById('macroLegendContainer'); const header=cont?.querySelector('header.topbar'); if(!cont||!header) return; const h=header.getBoundingClientRect().height; cont.style.paddingTop = (h + 16) + 'px'; }
+    function adjustTopPadding(){ const cont=document.getElementById('macroLegendContainer'); const header=cont?.querySelector('header.topbar'); if(!cont||!header) return; const h=header.getBoundingClientRect().height; cont.style.paddingTop=(h+16)+'px'; }
   </script>
 </body>
 </html>
